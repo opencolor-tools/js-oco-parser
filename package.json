@@ -1,0 +1,27 @@
+{
+  "name": "oct-parser",
+  "version": "1.0.0",
+  "description": "Parser for the open color format",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha test/"
+  },
+  "engines": {
+    "node": "> 4.0"
+  },
+  "keywords": [
+    "colors",
+    "palettes",
+    "parsing",
+    "yaml"
+  ],
+  "author": "Jan Krutisch",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^3.5.4",
+    "lex": "^1.7.9"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
+}
