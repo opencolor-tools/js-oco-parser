@@ -25,6 +25,14 @@ describe("Parser", () => {
     var tree = parser.parse(test);
     expect(tree.palettes['group name'].colors['yellow'].value).to.equal('#ff0000');
   });
+  it("should parse a reference", () => {
+    var test = "color: #fff\nref color: =color";
+    var tree = parser.parse(test);
+    // Only simple, same level references for now
+    expect(tree.references['ref color'].refName).to.equal('color');
+    expect(tree.references['ref color'].reference.value).to.equal('#fff');
+  });
+
 });
 
 describe("Parsing a more complex document", () => {

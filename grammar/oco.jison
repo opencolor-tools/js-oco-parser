@@ -21,8 +21,15 @@ entry
   { $$ = new yy.Palette($1, $4); }
   | NAME ':' colorvalue
   { $$ = new yy.Color($1, $3) }
+  | NAME ':' reference
+  { $$ = new yy.Reference($1, $3)}
   | metadata
   { $$ = $1;  }
+  ;
+
+reference
+  : '=' NAME
+  { $$ = yytext; }
   ;
 
 metadata
