@@ -1,7 +1,6 @@
 group:
   meta/data: Cool Metadata
-  tesh:
+  subgroup:
     color in subgroup: #291230
   yellow: #c01015
-
   yellow: #c01016

@@ -10,7 +10,6 @@ function lexAll(input) {
   lexer.resetWithInput(input);
   do {
     lex = lexer.lex();
-    console.log("LEX", lex, lexer.yytext);
     out.push(lex);
   } while(lex);
   return out;
@@ -24,8 +23,6 @@ function lexNTimes(input, step) {
   }
   return retVal;
 }
-
-console.log(lexAll("/author: Jan Krutisch\n"));
 
 describe("oco lexer", () => {
   it('should detect newlines', () => {

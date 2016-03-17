@@ -1,3 +1,4 @@
+'use strict';
 var expect = require('chai').expect
 var fs = require("fs");
 
@@ -23,5 +24,14 @@ describe("Parser", () => {
     var test = "group name: \n  yellow: #ff0000\n";
     var tree = parser.parse(test);
     expect(tree.palettes['group name'].colors['yellow'].value).to.equal('#ff0000');
+  });
+});
+
+describe("Parsing a more complex document", () => {
+  it("should parse a single color", () => {
+    var input = fs.readFileSync('test/fixtures/test.oco');
+    var tree = parser.parse(input);
+    // basically just one assertion to verify the parsing worked.
+    expect(tree.palettes['group'].colors['yellow'].value).to.equal('#c01016');
   });
 });

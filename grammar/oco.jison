@@ -22,12 +22,12 @@ entry
   | NAME ':' colorvalue
   { $$ = new yy.Color($1, $3) }
   | metadata
-  { $$ = $1; console.log("WHAT", $1) }
+  { $$ = $1;  }
   ;
 
 metadata
   : metaname ':' NAME newlines
-  { $$ = new yy.Metadata($1, $3); console.log("metadata", $1, $3); }
+  { $$ = new yy.Metadata($1, $3); }
   ;
 
 metaname
