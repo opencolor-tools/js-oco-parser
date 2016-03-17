@@ -1,3 +1,7 @@
 group:
-  indented group: #c01015
-  meta/data: I am metadata
+  meta/data: Cool Metadata
+  tesh:
+    color in subgroup: #291230
+  yellow: #c01015
+
+  yellow: #c01016

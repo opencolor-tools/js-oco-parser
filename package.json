@@ -1,5 +1,5 @@
 {
-  "name": "oct-parser",
+  "name": "oco-parser",
   "version": "1.0.0",
   "description": "Parser for the open color format",
   "main": "lib/index.js",
@@ -22,6 +22,7 @@
     "lex": "^1.7.9"
   },
   "devDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^3.5.0",
+    "jison": "^0.4.17",
   }
 }
