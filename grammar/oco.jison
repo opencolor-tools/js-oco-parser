@@ -6,7 +6,7 @@
 expressions
 
   : entries EOF
-  {  return $1 }
+  {  return new yy.Palette('root', $1) }
   ;
 
 entries
@@ -32,7 +32,7 @@ metadata
 
 metaname
   : '/' NAME
-  { $$ = '/' + $1 }
+  { $$ = '/' + $2 }
   | NAME '/' NAME
   { $$ = $1 + '/' + $3 }
   ;
