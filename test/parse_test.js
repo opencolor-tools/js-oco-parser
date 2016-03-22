@@ -39,6 +39,25 @@ describe("Parser", () => {
   });
 });
 
+describe("Parser access methods", () => {
+  it("should allow for dual access via index and key", () => {
+    var test = "color: #fff\n";
+    var tree = parser.parse(test);
+    expect(tree.get(0).value).to.equal('#fff');
+    expect(tree.get('color').value).to.equal('#fff');
+  });
+  it("should allow to forEach directly on the palette", () => {
+    var test = "color a: #fff\ncolor b: #000\n";
+    var tree = parser.parse(test);
+    var i = 0;
+    tree.forEach((color) => {
+      expect(color.constructor.name).to.equal('Color');
+      i++;
+    });
+    expect(i).to.equal(2); // make sure that the inner asserts are even called :)
+  });
+});
+
 describe("Parsing a more complex document", () => {
   it("should parse a single color", () => {
     var input = fs.readFileSync('test/fixtures/test.oco');
