@@ -20,6 +20,14 @@ describe("Parser", () => {
     var tree = parser.parse(test);
     expect(tree.metadata['meta/author'].value).to.equal('Jan Krutisch');
   })
+  it("should parse metadata with more than one slash", () => {
+    var test = "foo/bar/author: Jan Krutisch\n";
+    var tree = parser.parse(test);
+    expect(tree.metadata['foo/bar/author'].value).to.equal('Jan Krutisch');
+    var test = "/foo/bar/author: Jan Krutisch\n";
+    var tree = parser.parse(test);
+    expect(tree.metadata['/foo/bar/author'].value).to.equal('Jan Krutisch');
+  })
   it("should parse a simple group", () => {
     var test = "group name: \n  yellow: #ff0000\n";
     var tree = parser.parse(test);

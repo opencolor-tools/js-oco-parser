@@ -40,14 +40,18 @@ referenceNames
   ;
 
 metadata
-  : metaname ':' NAME newlines
+  : metanames ':' NAME newlines
   { $$ = new yy.Metadata($1, $3); }
   ;
 
-metaname
+metanames
   : '/' NAME
   { $$ = '/' + $2 }
   | NAME '/' NAME
+  { $$ = $1 + '/' + $3 }
+  | '/' NAME '/' metanames
+  { $$ = '/' + $2 + '/' + $4 }
+  | NAME '/' metanames
   { $$ = $1 + '/' + $3 }
   ;
 
