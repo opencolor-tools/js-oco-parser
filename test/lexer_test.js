@@ -24,6 +24,10 @@ function lexNTimes(input, step) {
   return retVal;
 }
 
+// test bed
+// var test = "group:\n group color: #fff\n group:\n  subgroup color: #afa\n  subgroup ref color: =group.group color\n";
+// console.log(lexAll(test));
+
 describe("oco lexer", () => {
   it('should detect newlines', () => {
     var lex = lexNTimes("\n", 1);

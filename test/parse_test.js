@@ -25,17 +25,52 @@ describe("Parser", () => {
     var tree = parser.parse(test);
     expect(tree.get('group name').get('yellow').value).to.equal('#ff0000');
   });
+  it("should parse a simple group with more than one color", () => {
+    var test = "group name: \n  yellow: #ff0000\n  green: #0f0\n";
+    var tree = parser.parse(test);
+    expect(tree.get('group name').get('yellow').value).to.equal('#ff0000');
+    expect(tree.get('group name').get('green').value).to.equal('#0f0');
+  });
   it("should parse a reference", () => {
-    var test = "color: #fff\nref color: =color";
+    var test = "color: #fff\nref color: =color\n";
     var tree = parser.parse(test);
     // Only simple, same level references for now
     expect(tree.children[1].refName).to.equal('color');
     expect(tree.children[1].reference.value).to.equal('#fff');
   });
+  it("should parse a deep reference", () => {
+    var test = "color: #fff\ngroup:\n  group color: #aea\n  ref color: =color\nanother color: #fff\n";
+    var tree = parser.parse(test);
+    // Only simple, same level references for now
+    var refColor = tree.get('group').get('ref color');
+    expect(refColor.refName).to.equal('color');
+    expect(refColor.reference.value).to.equal('#fff');
+  });
+  it("should parse a tree reference", () => {
+    var test = "color: #fff\ngroup:\n  group color: #aea\n  ref color: =group.another color\n  another color: #afa\n";
+    var tree = parser.parse(test);
+    // Only simple, same level references for now
+    var refColor = tree.get('group').get('ref color');
+    expect(refColor.refName).to.equal('group.another color');
+    expect(refColor.reference.value).to.equal('#afa');
+  });
+  it("should parse a non obvious tree reference", () => {
+    var test = "a:\n b: #fff\n a:\n  c: #afa\n  subgroup ref color: =a.b\n";
+    var tree = parser.parse(test);
+    // Only simple, same level references for now
+    var refColor = tree.get('a').get('a').get('subgroup ref color');
+    expect(refColor.refName).to.equal('a.b');
+    expect(refColor.reference.value).to.equal('#fff');
+  });
   it("should overwrite with last hit on key clashes", () => {
     var test = "color: #fff\ncolor: #000\n";
     var tree = parser.parse(test);
     expect(tree.get('color').value).to.equal('#000');
+  });
+  it('a child should know its parents', () => {
+    var test = "color: #fff\n";
+    var tree = parser.parse(test);
+    expect(tree.get('color').parent).to.equal(tree);
   });
 });
 
@@ -62,6 +97,7 @@ describe("Parsing a more complex document", () => {
   it("should parse a single color", () => {
     var input = fs.readFileSync('test/fixtures/test.oco');
     var tree = parser.parse(input);
+
     // basically just one assertion to verify the parsing worked.
     expect(tree.children[0].get('yellow').value).to.equal('#c01016');
   });

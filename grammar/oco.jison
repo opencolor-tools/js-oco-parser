@@ -28,8 +28,15 @@ entry
   ;
 
 reference
-  : '=' NAME
+  : '=' referenceNames newlines
+  { $$ = $2; }
+  ;
+
+referenceNames
+  : NAME
   { $$ = yytext; }
+  | NAME '.' referenceNames
+  { $$ = $1 + '.' + $3 }
   ;
 
 metadata
