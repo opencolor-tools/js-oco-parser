@@ -19,11 +19,11 @@
   "license": "MIT",
   "dependencies": {
     "js-yaml": "^3.5.4",
+    "jison": "^0.4.17",
     "lex": "^1.7.9"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "jison": "^0.4.17",
     "mocha": "^2.4.5"
   }
 }
