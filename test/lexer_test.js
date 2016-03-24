@@ -25,7 +25,7 @@ function lexNTimes(input, step) {
 }
 
 // test bed
-// var test = "color:\n #ff0022\n";
+// var test = "meta/data: Cool Metadata, now also with commas";
 // console.log(lexAll(test));
 
 describe("oco lexer", () => {
@@ -51,7 +51,7 @@ describe("oco lexer", () => {
   });
   it('should detect quoted string', () => {
     var lex = lexNTimes('"quoted string"', 1);
-    expect(lex).to.equal('STRING');
+    expect(lex).to.equal('NAME');
     lexer.resetWithInput("");
   });
 

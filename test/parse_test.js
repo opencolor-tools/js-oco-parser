@@ -11,6 +11,19 @@ describe("Parser", () => {
     expect(tree.name).to.equal('root');
     expect(tree.get('color').get('rgb').value).to.equal('#ff0022');
   });
+
+  it("should parse a single color with umlaut", () => {
+    var test = "Hintergrund Primär: #FFFFFF\n";
+    var tree = parser.parse(test);
+    expect(tree.get('Hintergrund Primär').get('rgb').value).to.equal('#FFFFFF');
+  });
+
+  it("should parse a single color with special chars", () => {
+    var test = "Google+: #C52E10\n";
+    var tree = parser.parse(test);
+    expect(tree.get('Google+').get('rgb').value).to.equal('#C52E10');
+  });
+
   it("should parse a single color given as block", () => {
     var test = "color:\n #ff0022\n";
     var tree = parser.parse(test);

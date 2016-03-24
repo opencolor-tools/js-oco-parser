@@ -67,7 +67,7 @@ metavalue
   : NAME
   { $$ = $1 }
   | STRING
-  { $$ = yytext }
+  { $$ = $1 }
   ;
 
 metanameparts
