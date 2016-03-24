@@ -3,8 +3,15 @@
   "version": "1.0.0",
   "description": "Parser for the open color format",
   "main": "lib/index.js",
+  "watch": {
+    "test": {
+      "patterns": ["grammar", "lib", "test"],
+      "extensions": "js,jison"
+    }
+  },
   "scripts": {
-    "test": "mocha test/"
+    "test": "mocha test",
+    "watch": "npm-watch"
   },
   "engines": {
     "node": "> 4.0"
@@ -24,6 +31,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "jison": "^0.4.17",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "npm-watch": "^0.1.1"
   }
 }

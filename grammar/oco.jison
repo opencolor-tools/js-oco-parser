@@ -4,9 +4,7 @@
 %%
 
 expressions
-
-  : entries EOF
-  {  return new yy.Palette('root', $1) }
+  : entries EOF {  return new yy.Block('root', $1) }
   ;
 
 entries
@@ -17,18 +15,27 @@ entries
   ;
 
 entry
-  : NAME ':' NEWLINE block
-  { $$ = new yy.Palette($1, $4); }
-  | NAME ':' colorvalue
-  { $$ = new yy.Color($1, $3) }
-  | NAME ':' reference
-  { $$ = new yy.Reference($1, $3)}
-  | metadata
-  { $$ = $1;  }
+  : entryname newlines block
+  { $$ = new yy.Block($1, $3); }
+  | entryname colorvalues newlines
+  { $$ = new yy.Block($1, $2) }
+  | entryname reference newlines
+  { $$ = new yy.Reference($1, $2)}
+  | metaname metavalue newlines
+  { $$ = new yy.Metadata($1, $2); }
+  | metaname newlines metablock
+  { $$ = new yy.Block($1, $2); }
+  | colorvalues newlines
+  { $$ = $1 }
+  ;
+
+entryname
+  : NAME ':'
+  { $$ = $1; }
   ;
 
 reference
-  : '=' referenceNames newlines
+  : '=' referenceNames
   { $$ = $2; }
   ;
 
@@ -39,19 +46,38 @@ referenceNames
   { $$ = $1 + '.' + $3 }
   ;
 
+metaentries
+  : metadata
+  { $$ = [$1] }
+  | metaentries metadata
+  { $$ = $1; $$.push($2) }
+  ;
+
 metadata
   : metanames ':' NAME newlines
   { $$ = new yy.Metadata($1, $3); }
   ;
 
-metanames
+metaname
+  : metanameparts ':'
+  { $$ = $1 }
+  ;
+
+metavalue
+  : NAME
+  { $$ = $1 }
+  | STRING
+  { $$ = yytext }
+  ;
+
+metanameparts
   : '/' NAME
   { $$ = '/' + $2 }
   | NAME '/' NAME
   { $$ = $1 + '/' + $3 }
-  | '/' NAME '/' metanames
+  | '/' NAME '/' metanameparts
   { $$ = '/' + $2 + '/' + $4 }
-  | NAME '/' metanames
+  | NAME '/' metanameparts
   { $$ = $1 + '/' + $3 }
   ;
 
@@ -62,11 +88,19 @@ newlines
 
 block
   : INDENT entries OUTDENT
-  { $$ = $2 }
+  { $$ = $2;}
+  ;
+
+metablock
+  : INDENT metaentries OUTDENT
+  { $$ = $2;}
   ;
 
 colorvalues
   : colorvalue
+  { $$ = [$1] }
+  | colorvalues ',' colorvalue
+  { $$ = $1; $1.push($2); }
   ;
 
 hexnum
@@ -75,8 +109,8 @@ hexnum
   ;
 
 colorvalue
-  : '#' hexnum newlines
-  { $$ = '#' + $2; }
-  | '#' NUMBER newlines
-  { $$ = '#' + $2; }
+  : '#' hexnum
+  { $$ = new yy.ColorValue('rgb', "#" + $2); }
+  | '#' NUMBER
+  { $$ = new yy.ColorValue('rgb', "#" + $2); }
   ;

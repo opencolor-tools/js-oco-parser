@@ -25,7 +25,7 @@ function lexNTimes(input, step) {
 }
 
 // test bed
-// var test = "foo/bar/author: Jan Krutisch\n";
+// var test = "color:\n #ff0022\n";
 // console.log(lexAll(test));
 
 describe("oco lexer", () => {
