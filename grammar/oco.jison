@@ -18,13 +18,13 @@ entry
   : entryname newlines block
   { $$ = new yy.Block($1, $3); }
   | entryname colorvalues newlines
-  { $$ = new yy.Block($1, $2) }
+  { $$ = new yy.Block($1, $2, 'Color') }
   | entryname reference newlines
   { $$ = new yy.Reference($1, $2)}
+  | metaname newlines metablock
+  { $$ = new yy.Block($1, $3, 'Metadata'); }
   | metaname metavalue newlines
   { $$ = new yy.Metadata($1, $2); }
-  | metaname newlines metablock
-  { $$ = new yy.Block($1, $2); }
   | colorvalues newlines
   { $$ = $1 }
   ;
@@ -54,20 +54,20 @@ metaentries
   ;
 
 metadata
-  : metanames ':' NAME newlines
-  { $$ = new yy.Metadata($1, $3); }
+  : NAME ':' metavalue newlines
+  { $$ = new yy.Metadata($1, $3);  }
+  | metaname ':' metavalue newlines
+  { $$ = new yy.Metadata($1, $3);  }
   ;
 
 metaname
   : metanameparts ':'
-  { $$ = $1 }
+  { $$ = $1; }
   ;
 
 metavalue
   : NAME
-  { $$ = $1 }
-  | STRING
-  { $$ = $1 }
+  { $$ = $1; }
   ;
 
 metanameparts
@@ -93,7 +93,7 @@ block
 
 metablock
   : INDENT metaentries OUTDENT
-  { $$ = $2;}
+  { $$ = $2; }
   ;
 
 colorvalues

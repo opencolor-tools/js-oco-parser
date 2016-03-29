@@ -40,6 +40,11 @@ describe("Parser", () => {
     var tree = parser.parse(test);
     expect(tree.metadata['meta/author'].value).to.equal('Erykah Badu');
   });
+  it("should parse metadata Block", () => {
+    var test = "/metadata:\n  author: Erykah Badu\n";
+    var tree = parser.parse(test);
+    expect(tree.metadata['/metadata'].metadata['author'].value).to.equal('Erykah Badu');
+  });
   it("should parse metadata with more than one slash", () => {
     var test = "foo/bar/author: Erykah Badu\n";
     var tree = parser.parse(test);

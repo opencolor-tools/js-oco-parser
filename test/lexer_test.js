@@ -25,7 +25,7 @@ function lexNTimes(input, step) {
 }
 
 // test bed
-// var test = "meta/data: Cool Metadata, now also with commas";
+// var test = "/metadata:\n  author: Erykah Badu\n";
 // console.log(lexAll(test));
 
 describe("oco lexer", () => {
