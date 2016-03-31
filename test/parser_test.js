@@ -97,6 +97,7 @@ another color: #fff
     expect(refColor.refName).to.equal('color');
     expect(refColor.reference.get('rgb').value).to.equal('#fff');
   });
+
   it("should parse a tree reference", () => {
     var test = `
 color: #fff
@@ -111,6 +112,7 @@ group:
     expect(refColor.refName).to.equal('group.another color');
     expect(refColor.reference.get('rgb').value).to.equal('#afa');
   });
+
   it("should parse a non obvious tree reference", () => {
     var test = `
 a:

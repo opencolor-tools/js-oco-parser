@@ -23,7 +23,7 @@ describe("Parsing Metadata", () => {
     expect(tree.metadata['/metadata'].metadata['author'].value).to.equal('Erykah Badu');
   });
 
-  it("should parse metadata Block with a slash a the end of the name", () => {
+  it("should parse metadata Block with a slash at the end of the name", () => {
     var test = `
 hello/metadata/:
   author: Erykah Badu
