@@ -2,7 +2,6 @@
   "predef": [
     "require",
     "__dirname",
-    "raise",
     "module"
   ],
   "browser": false,

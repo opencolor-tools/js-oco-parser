@@ -180,6 +180,19 @@ describe("Parser access methods", () => {
   });
 });
 
+describe("Error handling", () => {
+  it("should raise exception on illegal nesting of colors and colorvalues", () =>  {
+    var test = "block:\n color: #fff\n #ccc\n";
+    var fn = function() { parser.parse(test);};
+    expect(fn).to.throw();
+  });
+  it("should raise exception on parse error", () =>  {
+    var test = "block:\n color: #fff;\n";
+    var fn = function() { parser.parse(test); };
+    expect(fn).to.throw();
+  });
+});
+
 describe("Parsing a more complex document", () => {
   it("should parse a single color", () => {
     var input = fs.readFileSync('test/fixtures/test.oco');
