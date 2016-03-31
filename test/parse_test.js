@@ -140,6 +140,11 @@ describe("Parser", () => {
     var tree = parser.parse(test);
     expect(tree.get('color').parent).to.equal(tree);
   });
+  it('should parse with newlines in front', () => {
+    var test = "\n\ncolor: #fff\n";
+    var tree = parser.parse(test);
+    expect(tree.get('color').get('rgb').value).to.equal('#fff');
+  });
 });
 
 describe("Parser access methods", () => {
