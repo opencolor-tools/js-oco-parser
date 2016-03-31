@@ -41,7 +41,10 @@ describe("Parser", () => {
   });
 
   it("should parse a single color given as block", () => {
-    var test = "color:\n #ff0022\n";
+    var test = `
+color:
+  #ff0022
+`;
     var tree = parser.parse(test);
     expect(tree.constructor.name).to.equal('Block');
     expect(tree.name).to.equal('root');
@@ -59,13 +62,19 @@ describe("Parser", () => {
   });
 
   it("should parse metadata Block", () => {
-    var test = "/metadata:\n  author: Erykah Badu\n";
+    var test = `
+/metadata:
+  author: Erykah Badu
+`;
     var tree = parser.parse(test);
     expect(tree.metadata['/metadata'].metadata['author'].value).to.equal('Erykah Badu');
   });
 
   it("should parse metadata Block with a slash a the end of the name", () => {
-    var test = "hello/metadata/:\n  author: Erykah Badu\n";
+    var test = `
+hello/metadata/:
+  author: Erykah Badu
+`;
     var tree = parser.parse(test);
     expect(tree.metadata['hello/metadata/'].metadata['author'].value).to.equal('Erykah Badu');
   });
@@ -80,43 +89,78 @@ describe("Parser", () => {
   });
 
   it("should parse metadata in a color block", () => {
-    var test = "color:\n  #123\n  author/name: Erykah Badu\n";
+    var test = `
+color:
+  #123
+  author/name: Erykah Badu
+`;
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#123');
     expect(tree.get('color').metadata['author/name'].value).to.equal('Erykah Badu');
   });
+
   it("should parse metadata in a color block when metadata comes first", () => {
-    var test = "color:\n  author/name: Erykah Badu\n  #123\n";
+    var test = `
+color:
+  author/name: Erykah Badu
+  #123
+`;
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#123');
     expect(tree.get('color').metadata['author/name'].value).to.equal('Erykah Badu');
   });
+
   it("should parse metadata in a color block when metadata comes first (twice)", () => {
-    var test = "color:\n  author/name: Erykah Badu\n  author/email: Erykah Badu\n  #123\n";
+    var test = `
+color:
+  author/name: Erykah Badu
+  author/email: Erykah Badu
+  #123
+`;
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#123');
     expect(tree.get('color').metadata['author/name'].value).to.equal('Erykah Badu');
   });
+
   it("should parse a simple group", () => {
-    var test = "group name: \n  yellow: #ff0000\n";
+    var test = `
+group name:
+  yellow: #ff0000
+`;
     var tree = parser.parse(test);
     expect(tree.get('group name').get('yellow').get('rgb').value).to.equal('#ff0000');
   });
+
   it("should parse a simple group with more than one color", () => {
-    var test = "group name: \n  yellow: #ff0000\n  green: #0f0\n";
+    var test = `
+group name:
+  yellow: #ff0000
+  green: #0f0
+`;
     var tree = parser.parse(test);
     expect(tree.get('group name').get('yellow').get('rgb').value).to.equal('#ff0000');
     expect(tree.get('group name').get('green').get('rgb').value).to.equal('#0f0');
   });
+
   it("should parse a reference", () => {
-    var test = "color: #fff\nref color: =color\n";
+    var test = `
+color: #fff
+ref color: =color
+`;
     var tree = parser.parse(test);
     // Only simple, same level references for now
     expect(tree.children[1].refName).to.equal('color');
     expect(tree.children[1].reference.get('rgb').value).to.equal('#fff');
   });
+
   it("should parse a deep reference", () => {
-    var test = "color: #fff\ngroup:\n  group color: #aea\n  ref color: =color\nanother color: #fff\n";
+    var test = `
+color: #fff
+group:
+  group color: #aea
+  ref color: =color
+another color: #fff
+`;
     var tree = parser.parse(test);
     // Only simple, same level references for now
     var refColor = tree.get('group').get('ref color');
@@ -124,7 +168,13 @@ describe("Parser", () => {
     expect(refColor.reference.get('rgb').value).to.equal('#fff');
   });
   it("should parse a tree reference", () => {
-    var test = "color: #fff\ngroup:\n  group color: #aea\n  ref color: =group.another color\n  another color: #afa\n";
+    var test = `
+color: #fff
+group:
+  group color: #aea
+  ref color: =group.another color
+  another color: #afa
+`;
     var tree = parser.parse(test);
     // Only simple, same level references for now
     var refColor = tree.get('group').get('ref color');
@@ -132,28 +182,41 @@ describe("Parser", () => {
     expect(refColor.reference.get('rgb').value).to.equal('#afa');
   });
   it("should parse a non obvious tree reference", () => {
-    var test = "a:\n b: #fff\n a:\n  c: #afa\n  subgroup ref color: =a.b\n";
+    var test = `
+a:
+  b: #fff
+  a:
+    c: #afa
+    subgroup ref color: =a.b
+`;
     var tree = parser.parse(test);
     // Only simple, same level references for now
     var refColor = tree.get('a').get('a').get('subgroup ref color');
     expect(refColor.refName).to.equal('a.b');
     expect(refColor.reference.get('rgb').value).to.equal('#fff');
   });
+
   it("should overwrite with last hit on key clashes", () => {
-    var test = "color: #fff\ncolor: #000\n";
+    var test = `
+color: #fff
+color: #000
+`;
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#000');
   });
+
   it('a child should know its parents', () => {
     var test = "color: #fff\n";
     var tree = parser.parse(test);
     expect(tree.get('color').parent).to.equal(tree);
   });
+
   it('should parse with newlines in front', () => {
     var test = "\n\ncolor: #fff\n";
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#fff');
   });
+
   it('should parse with newline in front', () => {
     var test = "\ncolor: #fff\n";
     var tree = parser.parse(test);
@@ -168,8 +231,12 @@ describe("Parser access methods", () => {
     expect(tree.get(0).get('rgb').value).to.equal('#fff');
     expect(tree.get('color').get('rgb').value).to.equal('#fff');
   });
+
   it("should allow to forEach directly on the palette", () => {
-    var test = "color a: #fff\ncolor b: #000\n";
+    var test = `
+color a: #fff
+color b: #000
+`;
     var tree = parser.parse(test);
     var i = 0;
     tree.forEach((color) => {
@@ -182,12 +249,20 @@ describe("Parser access methods", () => {
 
 describe("Error handling", () => {
   it("should raise exception on illegal nesting of colors and colorvalues", () =>  {
-    var test = "block:\n color: #fff\n #ccc\n";
+    var test = `
+block:
+  color: #fff
+  #ccc
+`;
     var fn = function() { parser.parse(test);};
     expect(fn).to.throw();
   });
+
   it("should raise exception on parse error", () =>  {
-    var test = "block:\n color: #fff;\n";
+    var test = `
+block:
+  color: #fff;
+`;
     var fn = function() { parser.parse(test); };
     expect(fn).to.throw();
   });
