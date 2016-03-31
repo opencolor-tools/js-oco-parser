@@ -1,4 +1,6 @@
-var { expect } = require('chai');
+/* jshint -W097 */
+'use strict';
+var expect = require('chai').expect;
 var fs = require("fs");
 
 var parser = require('../lib/index.js');
@@ -55,11 +57,19 @@ describe("Parser", () => {
     tree = parser.parse(test);
     expect(tree.metadata['meta/author'].value).to.equal('Erykah Badu');
   });
+
   it("should parse metadata Block", () => {
     var test = "/metadata:\n  author: Erykah Badu\n";
     var tree = parser.parse(test);
     expect(tree.metadata['/metadata'].metadata['author'].value).to.equal('Erykah Badu');
   });
+
+  it("should parse metadata Block with a slash a the end of the name", () => {
+    var test = "hello/metadata/:\n  author: Erykah Badu\n";
+    var tree = parser.parse(test);
+    expect(tree.metadata['hello/metadata/'].metadata['author'].value).to.equal('Erykah Badu');
+  });
+
   it("should parse metadata with more than one slash", () => {
     var test = "foo/bar/author: Erykah Badu\n";
     var tree = parser.parse(test);

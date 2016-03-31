@@ -79,6 +79,8 @@ metanameparts
   { $$ = '/' + $2 + '/' + $4 }
   | NAME '/' metanameparts
   { $$ = $1 + '/' + $3 }
+  | NAME '/'
+  { $$ = $1 + '/' }
   ;
 
 newlines
