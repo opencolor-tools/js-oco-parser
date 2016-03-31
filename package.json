@@ -34,7 +34,6 @@
     "lex": "^1.7.9"
   },
   "devDependencies": {
-    "js-yaml": "^3.5.4",
     "jison": "^0.4.17",
     "chai": "^3.5.0",
     "jshint": "^2.9.1",
