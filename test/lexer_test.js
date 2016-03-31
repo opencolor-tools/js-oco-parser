@@ -1,19 +1,18 @@
 var expect = require('chai').expect;
 
 var lexer = require('../lib/lexer.js');
-var fs = require("fs");
 
 // for debugging purposes
-function lexAll(input) {
-  var out = [];
-  var lex;
-  lexer.resetWithInput(input);
-  do {
-    lex = lexer.lex();
-    out.push(lex);
-  } while(lex);
-  return out;
-}
+// function lexAll(input) {
+//   var out = [];
+//   var lex;
+//   lexer.resetWithInput(input);
+//   do {
+//     lex = lexer.lex();
+//     out.push(lex);
+//   } while(lex);
+//   return out;
+// }
 
 function lexNTimes(input, step) {
   lexer.resetWithInput(input);

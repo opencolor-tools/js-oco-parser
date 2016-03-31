@@ -5,13 +5,18 @@
   "main": "lib/index.js",
   "watch": {
     "test": {
-      "patterns": ["grammar", "lib", "test"],
+      "patterns": [
+        "grammar",
+        "lib",
+        "test"
+      ],
       "extensions": "js,jison"
     }
   },
   "scripts": {
     "test": "mocha test",
-    "watch": "npm-watch"
+    "watch": "npm-watch",
+    "lint": "jshint lib/ test/"
   },
   "engines": {
     "node": "> 4.0"
@@ -31,6 +36,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "jshint": "^2.9.1",
     "mocha": "^2.4.5",
     "npm-watch": "^0.1.1"
   }

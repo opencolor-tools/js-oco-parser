@@ -1,5 +1,4 @@
-'use strict';
-var expect = require('chai').expect
+var { expect } = require('chai');
 var fs = require("fs");
 
 var parser = require('../lib/index.js');
@@ -52,8 +51,8 @@ describe("Parser", () => {
     var test = "/author: Erykah Badu\n";
     var tree = parser.parse(test);
     expect(tree.metadata['/author'].value).to.equal('Erykah Badu');
-    var test = "meta/author: Erykah Badu\n";
-    var tree = parser.parse(test);
+    test = "meta/author: Erykah Badu\n";
+    tree = parser.parse(test);
     expect(tree.metadata['meta/author'].value).to.equal('Erykah Badu');
   });
   it("should parse metadata Block", () => {
@@ -65,8 +64,8 @@ describe("Parser", () => {
     var test = "foo/bar/author: Erykah Badu\n";
     var tree = parser.parse(test);
     expect(tree.metadata['foo/bar/author'].value).to.equal('Erykah Badu');
-    var test = "/foo/bar/author: Erykah Badu\n";
-    var tree = parser.parse(test);
+    test = "/foo/bar/author: Erykah Badu\n";
+    tree = parser.parse(test);
     expect(tree.metadata['/foo/bar/author'].value).to.equal('Erykah Badu');
   });
 
