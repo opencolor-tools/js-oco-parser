@@ -9,6 +9,7 @@ describe("Parser", () => {
     var test = "color: #ff0022\n";
     var tree = parser.parse(test);
     expect(tree.name).to.equal('root');
+    expect(tree.get('color').type).to.equal('Color');
     expect(tree.get('color').get('rgb').value).to.equal('#ff0022');
   });
 
@@ -43,6 +44,7 @@ describe("Parser", () => {
     var tree = parser.parse(test);
     expect(tree.constructor.name).to.equal('Block');
     expect(tree.name).to.equal('root');
+    expect(tree.get('color').type).to.equal('Color');
     expect(tree.get('color').get('rgb').value).to.equal('#ff0022');
   });
 
