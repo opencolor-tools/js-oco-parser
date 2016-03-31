@@ -1,7 +1,6 @@
 /* jshint -W097 */
 'use strict';
 var expect = require('chai').expect;
-var fs = require("fs");
 
 var parser = require('../lib/index.js');
 
