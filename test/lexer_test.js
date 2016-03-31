@@ -2,7 +2,7 @@ var expect = require('chai').expect;
 
 var lexer = require('../lib/lexer.js');
 
-// for debugging purposes
+//for debugging purposes
 // function lexAll(input) {
 //   var out = [];
 //   var lex;
@@ -23,13 +23,17 @@ function lexNTimes(input, step) {
   return retVal;
 }
 
-// test bed
-// var test = "/metadata:\n  author: Erykah Badu\n";
+//test bed
+// var test = "\n\nGroup:\n  name/author: Erykah Badu\n";
 // console.log(lexAll(test));
 
 describe("oco lexer", () => {
-  it('should detect newlines', () => {
+  it('should ignore empty newlines', () => {
     var lex = lexNTimes("\n", 1);
+    expect(lex).to.equal('EOF');
+  });
+  it('should detect newlines', () => {
+    var lex = lexNTimes("hello \n", 2);
     expect(lex).to.equal('NEWLINE');
   });
   it('should detect indentation', () => {
