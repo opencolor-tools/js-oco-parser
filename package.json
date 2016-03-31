@@ -30,10 +30,12 @@
   ],
   "author": "Jan Krutisch",
   "license": "MIT",
+  "dependencies": {
+    "lex": "^1.7.9"
+  },
   "devDependencies": {
     "js-yaml": "^3.5.4",
     "jison": "^0.4.17",
-    "lex": "^1.7.9",
     "chai": "^3.5.0",
     "jshint": "^2.9.1",
     "mocha": "^2.4.5",
