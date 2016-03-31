@@ -1,3 +1,4 @@
+const grammar = `
 
 %start expressions
 
@@ -130,3 +131,7 @@ colorvaluevalue
   : NUMBER
   | NAME
   ;
+
+`
+
+module.exports = grammar;
