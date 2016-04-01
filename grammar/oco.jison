@@ -41,7 +41,7 @@ reference
 
 referenceNames
   : NAME
-  { $$ = yytext; }
+  { $$ = $1; }
   | NAME '.' referenceNames
   { $$ = $1 + '.' + $3 }
   ;
@@ -54,9 +54,9 @@ metaentries
   ;
 
 metadata
-  : NAME ':' metavalue newlines
+  : metaname metavalue newlines
   { $$ = new yy.Metadata($1, $3);  }
-  | metaname ':' metavalue newlines
+  | NAME ':' metavalue newlines
   { $$ = new yy.Metadata($1, $3);  }
   ;
 
@@ -67,6 +67,10 @@ metavalue
   { $$ = parseFloat($1); }
   | boolean
   { $$ = $1; }
+  | colorvalue
+  { $$ = $1; }
+  | reference
+  { $$ = new yy.Reference('metachild', $1); }
   ;
 
 metaname

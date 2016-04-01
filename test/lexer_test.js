@@ -24,8 +24,25 @@ function lexNTimes(input, step) {
 }
 
 //test bed
+function lexAll(input) {
+  var out = [];
+  var lex;
+  lexer.resetWithInput(input);
+  do {
+    lex = lexer.lex();
+    out.push(lex);
+  } while(lex);
+  return out;
+}
+
+var test = `
+color: #fff
+meta/name: =color
+`;
+console.log(lexAll(test));
+
 // var test = "\n\nGroup:\n  name/author: Erykah Badu\n";
-// console.log(lexAll(test));
+//
 
 describe("oco lexer", () => {
   it('should ignore empty newlines', () => {

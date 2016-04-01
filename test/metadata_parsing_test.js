@@ -87,4 +87,19 @@ color:
     expect(tree.metadata['meta/data']).to.equal(1.2);
   });
 
+  it("should parse color metadata", () => {
+    var test = "meta/data: #ff0022\n";
+    var tree = parser.parse(test);
+    expect(tree.metadata['meta/data'].value).to.equal('#ff0022');
+  });
+  it("should parse reference metadata", () => {
+    var test = `
+color: #ff0022
+meta/data: =color
+`;
+    var tree = parser.parse(test);
+    console.log(tree);
+    expect(tree.metadata['meta/data'].reference.get('rgb').value).to.equal('#ff0022');
+  });
+
 });
