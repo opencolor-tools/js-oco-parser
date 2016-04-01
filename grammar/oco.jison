@@ -22,7 +22,7 @@ entry
   | entryname reference newlines
   { $$ = new yy.Reference($1, $2)}
   | metaname newlines metablock
-  { $$ = new yy.Block($1, $3, 'Metadata', @3); }
+  { $$ = new yy.Block($1, $3, 'Metablock', @3); }
   | metaname metavalue newlines
   { $$ = new yy.Metadata($1, $2); }
   | colorvalues newlines
@@ -60,13 +60,17 @@ metadata
   { $$ = new yy.Metadata($1, $3);  }
   ;
 
-metaname
-  : metanameparts ':'
+metavalue
+  : NAME
+  { $$ = $1; }
+  | NUMBER
+  { $$ = parseFloat($1); }
+  | boolean
   { $$ = $1; }
   ;
 
-metavalue
-  : NAME
+metaname
+  : metanameparts ':'
   { $$ = $1; }
   ;
 
@@ -79,7 +83,7 @@ metanameparts
   { $$ = '/' + $2 + '/' + $4 }
   | NAME '/' metanameparts
   { $$ = $1 + '/' + $3 }
-  | NAME '/'
+  | NAME '/'
   { $$ = $1 + '/' }
   ;
 
@@ -129,4 +133,11 @@ colorvaluevalues
 colorvaluevalue
   : NUMBER
   | NAME
+  ;
+
+boolean
+  : TRUE
+  { $$ = true; }
+  | FALSE
+  { $$ = false; }
   ;
