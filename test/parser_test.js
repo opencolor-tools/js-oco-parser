@@ -14,6 +14,22 @@ describe("Parser", () => {
     expect(tree.get('color').get('rgb').value).to.equal('#ff0022');
   });
 
+  it("should allow numbers as color names", () => {
+    var test = "001: #ff0022\n";
+    var tree = parser.parse(test);
+    expect(tree.name).to.equal('root');
+    expect(tree.get('001').type).to.equal('Color');
+    expect(tree.get('001').get('rgb').value).to.equal('#ff0022');
+  });
+
+  it("should allow hexnumbers as color names", () => {
+    var test = "f00: #f00022\n";
+    var tree = parser.parse(test);
+    expect(tree.name).to.equal('root');
+    expect(tree.get('f00').type).to.equal('Color');
+    expect(tree.get('f00').get('rgb').value).to.equal('#f00022');
+  });
+
   it("should parse a single color as an rgb value", () => {
     var test = "color: rgb(10,20,30)\n";
     var tree = parser.parse(test);

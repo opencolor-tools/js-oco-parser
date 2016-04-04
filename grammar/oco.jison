@@ -32,6 +32,10 @@ entry
 entryname
   : NAME ':'
   { $$ = $1;}
+  | NUMBER ':'
+  { $$ = $1;}
+  | HEXNUMBER ':'
+  { $$ = $1;}
   ;
 
 reference
