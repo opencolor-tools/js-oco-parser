@@ -14,21 +14,19 @@ jisonparser.yy = {
   Entry: Entry,
   Metadata: Metadata,
   Reference: Reference,
-  parseError: function parseError(str) {
-    throw str;
-  },
-  log: function log(object) {
-    console.log(JSON.stringify(object, false, ' '));
-  }
+  parseError: (str) => { throw(str); },
+  log: (object) => { console.log(JSON.stringify(object, false, ' ')); }
 };
 
+
 var parser = {
-  parse: function parse(data) {
+  parse(data) {
     jisonparser.lexer.resetWithInput(""); //resetting the lexer. Not needed in prod, but helps testing.
     var tree = jisonparser.parse(data);
     tree.resolveReferences();
     return tree;
   }
 };
+
 
 module.exports = parser;

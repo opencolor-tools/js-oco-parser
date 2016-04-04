@@ -98,7 +98,6 @@ color: #ff0022
 meta/data: =color
 `;
     var tree = parser.parse(test);
-    console.log(tree);
     expect(tree.metadata['meta/data'].reference.get('rgb').value).to.equal('#ff0022');
   });
 

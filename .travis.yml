@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - '5'
   - '4'
+  - '0.12' # to test non-es2015 stuff
 script:
   - npm test
   - npm run lint

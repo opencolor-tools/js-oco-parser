@@ -46,7 +46,7 @@ color:
   #ff0022
 `;
     var tree = parser.parse(test);
-    expect(tree.constructor.name).to.equal('Block');
+    expect(tree.type).to.equal('Root');
     expect(tree.name).to.equal('root');
     expect(tree.get('color').type).to.equal('Color');
     expect(tree.get('color').get('rgb').value).to.equal('#ff0022');
@@ -172,7 +172,7 @@ color b: #000
     var tree = parser.parse(test);
     var i = 0;
     tree.forEach((color) => {
-      expect(color.constructor.name).to.equal('Block');
+      expect(color.type).to.equal('Color');
       i++;
     });
     expect(i).to.equal(2); // make sure that the inner asserts are even called :)

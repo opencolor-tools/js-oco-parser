@@ -4,7 +4,7 @@
 %%
 
 expressions
-  : entries EOF {  return new yy.Block('root', $1, 'Root', @1) }
+  : entries EOF {  return new yy.Entry('root', $1, 'Root', @1) }
   ;
 
 entries
@@ -16,13 +16,13 @@ entries
 
 entry
   : entryname newlines block
-  { $$ = new yy.Block($1, $3, null, @3); }
+  { $$ = new yy.Entry($1, $3, null, @3); }
   | entryname colorvalues newlines
-  { $$ = new yy.Block($1, $2, 'Color', @2); }
+  { $$ = new yy.Entry($1, $2, 'Color', @2); }
   | entryname reference newlines
   { $$ = new yy.Reference($1, $2)}
   | metaname newlines metablock
-  { $$ = new yy.Block($1, $3, 'Metablock', @3); }
+  { $$ = new yy.Entry($1, $3, 'Metablock', @3); }
   | metaname metavalue newlines
   { $$ = new yy.Metadata($1, $2); }
   | colorvalues newlines
