@@ -4,29 +4,15 @@
   "description": "Parser for the open color format",
   "main": "lib/index.js",
   "repository": "https://github.com/opencolor-tools/js-oco-parser",
-  "watch": {
-    "test": {
-      "patterns": [
-        "grammar",
-        "lib",
-        "test"
-      ],
-      "extensions": "js,jison"
-    }
-  },
   "scripts": {
     "test": "make test",
-    "watch": "npm-watch",
+    "build": "make build",
     "lint": "jshint src/ test/"
-  },
-  "engines": {
-    "node": "> 4.0"
   },
   "keywords": [
     "colors",
     "palettes",
-    "parsing",
-    "yaml"
+    "parsing"
   ],
   "author": "Jan Krutisch",
   "license": "MIT",
@@ -40,7 +26,6 @@
     "chai": "^3.5.0",
     "jison": "^0.4.17",
     "jshint": "^2.9.1",
-    "mocha": "^2.4.5",
-    "npm-watch": "^0.1.1"
+    "mocha": "^2.4.5"
   }
 }
