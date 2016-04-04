@@ -15,14 +15,14 @@ function flatten(ary) {
 
 class Entry {
   constructor(name, children, type, position) {
-    this.name = name;
+    this.name = name || 'Root';
     this.position = position;
     this.metadata = {};
     this.children = [];
     this.childKeys = {};
     this.parent = null;
-    this.type = type || 'Entry';
-    this.addChildren(flatten(children));
+    this.type = type || ((this.name === 'Root') ? 'Root' : 'Entry');
+    this.addChildren(flatten(children || []));
     this.validateType();
     this.forEach = Array.prototype.forEach.bind(this.children); // the magic of JavaScript.
 
@@ -34,30 +34,36 @@ class Entry {
       return this.children[nameOrIndex];
     }
   }
-  addChildren(children) {
-    children.forEach((child) => {
-      var type = child.type;
-      // we're basically only separating meta data.
-      if (type === 'Metadata') {
-        this.metadata[child.name] = child.value;
-      } else if (type === 'Metablock') {
-        var prefix = child.name + "/";
-        Object.keys(child.metadata).forEach((key) => {
-          var combinedKey = (prefix + key).replace(/\/\//g, '/'); // normalize keys
-          this.metadata[combinedKey] = child.metadata[key];
-        });
+  addChild(child, validate=true) {
+    var type = child.type;
+    // we're basically only separating meta data.
+    if (type === 'Metadata') {
+      this.metadata[child.name] = child.value;
+    } else if (type === 'Metablock') {
+      var prefix = child.name + "/";
+      Object.keys(child.metadata).forEach((key) => {
+        var combinedKey = (prefix + key).replace(/\/\//g, '/'); // normalize keys
+        this.metadata[combinedKey] = child.metadata[key];
+      });
+    } else {
+      if ('undefined' !== typeof this.childKeys[child.name]) { // name collision. just overwrite as yaml would probably do.
+        this.children[this.childKeys[child.name]] = child;
       } else {
-        if ('undefined' !== typeof this.childKeys[child.name]) { // name collision. just overwrite as yaml would probably do.
-          this.children[this.childKeys[child.name]] = child;
-        } else {
-          var newIndex = this.children.length;
-          this.children.push(child);
-          this.childKeys[child.name] = newIndex;
-        }
+        var newIndex = this.children.length;
+        this.children.push(child);
+        this.childKeys[child.name] = newIndex;
       }
-      child.parent = this;
-    });
+    }
+    child.parent = this;
+    if (validate) {
+      this.validateType();
+    }
   }
+
+  addChildren(children) {
+    children.forEach((child) => { this.addChild(child, false); }, this);
+  }
+
   validateType() {
     var types = [];
     this.children.forEach((child) => {

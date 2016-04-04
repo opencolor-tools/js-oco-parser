@@ -72,62 +72,6 @@ group name:
     expect(tree.get('group name').get('green').get('rgb').value).to.equal('#0f0');
   });
 
-  it("should parse a reference", () => {
-    var test = `
-color: #fff
-ref color: =color
-`;
-    var tree = parser.parse(test);
-    // Only simple, same level references for now
-    expect(tree.children[1].refName).to.equal('color');
-    expect(tree.children[1].reference.get('rgb').value).to.equal('#fff');
-  });
-
-  it("should parse a deep reference", () => {
-    var test = `
-color: #fff
-group:
-  group color: #aea
-  ref color: =color
-another color: #fff
-`;
-    var tree = parser.parse(test);
-    // Only simple, same level references for now
-    var refColor = tree.get('group').get('ref color');
-    expect(refColor.refName).to.equal('color');
-    expect(refColor.reference.get('rgb').value).to.equal('#fff');
-  });
-
-  it("should parse a tree reference", () => {
-    var test = `
-color: #fff
-group:
-  group color: #aea
-  ref color: =group.another color
-  another color: #afa
-`;
-    var tree = parser.parse(test);
-    // Only simple, same level references for now
-    var refColor = tree.get('group').get('ref color');
-    expect(refColor.refName).to.equal('group.another color');
-    expect(refColor.reference.get('rgb').value).to.equal('#afa');
-  });
-
-  it("should parse a non obvious tree reference", () => {
-    var test = `
-a:
-  b: #fff
-  a:
-    c: #afa
-    subgroup ref color: =a.b
-`;
-    var tree = parser.parse(test);
-    // Only simple, same level references for now
-    var refColor = tree.get('a').get('a').get('subgroup ref color');
-    expect(refColor.refName).to.equal('a.b');
-    expect(refColor.reference.get('rgb').value).to.equal('#fff');
-  });
-
   it("should overwrite with last hit on key clashes", () => {
     var test = `
 color: #fff

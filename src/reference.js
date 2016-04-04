@@ -9,6 +9,20 @@ class Reference {
     this.parent = null;
     this.type = 'Reference';
   }
+  resolved(stack = []) {
+    if (stack.indexOf(this) !== -1) {
+      throw("References can not be circular!");
+    }
+    if (this.reference) {
+      if (this.reference['reference']) {
+        return this.reference.resolved(stack.concat([this]));
+      } else {
+        return this.reference;
+      }
+    }
+    return false;
+
+  }
 }
 
 module.exports = Reference;
