@@ -15,7 +15,7 @@ class ColorValue {
     }
     var space = value.match(/^(\w+)\((.*)\)$/);
     if (space) {
-      return new ColorValue(space[1], space[2]);
+      return new ColorValue(space[1], space[0]);
     }
     throw("Illegal Color Value: " + value);
   }
