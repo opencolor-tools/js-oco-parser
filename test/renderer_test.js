@@ -7,9 +7,9 @@ var fs = require("fs");
 describe('Renderer', () => {
   it("should render a simple example", () => {
     var tree = new oco.Entry();
-    var meta = new oco.Metadata('key/key','Value');
     var value = new oco.ColorValue.fromColorValue('#ffe');
-    var color = new oco.Entry('bright yellow', [value, meta], 'Color');
+    var color = new oco.Entry('bright yellow', [value], 'Color');
+    color.addMetadata({'key/key': 'Value'});
     tree.addChild(color);
     var result = oco.render(tree);
     var expected = `bright yellow:

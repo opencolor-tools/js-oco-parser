@@ -128,7 +128,7 @@ colorvalue
   | '#' NUMBER
   { $$ = new yy.ColorValue('rgb', "#" + $2); }
   | NAME '(' colorvaluevalues ')'
-  { $$ = new yy.ColorValue($1, $3.join(",")); }
+  { $$ = new yy.ColorValue($1, $1 + "(" + $3.join(",") + ")"); }
   ;
 
 colorvaluevalues

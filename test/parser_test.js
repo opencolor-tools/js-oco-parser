@@ -34,14 +34,14 @@ describe("Parser", () => {
     var test = "color: rgb(10,20,30)\n";
     var tree = parser.parse(test);
     expect(tree.name).to.equal('root');
-    expect(tree.get('color').get('rgb').value).to.equal('10,20,30');
+    expect(tree.get('color').get('rgb').value).to.equal('rgb(10,20,30)');
   });
 
   it("should parse a single color as an special value", () => {
     var test = "color: RAL(1003)\n";
     var tree = parser.parse(test);
     expect(tree.name).to.equal('root');
-    expect(tree.get('color').get('RAL').value).to.equal('1003');
+    expect(tree.get('color').get('RAL').value).to.equal('RAL(1003)');
   });
 
   it("should parse a single color with umlaut", () => {

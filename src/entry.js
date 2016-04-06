@@ -1,6 +1,9 @@
 /* jshint -W097 */
 'use strict';
 
+var Reference = require('./reference');
+var ColorValue = require('./color_value');
+
 function flatten(ary) {
   var ret = [];
   for(var i = 0; i < ary.length; i++) {
@@ -39,6 +42,26 @@ class Entry {
     if (element['refName']) {
       element.parent = this;
     }
+  }
+
+  addMetadata(metadata) {
+    Object.keys(metadata).forEach((key) => {
+      if (!key.match(/\//)) {
+        throw("Metadata keys must contain at least one slash. (Failed at ''" + key + "')");
+      }
+      if (typeof(metadata[key]) === 'string') {
+        if (metadata[key].match(/^=/)) {
+          // shortcut for creating references
+          var name = metadata[key].slice(1).trim();
+          metadata[key] = new Reference('metachild', name);
+        } else if (metadata[key].match(/^#([a-fA-F0-9]){3,8}/) || metadata[key].match(/^rgba?\(.*\)$/)) {
+          // shortcut for creating colors
+          metadata[key] = ColorValue.fromColorValue(metadata[key]);
+        }
+      }
+      this.metadata[key] = metadata[key];
+      this.addParent(this.metadata[key]);
+    });
   }
 
   addChild(child, validate=true) {
