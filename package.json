@@ -1,6 +1,6 @@
 {
   "name": "opencolor",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "A collection of functions to parse Open Color files, construct them via code and write them",
   "main": "lib/index.js",
   "repository": "https://github.com/opencolor-tools/opencolor-js",
@@ -12,9 +12,8 @@
     "url": "https://jan.krutisch.de/"
   },
   "contributors": [
-    {
-      "name": "Florian Munz"
-    }
+    "Florian Munz <surf@theflow.de>",
+    "Michael Schieben <michael@precious-forever.com>"
   ],
   "scripts": {
     "test": "make test",
