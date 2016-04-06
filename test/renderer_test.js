@@ -52,7 +52,7 @@ almost yellow: =bright yellow
     var input = fs.readFileSync('test/fixtures/test.oco');
     var tree = oco.parse(input);
     // basically just one assertion to verify the parsing worked.
-    var result = new oco.Renderer(tree).render();
+    var result = oco.render(tree);
     expect(result).to.equal(input.toString());
 
 

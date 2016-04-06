@@ -4,7 +4,6 @@
 class Reference {
   constructor(name, refName) {
     this.name = name;
-    this.reference = null;
     this.refName = refName;
     this.parent = null;
     this.type = 'Reference';
@@ -13,15 +12,33 @@ class Reference {
     if (stack.indexOf(this) !== -1) {
       throw("References can not be circular!");
     }
-    if (this.reference) {
-      if (this.reference['reference']) {
-        return this.reference.resolved(stack.concat([this]));
+    var refPath = this.refName.split(".");
+    var reference = this.resolve(this.parent, refPath);
+    if (reference) {
+      if (reference['refName']) {
+        return reference.resolved(stack.concat([this]));
       } else {
-        return this.reference;
+        return reference;
       }
     }
-    return false;
+    return null;
+  }
 
+  resolve(current, path, notUp) {
+    var resolved = current.get(path[0]);
+    if (resolved) {
+      if (path.length > 1) {
+        resolved = this.resolve(resolved, path.slice(1), true);
+      }
+      if (resolved) {
+        return resolved;
+      }
+    }
+    if (current.parent && !notUp) {
+      return this.resolve(current.parent, path);
+    } else {
+      return null;
+    }
   }
 }
 

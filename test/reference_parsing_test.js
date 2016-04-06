@@ -12,7 +12,7 @@ ref color: =color
     var tree = oco.parse(test);
     // Only simple, same level references for now
     expect(tree.children[1].refName).to.equal('color');
-    expect(tree.children[1].reference.get('rgb').value).to.equal('#fff');
+    expect(tree.children[1].resolved().get('rgb').value).to.equal('#fff');
   });
 
   it("should parse a deep reference", () => {
@@ -27,7 +27,7 @@ another color: #fff
     // Only simple, same level references for now
     var refColor = tree.get('group').get('ref color');
     expect(refColor.refName).to.equal('color');
-    expect(refColor.reference.get('rgb').value).to.equal('#fff');
+    expect(refColor.resolved().get('rgb').value).to.equal('#fff');
   });
 
   it("should parse a tree reference", () => {
@@ -42,7 +42,7 @@ group:
     // Only simple, same level references for now
     var refColor = tree.get('group').get('ref color');
     expect(refColor.refName).to.equal('group.another color');
-    expect(refColor.reference.get('rgb').value).to.equal('#afa');
+    expect(refColor.resolved().get('rgb').value).to.equal('#afa');
   });
 
   it("should parse a non obvious tree reference", () => {
@@ -57,7 +57,7 @@ a:
     // Only simple, same level references for now
     var refColor = tree.get('a').get('a').get('subgroup ref color');
     expect(refColor.refName).to.equal('a.b');
-    expect(refColor.reference.get('rgb').value).to.equal('#fff');
+    expect(refColor.resolved().get('rgb').value).to.equal('#fff');
   });
 
   it("should resolve references of references", () => {

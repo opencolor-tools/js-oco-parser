@@ -6,6 +6,7 @@ var Entry = require('./entry');
 var ColorValue = require('./color_value');
 var Reference = require('./reference');
 var Metadata = require('./metadata');
+var Renderer = require('./renderer');
 var lexer = require('./lexer');
 jisonparser.lexer = lexer;
 
@@ -23,9 +24,15 @@ var parser = {
   parse(data) {
     jisonparser.lexer.resetWithInput(""); //resetting the lexer. Not needed in prod, but helps testing.
     var tree = jisonparser.parse(data);
-    tree.resolveReferences();
     return tree;
-  }
+  },
+  render(tree) {
+    return new Renderer(tree).render();
+  },
+  Entry,
+  ColorValue,
+  Reference,
+  Metadata
 };
 
 

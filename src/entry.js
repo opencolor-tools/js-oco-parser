@@ -22,7 +22,7 @@ class Entry {
     this.childKeys = {};
     this.parent = null;
     this.type = type || ((this.name === 'Root') ? 'Root' : 'Entry');
-    this.addChildren(flatten(children || []));
+    this.addChildren(flatten(children || []), false);
     this.validateType();
     this.forEach = Array.prototype.forEach.bind(this.children); // the magic of JavaScript.
 
@@ -34,16 +34,25 @@ class Entry {
       return this.children[nameOrIndex];
     }
   }
+
+  addParent(element) {
+    if (element['refName']) {
+      element.parent = this;
+    }
+  }
+
   addChild(child, validate=true) {
     var type = child.type;
     // we're basically only separating meta data.
     if (type === 'Metadata') {
       this.metadata[child.name] = child.value;
+      this.addParent(this.metadata[child.name]);
     } else if (type === 'Metablock') {
       var prefix = child.name + "/";
       Object.keys(child.metadata).forEach((key) => {
         var combinedKey = (prefix + key).replace(/\/\//g, '/'); // normalize keys
         this.metadata[combinedKey] = child.metadata[key];
+        this.addParent(this.metadata[combinedKey]);
       });
     } else {
       if ('undefined' !== typeof this.childKeys[child.name]) { // name collision. just overwrite as yaml would probably do.
@@ -81,40 +90,6 @@ class Entry {
       this.type = 'Color';
     }
   }
-
-  resolve(current, path, notUp) {
-    var resolved = current.get(path[0]);
-    if (resolved) {
-      if (path.length > 1) {
-        resolved = this.resolve(resolved, path.slice(1), true);
-      }
-      if (resolved) {
-        return resolved;
-      }
-    }
-    if (current.parent && !notUp) {
-      return this.resolve(current.parent, path);
-    } else {
-      return null;
-    }
-  }
-
-  resolveChild(child) {
-    if (child['resolveReferences']) {
-      child.resolveReferences();
-    }
-    if (child['refName']) { // look ma, it's a reference
-      var refPath = child.refName.split(".");
-      child.reference = this.resolve(this, refPath);
-    }
-  }
-
-  resolveReferences() {
-    Object.keys(this.metadata).forEach((key) => {
-      this.resolveChild(this.metadata[key]);
-    });
-    this.children.forEach(this.resolveChild, this);
-  }
-
 }
+
 module.exports = Entry;
