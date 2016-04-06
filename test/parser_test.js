@@ -116,6 +116,34 @@ color: #000
   });
 });
 
+describe("Parsing comments", () => {
+  it("should parse single line comments", () => {
+    var test = "color: #fff\n// Hello!\n";
+    var tree = parser.parse(test);
+    expect(tree.get('color').get('rgb').value).to.equal('#fff');
+  });
+  it("should parse single line comments after block", () => {
+    var test = `
+group:
+  color: #fff
+// Hello!
+`;
+    var tree = parser.parse(test);
+    expect(tree.get('group').get('color').get('rgb').value).to.equal('#fff');
+  });
+
+  it("should parse same line comments", () => {
+    var test = "color: #fff// Hello!\n";
+    var tree = parser.parse(test);
+    expect(tree.get('color').get('rgb').value).to.equal('#fff');
+  });
+  it("should parse block lead comments", () => {
+    var test = "group: // Hello\n  color: #ffe\n";
+    var tree = parser.parse(test);
+    expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
+  });
+});
+
 describe("Parser access methods", () => {
   it("should allow for dual access via index and key", () => {
     var test = "color: #fff\n";
@@ -141,9 +169,10 @@ color b: #000
 
 describe("Parsing a more complex document", () => {
   it("should parse a single color", () => {
-    var input = fs.readFileSync('test/fixtures/test.oco');
+    var input = fs.readFileSync('test/fixtures/test_with_comments.oco');
     var tree = parser.parse(input);
     // basically just one assertion to verify the parsing worked.
     expect(tree.children[0].get('yellow').get('rgb').value).to.equal('#c01016');
+    expect(tree.get('group').metadata['meta/other/data']).to.equal('Super Cool Metadata');
   });
 });

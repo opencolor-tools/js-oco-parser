@@ -85,8 +85,9 @@ class Entry {
         this.children.push(child);
         this.childKeys[child.name] = newIndex;
       }
+      child.parent = this;
     }
-    child.parent = this;
+
     if (validate) {
       this.validateType();
     }

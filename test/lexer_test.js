@@ -2,18 +2,6 @@ var expect = require('chai').expect;
 
 var lexer = require('../lib/lexer.js');
 
-//for debugging purposes
-// function lexAll(input) {
-//   var out = [];
-//   var lex;
-//   lexer.resetWithInput(input);
-//   do {
-//     lex = lexer.lex();
-//     out.push(lex);
-//   } while(lex);
-//   return out;
-// }
-
 function lexNTimes(input, step) {
   lexer.resetWithInput(input);
   var retVal, i;
@@ -34,11 +22,8 @@ function lexNTimes(input, step) {
 //   } while(lex);
 //   return out;
 // }
-
-// var test = `
-// color: #fff
-// meta/name: =color
-// `;
+//
+// var test = "test/:\n  other/data: Super Cool Metadata\n";
 // console.log(lexAll(test));
 
 // var test = "\n\nGroup:\n  name/author: Erykah Badu\n";

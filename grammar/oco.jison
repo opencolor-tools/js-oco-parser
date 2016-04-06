@@ -9,28 +9,37 @@ expressions
 
 entries
   : entry
-  { $$ = [ $1 ]}
+  { $$ = [ $1 ]; }
   | entries entry
   { $$ = $1; $1.push($2); }
+  | entries terminators
+  { $$ = $1; }
   ;
 
 entry
-  : entryname newlines block
+  : entryname terminators block
   { $$ = new yy.Entry($1, $3, null, @3); }
-  | entryname colorvalues newlines
+  | entryname colorvalues terminators
   { $$ = new yy.Entry($1, $2, 'Color', @2); }
-  | entryname reference newlines
+  | entryname reference terminators
   { $$ = new yy.Reference($1, $2)}
-  | metaname newlines metablock
+  | metaname terminators metablock
   { $$ = new yy.Entry($1, $3, 'Metablock', @3); }
-  | metaname metavalue newlines
+  | metaname metavalue terminators
   { $$ = new yy.Metadata($1, $2); }
-  | colorvalues newlines
+  | colorvalues terminators
   { $$ = $1 }
   ;
 
+nameparts
+  : NAME
+  { $$ = $1;}
+  | nameparts NAME
+  { $$ = $1 + ' ' + $2 }
+  ;
+
 entryname
-  : NAME ':'
+  : nameparts ':'
   { $$ = $1;}
   | NUMBER ':'
   { $$ = $1;}
@@ -44,9 +53,9 @@ reference
   ;
 
 referenceNames
-  : NAME
+  : nameparts
   { $$ = $1; }
-  | NAME '.' referenceNames
+  | nameparts '.' referenceNames
   { $$ = $1 + '.' + $3 }
   ;
 
@@ -58,15 +67,15 @@ metaentries
   ;
 
 metadata
-  : metaname metavalue newlines
-  { $$ = new yy.Metadata($1, $3);  }
-  | NAME ':' metavalue newlines
+  : metaname metavalue terminators
+  { $$ = new yy.Metadata($1, $2);  }
+  | nameparts ':' metavalue terminators
   { $$ = new yy.Metadata($1, $3);  }
   ;
 
 metavalue
-  : NAME
-  { $$ = $1; }
+  : nameparts
+  { $$ = $1;}
   | NUMBER
   { $$ = parseFloat($1); }
   | boolean
@@ -82,6 +91,11 @@ metaname
   { $$ = $1; }
   ;
 
+comment
+  : COMMENTSTART nameparts
+  | COMMENTSTART STRING
+  ;
+
 metanameparts
   : '/' NAME
   { $$ = '/' + $2 }
@@ -95,10 +109,11 @@ metanameparts
   { $$ = $1 + '/' }
   ;
 
-newlines
+terminators
   : NEWLINE
-  | NEWLINE newlines
+  | comment terminators
   ;
+
 
 block
   : INDENT entries OUTDENT
