@@ -6,14 +6,14 @@ Build-Status: ![Build Status](https://travis-ci.org/opencolor-tools/js-oco-parse
 
 ## Install
 
-npm install ocolib
+npm install opencolor
 
 ## Examples
 
 Parsing and rendering OCO formats in node.js
 
 ```JavaScript
-var oco = require('ocolib');
+var oco = require('opencolor');
 
 var tree = oco.parse(string); // gives you a tree of the parsed OCO data
 
