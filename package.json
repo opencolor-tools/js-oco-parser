@@ -1,9 +1,21 @@
 {
-  "name": "oco-parser",
-  "version": "1.0.0",
-  "description": "Parser for the open color format",
+  "name": "opencolor",
+  "version": "1.0",
+  "description": "A collection of functions to parse Open Color files, construct them via code and write them",
   "main": "lib/index.js",
-  "repository": "https://github.com/opencolor-tools/js-oco-parser",
+  "repository": "https://github.com/opencolor-tools/opencolor-js",
+  "bugs": "https://github.com/opencolor-tools/opencolor-js/issues",
+  "homepage": "http://opencolor.tools",
+  "author": {
+    "name": "Jan Krutisch",
+    "email": "jan@krutisch.de",
+    "url": "https://jan.krutisch.de/"
+  },
+  "contributors": [
+    {
+      "name": "Florian Munz"
+    }
+  ],
   "scripts": {
     "test": "make test",
     "build": "make build",
