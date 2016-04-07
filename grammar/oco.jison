@@ -31,19 +31,24 @@ entry
   { $$ = $1 }
   ;
 
-nameparts
+namepart
   : NAME
   { $$ = $1;}
-  | nameparts NAME
+  | NUMBER
+  { $$ = $1;}
+  | HEXNUMBER
+  { $$ = $1;}
+  ;
+
+nameparts
+  : namepart
+  { $$ = $1;}
+  | nameparts namepart
   { $$ = $1 + ' ' + $2 }
   ;
 
 entryname
   : nameparts ':'
-  { $$ = $1;}
-  | NUMBER ':'
-  { $$ = $1;}
-  | HEXNUMBER ':'
   { $$ = $1;}
   ;
 
@@ -54,7 +59,7 @@ reference
 
 referenceNames
   : nameparts
-  { $$ = $1; }
+  { $$ = "" + $1; }
   | nameparts '.' referenceNames
   { $$ = $1 + '.' + $3 }
   ;
@@ -74,7 +79,7 @@ metadata
   ;
 
 metavalue
-  : nameparts
+  : metavalueparts
   { $$ = $1;}
   | NUMBER
   { $$ = parseFloat($1); }
@@ -84,6 +89,19 @@ metavalue
   { $$ = $1; }
   | reference
   { $$ = new yy.Reference('metachild', $1); }
+  ;
+
+metavalueparts
+  : NAME
+  { $$ = $1;}
+  | HEXNUMBER
+  { $$ = $1;}
+  | metavalueparts NAME
+  { $$ = $1 + " " + $2 }
+  | metavalueparts NUMBER
+  { $$ = $1 + " " + $2 }
+  | metavalueparts HEXNUMBER
+  { $$ = $1 + " " + $2 }
   ;
 
 metaname
@@ -97,15 +115,15 @@ comment
   ;
 
 metanameparts
-  : '/' NAME
+  : '/' nameparts
   { $$ = '/' + $2 }
-  | NAME '/' NAME
+  | nameparts '/' nameparts
   { $$ = $1 + '/' + $3 }
-  | '/' NAME '/' metanameparts
+  | '/' nameparts '/' metanameparts
   { $$ = '/' + $2 + '/' + $4 }
-  | NAME '/' metanameparts
+  | nameparts '/' metanameparts
   { $$ = $1 + '/' + $3 }
-  | NAME '/'
+  | nameparts '/'
   { $$ = $1 + '/' }
   ;
 

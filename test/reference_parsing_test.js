@@ -83,7 +83,6 @@ b: =a
     expect(tree.get('a').resolved).to.throw();
   });
 
-
   it("should break on resolving multi circular references", () => {
     var test = `
 a: =b
@@ -93,6 +92,16 @@ c: =a
     var tree = oco.parse(test);
     // Only simple, same level references for now
     expect(tree.get('a').resolved).to.throw();
+  });
+
+  it("should resolve references with number names", () => {
+    var test = `
+800: #cc0000
+a: =800
+`;
+    var tree = oco.parse(test);
+    // Only simple, same level references for now
+    expect(tree.get('a').resolved().get('rgb').value).to.equal('#cc0000');
   });
 
 });

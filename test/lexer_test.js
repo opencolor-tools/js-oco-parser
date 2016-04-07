@@ -23,7 +23,7 @@ function lexNTimes(input, step) {
 //   return out;
 // }
 //
-// var test = "test/:\n  other/data: Super Cool Metadata\n";
+// var test = "/author: Erykah Badu\n";
 // console.log(lexAll(test));
 
 // var test = "\n\nGroup:\n  name/author: Erykah Badu\n";
