@@ -1,5 +1,10 @@
 /* jshint -W097 */
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
 if (typeof module === "object" && typeof module.exports === "object") module.exports = Lexer;
 
 Lexer.defunct = function (chr) {
@@ -64,18 +69,24 @@ function Lexer(defunct) {
                     this.index += length;
                     this.reject = false;
                     remove++;
-
-                    var token = match.action.apply(this, result);
-                    if (this.reject) this.index = result.index;
-                    else if (typeof token !== "undefined") {
-                        switch (Object.prototype.toString.call(token)) {
-                        case "[object Array]":
-                            tokens = token.slice(1);
-                            token = token[0];
-                        default:
-                            if (length) remove = 0;
-                            return token;
-                        }
+                    log("---");
+                    log(match);
+                    if(!match.action) {
+                      log("missing action");
+                    } else {
+                      var token = match.action.apply(this, result);
+                      log("token " + token);
+                      if (this.reject) this.index = result.index;
+                      else if (typeof token !== "undefined") {
+                          switch (Object.prototype.toString.call(token)) {
+                          case "[object Array]":
+                              tokens = token.slice(1);
+                              token = token[0];
+                          default:
+                              if (length) remove = 0;
+                              return token;
+                          }
+                      }
                     }
                 } else break;
             }
@@ -148,316 +159,250 @@ function Lexer(defunct) {
 }
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+// -- lexer
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+// replaces require
 
+var row = 1;
+var col = 1;
+var indent = [0];
 
-var ocoParser = (function(){
-var o = function(k,v,o,l){
-  for(
-      o=o||{}, l=k.length;
-      l--;
-      xk = k[l],
-      o[xk]=v
-      );
-    return o
-  }
-  ,$V0=[1,12],$V1=[1,8],$V2=[1,9],$V3=[1,13],$V4=[1,14],$V5=[1,20],$V6=[1,18],$V7=[5,16,18,19,29,31,32,34,37],$V8=[1,25],$V9=[1,24],$Va=[1,33],$Vb=[1,29],$Vc=[1,34],$Vd=[1,35],$Ve=[1,37],$Vf=[1,39],$Vg=[29,32,35],$Vh=[16,17],$Vi=[2,11],$Vj=[1,43],$Vk=[1,44],$Vl=[5,16,18,19,29,31,32,33,34,37],$Vm=[1,52],$Vn=[29,32],$Vo=[16,20,29,32,37],$Vp=[1,68],$Vq=[1,67],$Vr=[1,76],$Vs=[35,40],$Vt=[16,31,34];
-var parser = {trace: function trace() { },
-yy: {},
-symbols_: {"error":2,"expressions":3,"entries":4,"EOF":5,"entry":6,"terminators":7,"entryname":8,"block":9,"colorvalues":10,"reference":11,"metaname":12,"metablock":13,"metavalue":14,"nameparts":15,"NAME":16,":":17,"NUMBER":18,"HEXNUMBER":19,"=":20,"referenceNames":21,".":22,"metaentries":23,"metadata":24,"boolean":25,"colorvalue":26,"metanameparts":27,"comment":28,"COMMENTSTART":29,"STRING":30,"/":31,"NEWLINE":32,"INDENT":33,"OUTDENT":34,",":35,"hexnum":36,"#":37,"(":38,"colorvaluevalues":39,")":40,"colorvaluevalue":41,"TRUE":42,"FALSE":43,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",16:"NAME",17:":",18:"NUMBER",19:"HEXNUMBER",20:"=",22:".",29:"COMMENTSTART",30:"STRING",31:"/",32:"NEWLINE",33:"INDENT",34:"OUTDENT",35:",",37:"#",38:"(",40:")",42:"TRUE",43:"FALSE"},
-productions_: [0,[3,2],[4,1],[4,2],[4,2],[6,3],[6,3],[6,3],[6,3],[6,3],[6,2],[15,1],[15,2],[8,2],[8,2],[8,2],[11,2],[21,1],[21,3],[23,1],[23,2],[24,3],[24,4],[14,1],[14,1],[14,1],[14,1],[14,1],[12,2],[28,2],[28,2],[27,2],[27,3],[27,4],[27,3],[27,2],[7,1],[7,2],[9,3],[13,3],[10,1],[10,3],[36,1],[26,2],[26,2],[26,4],[39,1],[39,3],[41,1],[41,1],[25,1],[25,1]],
-performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$) {
-/* this == yyval */
+var lexer = new Lexer(function (char) {
+  throw new Error("Unexpected character at row " + row + ", col " + col + ": " + char);
+});
 
-var $0 = $$.length - 1;
-switch (yystate) {
-case 1:
-  return new yy.Entry('root', $$[$0-1], 'Root', _$[$0-1]) 
-break;
-case 2:
- this.$ = [ $$[$0] ]; 
-break;
-case 3:
- this.$ = $$[$0-1]; $$[$0-1].push($$[$0]); 
-break;
-case 4: case 28: case 39:
- this.$ = $$[$0-1]; 
-break;
-case 5:
- this.$ = new yy.Entry($$[$0-2], $$[$0], null, _$[$0]); 
-break;
-case 6:
- this.$ = new yy.Entry($$[$0-2], $$[$0-1], 'Color', _$[$0-1]); 
-break;
-case 7:
- this.$ = new yy.Reference($$[$0-2], $$[$0-1])
-break;
-case 8:
- this.$ = new yy.Entry($$[$0-2], $$[$0], 'Metablock', _$[$0]); 
-break;
-case 9:
- this.$ = new yy.Metadata($$[$0-2], $$[$0-1]); 
-break;
-case 10:
- this.$ = $$[$0-1] 
-break;
-case 11: case 23:
- this.$ = $$[$0];
-break;
-case 12:
- this.$ = $$[$0-1] + ' ' + $$[$0] 
-break;
-case 13: case 14: case 15: case 38:
- this.$ = $$[$0-1];
-break;
-case 16: case 17: case 25: case 26:
- this.$ = $$[$0]; 
-break;
-case 18:
- this.$ = $$[$0-2] + '.' + $$[$0] 
-break;
-case 19: case 40:
- this.$ = [$$[$0]] 
-break;
-case 20:
- this.$ = $$[$0-1]; this.$.push($$[$0]) 
-break;
-case 21:
- this.$ = new yy.Metadata($$[$0-2], $$[$0-1]);  
-break;
-case 22:
- this.$ = new yy.Metadata($$[$0-3], $$[$0-1]);  
-break;
-case 24:
- this.$ = parseFloat($$[$0]); 
-break;
-case 27:
- this.$ = new yy.Reference('metachild', $$[$0]); 
-break;
-case 31:
- this.$ = '/' + $$[$0] 
-break;
-case 32: case 34:
- this.$ = $$[$0-2] + '/' + $$[$0] 
-break;
-case 33:
- this.$ = '/' + $$[$0-2] + '/' + $$[$0] 
-break;
-case 35:
- this.$ = $$[$0-1] + '/' 
-break;
-case 41:
- this.$ = $$[$0-2]; $$[$0-2].push($$[$0-1]); 
-break;
-case 42:
- this.$ = yytext; 
-break;
-case 43: case 44:
- this.$ = new yy.ColorValue('rgb', "#" + $$[$0]); 
-break;
-case 45:
- this.$ = new yy.ColorValue($$[$0-3], $$[$0-3] + "(" + $$[$0-1].join(",") + ")"); 
-break;
-case 46:
- this.$ = [$$[$0]]; 
-break;
-case 47:
- this.$ = $$[$0-2]; this.$.push($$[$0]); 
-break;
-case 50:
- this.$ = true; 
-break;
-case 51:
- this.$ = false; 
-break;
-}
-},
-table: [{3:1,4:2,6:3,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,31:$V3,37:$V4},{1:[3]},{5:[1,15],6:16,7:17,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,28:19,29:$V5,31:$V3,32:$V6,37:$V4},o($V7,[2,2]),{7:21,10:22,11:23,16:$V8,20:$V9,26:11,28:19,29:$V5,32:$V6,37:$V4},{7:26,11:32,14:27,15:28,16:$Va,18:$Vb,20:$V9,25:30,26:31,28:19,29:$V5,32:$V6,37:$V4,42:$Vc,43:$Vd},{7:36,28:19,29:$V5,32:$V6,35:$Ve},{16:$Vf,17:[1,38]},{17:[1,40]},{17:[1,41]},{17:[1,42]},o($Vg,[2,40]),o($Vh,$Vi,{31:$Vj,38:$Vk}),{16:[1,45]},{18:[1,47],19:[1,48],36:46},{1:[2,1]},o($V7,[2,3]),o($V7,[2,4]),o($Vl,[2,36]),{7:49,28:19,29:$V5,32:$V6},{15:50,16:$Vm,30:[1,51]},{9:53,33:[1,54]},{7:55,28:19,29:$V5,32:$V6,35:$Ve},{7:56,28:19,29:$V5,32:$V6},{15:58,16:$Vm,21:57},{38:$Vk},{13:59,33:[1,60]},{7:61,28:19,29:$V5,32:$V6},o($Vn,[2,23],{16:$Vf}),o($Vn,[2,24]),o($Vn,[2,25]),o($Vn,[2,26]),o($Vn,[2,27]),o([16,29,32],$Vi,{38:$Vk}),o($Vn,[2,50]),o($Vn,[2,51]),o($V7,[2,10]),{16:$V8,26:62,37:$V4},o($Vo,[2,13]),o([16,17,22,29,32],[2,12]),o($Vo,[2,14]),o($Vo,[2,15]),o([16,18,20,29,32,37,42,43],[2,28]),{16:[1,63],17:[2,35],27:64,31:$V3},{16:$Vp,18:$Vq,39:65,41:66},{17:[2,31],31:[1,69]},o($Vg,[2,43]),o($Vg,[2,44]),o($Vg,[2,42]),o($Vl,[2,37]),o($Vn,[2,29],{16:$Vf}),o($Vn,[2,30]),o([16,22,29,32],$Vi),o($V7,[2,5]),{4:70,6:3,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,31:$V3,37:$V4},o($V7,[2,6]),o($V7,[2,7]),o($Vn,[2,16]),o($Vn,[2,17],{16:$Vf,22:[1,71]}),o($V7,[2,8]),{12:74,15:75,16:$Vr,23:72,24:73,27:10,31:$V3},o($V7,[2,9]),o($Vg,[2,41]),{17:[2,32],31:$Vj},{17:[2,34]},{35:[1,78],40:[1,77]},o($Vs,[2,46]),o($Vs,[2,48]),o($Vs,[2,49]),{16:[1,80],27:79,31:$V3},{6:16,7:17,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,28:19,29:$V5,31:$V3,32:$V6,34:[1,81],37:$V4},{15:58,16:$Vm,21:82},{12:74,15:75,16:$Vr,24:84,27:10,31:$V3,34:[1,83]},o($Vt,[2,19]),{11:32,14:85,15:28,16:$Va,18:$Vb,20:$V9,25:30,26:31,37:$V4,42:$Vc,43:$Vd},{16:$Vf,17:[1,86]},o($Vh,$Vi,{31:$Vj}),o($Vg,[2,45]),{16:$Vp,18:$Vq,41:87},{17:[2,33]},{31:$Vj},o($V7,[2,38]),o($Vn,[2,18]),o($V7,[2,39]),o($Vt,[2,20]),{7:88,28:19,29:$V5,32:$V6},{11:32,14:89,15:28,16:$Va,18:$Vb,20:$V9,25:30,26:31,37:$V4,42:$Vc,43:$Vd},o($Vs,[2,47]),o($Vt,[2,21]),{7:90,28:19,29:$V5,32:$V6},o($Vt,[2,22])],
-defaultActions: {15:[2,1],64:[2,34],79:[2,33]},
-parseError: function parseError(str, hash) {
-    if (hash.recoverable) {
-        this.trace(str);
-    } else {
-        function _parseError (msg, hash) {
-            this.message = msg;
-            this.hash = hash;
-        }
-        _parseError.prototype = Error;
-
-        throw new _parseError(str, hash);
-    }
-},
-parse: function parse(input) {
-    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
-    var args = lstack.slice.call(arguments, 1);
-    var lexer = Object.create(this.lexer);
-    var sharedState = { yy: {} };
-    for (var k in this.yy) {
-        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
-            sharedState.yy[k] = this.yy[k];
-        }
-    }
-    lexer.setInput(input, sharedState.yy);
-    sharedState.yy.lexer = lexer;
-    sharedState.yy.parser = this;
-    if (typeof lexer.yylloc == 'undefined') {
-        lexer.yylloc = {};
-    }
-    var yyloc = lexer.yylloc;
-    lstack.push(yyloc);
-    var ranges = lexer.options && lexer.options.ranges;
-    if (typeof sharedState.yy.parseError === 'function') {
-        this.parseError = sharedState.yy.parseError;
-    } else {
-        this.parseError = Object.getPrototypeOf(this).parseError;
-    }
-    function popStack(n) {
-        stack.length = stack.length - 2 * n;
-        vstack.length = vstack.length - n;
-        lstack.length = lstack.length - n;
-    }
-    _token_stack:
-        var lex = function () {
-            var token;
-            token = lexer.lex() || EOF;
-            if (typeof token !== 'number') {
-                token = self.symbols_[token] || token;
-            }
-            return token;
-        };
-    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
-    while (true) {
-        state = stack[stack.length - 1];
-        if (this.defaultActions[state]) {
-            action = this.defaultActions[state];
-        } else {
-            if (symbol === null || typeof symbol == 'undefined') {
-                symbol = lex();
-            }
-            action = table[state] && table[state][symbol];
-        }
-                    if (typeof action === 'undefined' || !action.length || !action[0]) {
-                var errStr = '';
-                expected = [];
-                for (p in table[state]) {
-                    if (this.terminals_[p] && p > TERROR) {
-                        expected.push('\'' + this.terminals_[p] + '\'');
-                    }
-                }
-                if (lexer.showPosition) {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
-                } else {
-                    errStr = 'Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
-                }
-                this.parseError(errStr, {
-                    text: lexer.match,
-                    token: this.terminals_[symbol] || symbol,
-                    line: lexer.yylineno,
-                    loc: yyloc,
-                    expected: expected
-                });
-            }
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
-        }
-        switch (action[0]) {
-        case 1:
-            stack.push(symbol);
-            vstack.push(lexer.yytext);
-            lstack.push(lexer.yylloc);
-            stack.push(action[1]);
-            symbol = null;
-            if (!preErrorSymbol) {
-                yyleng = lexer.yyleng;
-                yytext = lexer.yytext;
-                yylineno = lexer.yylineno;
-                yyloc = lexer.yylloc;
-                if (recovering > 0) {
-                    recovering--;
-                }
-            } else {
-                symbol = preErrorSymbol;
-                preErrorSymbol = null;
-            }
-            break;
-        case 2:
-            var __OCO_SKETCK_k = action[1]; len = this.productions_[__OCO_SKETCK_k][1];
-            yyval.$ = vstack[vstack.length - len];
-            yyval._$ = {
-                first_line: lstack[lstack.length - (len || 1)].first_line,
-                last_line: lstack[lstack.length - 1].last_line,
-                first_column: lstack[lstack.length - (len || 1)].first_column,
-                last_column: lstack[lstack.length - 1].last_column
-            };
-            if (ranges) {
-                yyval._$.range = [
-                    lstack[lstack.length - (len || 1)].range[0],
-                    lstack[lstack.length - 1].range[1]
-                ];
-            }
-            r = this.performAction.apply(yyval, [
-                yytext,
-                yyleng,
-                yylineno,
-                sharedState.yy,
-                action[1],
-                vstack,
-                lstack
-            ].concat(args));
-            if (typeof r !== 'undefined') {
-                return r;
-            }
-            if (len) {
-                stack = stack.slice(0, -1 * len * 2);
-                vstack = vstack.slice(0, -1 * len);
-                lstack = lstack.slice(0, -1 * len);
-            }
-            var __OCO_SKETCK_k = action[1]; stack.push(this.productions_[__OCO_SKETCK_k][0]);
-            vstack.push(yyval.$);
-            lstack.push(yyval._$);
-            var __OCO_SKETCK_k1 = stack[stack.length - 2]; var __OCO_SKETCK_k2 = stack[stack.length - 2]; newState = table[__OCO_SKETCK_k1][__OCO_SKETCK_k2];
-            stack.push(newState);
-            break;
-        case 3:
-            return true;
-        }
-    }
-    return true;
-}};
-
-function Parser () {
-  this.yy = {};
-}
-Parser.prototype = parser;parser.Parser = Parser;
-return new Parser;
-})();
-
-
-if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = ocoParser;
-exports.Parser = ocoParser.Parser;
-exports.parse = function () { return ocoParser.parse.apply(ocoParser, arguments); };
-exports.main = function commonjsMain(args) {
-    if (!args[1]) {
-        console.log('Usage: '+args[0]+' FILE');
-        process.exit(1);
-    }
-    // replaces require
-    return exports.parser.parse(source);
+lexer.resetWithInput = function (input) {
+  lexer.setInput(input);
+  row = 1;
+  col = 1;
+  indent = [0];
 };
-if (typeof module !== 'undefined' && require.main === module) {
-  exports.main(process.argv.slice(1));
+
+function addLocation(obj, line, col, length) {
+  if (!obj.yylloc) {
+    obj.yylloc = {};
+  }
+  obj.yylloc.first_line = line;
+  obj.yylloc.last_line = line;
+  obj.yylloc.first_column = col;
+  obj.yylloc.last_column = col + length;
 }
-}/* jshint -W097 */
+
+lexer.addRule(new RegExp('^( \\t)*\\n', 'gm'), function () {
+  col = 1;
+  row += 1;
+});
+
+lexer.addRule(new RegExp('\\n+'), function (lexeme) {
+  addLocation(this, row, col, 1);
+  col = 1;
+  row += lexeme.length;
+  return "NEWLINE";
+});
+
+lexer.addRule(new RegExp('^ *', 'gm'), function (lexeme) {
+  var indentation = lexeme.length;
+  addLocation(this, row, col, indentation);
+  col += indentation;
+
+  if (indentation > indent[0]) {
+    indent.unshift(indentation);
+    return "INDENT";
+  }
+
+  var tokens = [];
+
+  while (indentation < indent[0]) {
+    tokens.push("OUTDENT");
+    indent.shift();
+  }
+
+  if (tokens.length) {
+    return tokens;
+  }
+});
+
+lexer.addRule(new RegExp(' +'), function (lexeme) {
+  col += lexeme.length;
+});
+
+lexer.addRule(new RegExp('true'), function (lexeme) {
+  addLocation(this, row, col, lexeme.length);
+  col += lexeme.length;
+  return "TRUE";
+});
+
+lexer.addRule(new RegExp('false'), function (lexeme) {
+  addLocation(this, row, col, lexeme.length);
+  col += lexeme.length;
+  return "FALSE";
+});
+
+lexer.addRule(new RegExp('([0-9]+(\\.?[0-9]*))'), function (lexeme) {
+  this.yytext = lexeme;
+  addLocation(this, row, col, lexeme.length);
+  col += lexeme.length;
+  return "NUMBER";
+});
+
+lexer.addRule(new RegExp('[a-f\\d]{3,8}', 'i'), function (lexeme) {
+  addLocation(this, row, col, lexeme.length);
+  this.yytext = lexeme;
+  col += lexeme.length;
+  return "HEXNUMBER";
+});
+
+lexer.addRule(new RegExp('[^\\/:.,=#()\\n ]+'), function (lexeme) {
+  log("NAME");
+  addLocation(this, row, col, lexeme.length);
+  this.yytext = lexeme;
+  col += lexeme.length;
+  return "NAME";
+});
+
+
+// lexer.addRule(/"(.*)"/, function (lexeme, string) {
+//   this.yytext = string;
+//   addLocation(this, row, col, string.length);
+//   col += lexeme.length;
+//   return "STRING";
+// });
+
+lexer.addRule(new RegExp('\\/\\/'), function () {
+  addLocation(this, row, col, 1);
+  col++;
+  return "COMMENTSTART";
+});
+
+lexer.addRule(new RegExp('\\/'), function () {
+  addLocation(this, row, col, 1);
+  col++;
+  return "/";
+});
+
+
+lexer.addRule(new RegExp('\\.'), function (lexeme) {
+  log("DOT");
+  addLocation(this, row, col, 1);
+  col++;
+  return ".";
+});
+
+lexer.addRule(new RegExp('\\:'), function () {
+  log("COLON");
+  addLocation(this, row, col, 1);
+  col++;
+  return ":";
+});
+
+lexer.addRule(new RegExp('='), function () {
+  log("EQUAL_SIGN");
+  addLocation(this, row, col, 1);
+  col++;
+  return "=";
+});
+
+lexer.addRule(new RegExp('\\#'), function () {
+  addLocation(this, row, col, 1);
+  col++;
+  return "#";
+});
+
+var __OCO_SKETCK_r1 = '\\';
+__OCO_SKETCK_r1 += '(';
+lexer.addRule(new RegExp(__OCO_SKETCK_r1), function () {
+  addLocation(this, row, col, 1);
+  col++;
+  return "(";
+});
+
+var __OCO_SKETCK_r2 = '\\';
+__OCO_SKETCK_r2 += ')';
+lexer.addRule(new RegExp(__OCO_SKETCK_r2), function () {
+  addLocation(this, row, col, 1);
+  col++;
+  return ")";
+});
+
+lexer.addRule(new RegExp(','), function () {
+  addLocation(this, row, col, 1);
+  col++;
+  return ",";
+});
+
+lexer.addRule(new RegExp('='), function () {
+  addLocation(this, row, col, 1);
+  col++;
+  return "=";
+});
+
+// lexer.addRule(/(.+)$/gm, function(lexeme) {
+//   this.yytext = lexeme;
+//   col += lexeme.length;
+//   return "STRING";
+// });
+
+lexer.addRule(new RegExp('$'), function () {
+  addLocation(this, row, col, 0);
+  return "EOF";
+});
+/* jshint -W097 */
+
+// -- Reference
+
+var Reference = function () {
+  function Reference(name, refName) {
+    _classCallCheck(this, Reference);
+
+    this.name = name;
+    this.refName = refName;
+    this.parent = null;
+    this.type = 'Reference';
+  }
+
+  _createClass(Reference, [{
+    key: 'resolved',
+    value: function resolved() {
+      var stack = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+
+      if (stack.indexOf(this) !== -1) {
+        throw "References can not be circular!";
+      }
+      var refPath = this.refName.split(".");
+      var reference = this.resolve(this.parent, refPath);
+      if (reference) {
+        if (reference['refName']) {
+          return reference.resolved(stack.concat([this]));
+        } else {
+          return reference;
+        }
+      }
+      return null;
+    }
+  }, {
+    key: 'resolve',
+    value: function resolve(current, path, notUp) {
+      var resolved = current.get(path[0]);
+      if (resolved) {
+        if (path.length > 1) {
+          resolved = this.resolve(resolved, path.slice(1), true);
+        }
+        if (resolved) {
+          return resolved;
+        }
+      }
+      if (current.parent && !notUp) {
+        return this.resolve(current.parent, path);
+      } else {
+        return null;
+      }
+    }
+  }]);
+
+  return Reference;
+}();
 
 // -- ENTRY
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function flatten(ary) {
   var ret = [];
@@ -627,258 +572,8 @@ var ColorValue = function () {
   return ColorValue;
 }();
 
-// replaced export
-/* jshint -W097 */
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// replaces require
-// replaces require
-
-function flatten(ary) {
-  var ret = [];
-  for (var i = 0; i < ary.length; i++) {
-    if (Array.isArray(ary[i])) {
-      ret = ret.concat(flatten(ary[i]));
-    } else {
-      ret.push(ary[i]);
-    }
-  }
-  return ret;
-}
-
-// replaced export
-/* jshint -W097 */
-
-
-// replaces require
-// replaces require
-// replaces require
-// replaces require
-// replaces require
-// replaces require
-// replaces require
-jisonparser = ocoParser;
-jisonparser.lexer = lexer;
-
-jisonparser.yy = {
-  ColorValue: ColorValue,
-  Entry: Entry,
-  Metadata: Metadata,
-  Reference: Reference,
-  parseError: function parseError(str) {
-    throw str;
-  },
-  log: function log(object) {
-    console.log(JSON.stringify(object, false, ' '));
-  }
-};
-
-var parser = {
-  parse: function parse(data) {
-    jisonparser.lexer.resetWithInput(""); //resetting the lexer. Not needed in prod, but helps testing.
-    var tree = jisonparser.parse(data);
-    return tree;
-  },
-  render: function render(tree) {
-    return new Renderer(tree).render();
-  },
-
-  Entry: Entry,
-  ColorValue: ColorValue,
-  Reference: Reference,
-  Metadata: Metadata
-};
-
-// replaced export
-/* jshint -W097 */
-
-
-// replaces require
-
-var row = 1;
-var col = 1;
-var indent = [0];
-
-var lexer = new Lexer(function (char) {
-  throw new Error("Unexpected character at row " + row + ", col " + col + ": " + char);
-});
-
-lexer.resetWithInput = function (input) {
-  lexer.setInput(input);
-  row = 1;
-  col = 1;
-  indent = [0];
-};
-
-function addLocation(obj, line, col, length) {
-  if (!obj.yylloc) {
-    obj.yylloc = {};
-  }
-  obj.yylloc.first_line = line;
-  obj.yylloc.last_line = line;
-  obj.yylloc.first_column = col;
-  obj.yylloc.last_column = col + length;
-}
-
-lexer.addRule(/^( \t)*\n/gm, function () {
-  col = 1;
-  row += 1;
-});
-
-lexer.addRule(new RegExp('/\n+/')), function (lexeme) {
-  addLocation(this, row, col, 1);
-  col = 1;
-  row += lexeme.length;
-  return "NEWLINE";
-});
-
-lexer.addRule(/^ */gm, function (lexeme) {
-  var indentation = lexeme.length;
-  addLocation(this, row, col, indentation);
-  col += indentation;
-
-  if (indentation > indent[0]) {
-    indent.unshift(indentation);
-    return "INDENT";
-  }
-
-  var tokens = [];
-
-  while (indentation < indent[0]) {
-    tokens.push("OUTDENT");
-    indent.shift();
-  }
-
-  if (tokens.length) {
-    return tokens;
-  }
-});
-
-lexer.addRule(new RegExp('/ +/')), function (lexeme) {
-  col += lexeme.length;
-});
-
-lexer.addRule(new RegExp('/true/')), function (lexeme) {
-  addLocation(this, row, col, lexeme.length);
-  col += lexeme.length;
-  return "TRUE";
-});
-
-lexer.addRule(new RegExp('/false/')), function (lexeme) {
-  addLocation(this, row, col, lexeme.length);
-  col += lexeme.length;
-  return "FALSE";
-});
-
-lexer.addRule(new RegExp('/([0-9]+(\.?[0-9]*))/')), function (lexeme) {
-  this.yytext = lexeme;
-  addLocation(this, row, col, lexeme.length);
-  col += lexeme.length;
-  return "NUMBER";
-});
-
-lexer.addRule(new RegExp('/[a-f\d]{3,8}/', 'i'), function (lexeme) {
-  addLocation(this, row, col, lexeme.length);
-  this.yytext = lexeme;
-  col += lexeme.length;
-  return "HEXNUMBER";
-});
-
-lexer.addRule(new RegExp('/[^\/:.,=#()\n ]+/')), function (lexeme) {
-  addLocation(this, row, col, lexeme.length);
-  this.yytext = lexeme;
-  col += lexeme.length;
-  return "NAME";
-});
-
-
-// lexer.addRule(/"(.*)"/, function (lexeme, string) {
-//   this.yytext = string;
-//   addLocation(this, row, col, string.length);
-//   col += lexeme.length;
-//   return "STRING";
-// });
-
-lexer.addRule(new RegExp('/\/\//'), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return "COMMENTSTART";
-});
-
-lexer.addRule(new RegExp('/\//')), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return "/";
-});
-
-
-lexer.addRule(new RegExp('\.')), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return ".";
-});
-
-lexer.addRule(new RegExp('/\:/')), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return ":";
-});
-
-lexer.addRule(new RegExp('/=/')), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return "=";
-});
-
-lexer.addRule(new RegExp('/\#/')), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return "#";
-});
-
-var __OCO_SKETCK_r1 = '/\\';
-__OCO_SKETCK_r1 += '(/';
-lexer.addRule(new RegExp(__OCO_SKETCK_r1)), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return "(";
-});
-
-var __OCO_SKETCK_r2 = '/\\';
-__OCO_SKETCK_r2 += ')/';
-lexer.addRule(new RegExp(__OCO_SKETCK_r2)), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return ")";
-});
-
-lexer.addRule(new RegExp('/,/')), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return ",";
-});
-
-lexer.addRule(new RegExp('/=/')), function () {
-  addLocation(this, row, col, 1);
-  col++;
-  return "=";
-});
-
-// lexer.addRule(/(.+)$/gm, function(lexeme) {
-//   this.yytext = lexeme;
-//   col += lexeme.length;
-//   return "STRING";
-// });
-
-lexer.addRule(new RegExp('/$/')), function () {
-  addLocation(this, row, col, 0);
-  return "EOF";
-});
-/* jshint -W097 */
 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -891,71 +586,6 @@ var Metadata = function Metadata(name, value) {
   this.type = 'Metadata';
   this.parent = null;
 };
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Reference = function () {
-  function Reference(name, refName) {
-    _classCallCheck(this, Reference);
-
-    this.name = name;
-    this.refName = refName;
-    this.parent = null;
-    this.type = 'Reference';
-  }
-
-  _createClass(Reference, [{
-    key: 'resolved',
-    value: function resolved() {
-      var stack = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-
-      if (stack.indexOf(this) !== -1) {
-        throw "References can not be circular!";
-      }
-      var refPath = this.refName.split(".");
-      var reference = this.resolve(this.parent, refPath);
-      if (reference) {
-        if (reference['refName']) {
-          return reference.resolved(stack.concat([this]));
-        } else {
-          return reference;
-        }
-      }
-      return null;
-    }
-  }, {
-    key: 'resolve',
-    value: function resolve(current, path, notUp) {
-      var resolved = current.get(path[0]);
-      if (resolved) {
-        if (path.length > 1) {
-          resolved = this.resolve(resolved, path.slice(1), true);
-        }
-        if (resolved) {
-          return resolved;
-        }
-      }
-      if (current.parent && !notUp) {
-        return this.resolve(current.parent, path);
-      } else {
-        return null;
-      }
-    }
-  }]);
-
-  return Reference;
-}();
-
-// replaced export
-/* jshint -W097 */
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Renderer = function () {
   function Renderer(root) {
@@ -1100,4 +730,398 @@ var Renderer = function () {
   return Renderer;
 }();
 
+
+
 // replaced export
+/* jshint -W097 */
+
+// -- oco-parser
+
+var ocoParser = (function(){
+var o = function(k,v,o,l){
+  for(
+      o=o||{}, l=k.length;
+      l--;
+      xk = k[l],
+      o[xk]=v
+      );
+    return o
+  }
+  ,$V0=[1,12],$V1=[1,8],$V2=[1,9],$V3=[1,13],$V4=[1,14],$V5=[1,20],$V6=[1,18],$V7=[5,16,18,19,29,31,32,34,37],$V8=[1,25],$V9=[1,24],$Va=[1,33],$Vb=[1,29],$Vc=[1,34],$Vd=[1,35],$Ve=[1,37],$Vf=[1,39],$Vg=[29,32,35],$Vh=[16,17],$Vi=[2,11],$Vj=[1,43],$Vk=[1,44],$Vl=[5,16,18,19,29,31,32,33,34,37],$Vm=[1,52],$Vn=[29,32],$Vo=[16,20,29,32,37],$Vp=[1,68],$Vq=[1,67],$Vr=[1,76],$Vs=[35,40],$Vt=[16,31,34];
+var parser = {trace: function trace() { },
+yy: {},
+symbols_: {"error":2,"expressions":3,"entries":4,"EOF":5,"entry":6,"terminators":7,"entryname":8,"block":9,"colorvalues":10,"reference":11,"metaname":12,"metablock":13,"metavalue":14,"nameparts":15,"NAME":16,":":17,"NUMBER":18,"HEXNUMBER":19,"=":20,"referenceNames":21,".":22,"metaentries":23,"metadata":24,"boolean":25,"colorvalue":26,"metanameparts":27,"comment":28,"COMMENTSTART":29,"STRING":30,"/":31,"NEWLINE":32,"INDENT":33,"OUTDENT":34,",":35,"hexnum":36,"#":37,"(":38,"colorvaluevalues":39,")":40,"colorvaluevalue":41,"TRUE":42,"FALSE":43,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",16:"NAME",17:":",18:"NUMBER",19:"HEXNUMBER",20:"=",22:".",29:"COMMENTSTART",30:"STRING",31:"/",32:"NEWLINE",33:"INDENT",34:"OUTDENT",35:",",37:"#",38:"(",40:")",42:"TRUE",43:"FALSE"},
+productions_: [0,[3,2],[4,1],[4,2],[4,2],[6,3],[6,3],[6,3],[6,3],[6,3],[6,2],[15,1],[15,2],[8,2],[8,2],[8,2],[11,2],[21,1],[21,3],[23,1],[23,2],[24,3],[24,4],[14,1],[14,1],[14,1],[14,1],[14,1],[12,2],[28,2],[28,2],[27,2],[27,3],[27,4],[27,3],[27,2],[7,1],[7,2],[9,3],[13,3],[10,1],[10,3],[36,1],[26,2],[26,2],[26,4],[39,1],[39,3],[41,1],[41,1],[25,1],[25,1]],
+performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate, $$, _$) {
+/* this == yyval */
+
+var $0 = $$.length - 1;
+switch (yystate) {
+case 1:
+  return new yy.Entry('root', $$[$0-1], 'Root', _$[$0-1]) 
+break;
+case 2:
+ this.$ = [ $$[$0] ]; 
+break;
+case 3:
+ this.$ = $$[$0-1]; $$[$0-1].push($$[$0]); 
+break;
+case 4: case 28: case 39:
+ this.$ = $$[$0-1]; 
+break;
+case 5:
+ this.$ = new yy.Entry($$[$0-2], $$[$0], null, _$[$0]); 
+break;
+case 6:
+ this.$ = new yy.Entry($$[$0-2], $$[$0-1], 'Color', _$[$0-1]); 
+break;
+case 7:
+ this.$ = new yy.Reference($$[$0-2], $$[$0-1])
+break;
+case 8:
+ this.$ = new yy.Entry($$[$0-2], $$[$0], 'Metablock', _$[$0]); 
+break;
+case 9:
+ this.$ = new yy.Metadata($$[$0-2], $$[$0-1]); 
+break;
+case 10:
+ this.$ = $$[$0-1] 
+break;
+case 11: case 23:
+ this.$ = $$[$0];
+break;
+case 12:
+ this.$ = $$[$0-1] + ' ' + $$[$0] 
+break;
+case 13: case 14: case 15: case 38:
+ this.$ = $$[$0-1];
+break;
+case 16: case 17: case 25: case 26:
+ this.$ = $$[$0]; 
+break;
+case 18:
+ this.$ = $$[$0-2] + '.' + $$[$0] 
+break;
+case 19: case 40:
+ this.$ = [$$[$0]] 
+break;
+case 20:
+ this.$ = $$[$0-1]; this.$.push($$[$0]) 
+break;
+case 21:
+ this.$ = new yy.Metadata($$[$0-2], $$[$0-1]);  
+break;
+case 22:
+ this.$ = new yy.Metadata($$[$0-3], $$[$0-1]);  
+break;
+case 24:
+ this.$ = parseFloat($$[$0]); 
+break;
+case 27:
+ this.$ = new yy.Reference('metachild', $$[$0]); 
+break;
+case 31:
+ this.$ = '/' + $$[$0] 
+break;
+case 32: case 34:
+ this.$ = $$[$0-2] + '/' + $$[$0] 
+break;
+case 33:
+ this.$ = '/' + $$[$0-2] + '/' + $$[$0] 
+break;
+case 35:
+ this.$ = $$[$0-1] + '/' 
+break;
+case 41:
+ this.$ = $$[$0-2]; $$[$0-2].push($$[$0-1]); 
+break;
+case 42:
+ this.$ = yytext; 
+break;
+case 43: case 44:
+ this.$ = new yy.ColorValue('rgb', "#" + $$[$0]); 
+break;
+case 45:
+ this.$ = new yy.ColorValue($$[$0-3], $$[$0-3] + "(" + $$[$0-1].join(",") + ")"); 
+break;
+case 46:
+ this.$ = [$$[$0]]; 
+break;
+case 47:
+ this.$ = $$[$0-2]; this.$.push($$[$0]); 
+break;
+case 50:
+ this.$ = true; 
+break;
+case 51:
+ this.$ = false; 
+break;
+}
+},
+table: [{3:1,4:2,6:3,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,31:$V3,37:$V4},{1:[3]},{5:[1,15],6:16,7:17,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,28:19,29:$V5,31:$V3,32:$V6,37:$V4},o($V7,[2,2]),{7:21,10:22,11:23,16:$V8,20:$V9,26:11,28:19,29:$V5,32:$V6,37:$V4},{7:26,11:32,14:27,15:28,16:$Va,18:$Vb,20:$V9,25:30,26:31,28:19,29:$V5,32:$V6,37:$V4,42:$Vc,43:$Vd},{7:36,28:19,29:$V5,32:$V6,35:$Ve},{16:$Vf,17:[1,38]},{17:[1,40]},{17:[1,41]},{17:[1,42]},o($Vg,[2,40]),o($Vh,$Vi,{31:$Vj,38:$Vk}),{16:[1,45]},{18:[1,47],19:[1,48],36:46},{1:[2,1]},o($V7,[2,3]),o($V7,[2,4]),o($Vl,[2,36]),{7:49,28:19,29:$V5,32:$V6},{15:50,16:$Vm,30:[1,51]},{9:53,33:[1,54]},{7:55,28:19,29:$V5,32:$V6,35:$Ve},{7:56,28:19,29:$V5,32:$V6},{15:58,16:$Vm,21:57},{38:$Vk},{13:59,33:[1,60]},{7:61,28:19,29:$V5,32:$V6},o($Vn,[2,23],{16:$Vf}),o($Vn,[2,24]),o($Vn,[2,25]),o($Vn,[2,26]),o($Vn,[2,27]),o([16,29,32],$Vi,{38:$Vk}),o($Vn,[2,50]),o($Vn,[2,51]),o($V7,[2,10]),{16:$V8,26:62,37:$V4},o($Vo,[2,13]),o([16,17,22,29,32],[2,12]),o($Vo,[2,14]),o($Vo,[2,15]),o([16,18,20,29,32,37,42,43],[2,28]),{16:[1,63],17:[2,35],27:64,31:$V3},{16:$Vp,18:$Vq,39:65,41:66},{17:[2,31],31:[1,69]},o($Vg,[2,43]),o($Vg,[2,44]),o($Vg,[2,42]),o($Vl,[2,37]),o($Vn,[2,29],{16:$Vf}),o($Vn,[2,30]),o([16,22,29,32],$Vi),o($V7,[2,5]),{4:70,6:3,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,31:$V3,37:$V4},o($V7,[2,6]),o($V7,[2,7]),o($Vn,[2,16]),o($Vn,[2,17],{16:$Vf,22:[1,71]}),o($V7,[2,8]),{12:74,15:75,16:$Vr,23:72,24:73,27:10,31:$V3},o($V7,[2,9]),o($Vg,[2,41]),{17:[2,32],31:$Vj},{17:[2,34]},{35:[1,78],40:[1,77]},o($Vs,[2,46]),o($Vs,[2,48]),o($Vs,[2,49]),{16:[1,80],27:79,31:$V3},{6:16,7:17,8:4,10:6,12:5,15:7,16:$V0,18:$V1,19:$V2,26:11,27:10,28:19,29:$V5,31:$V3,32:$V6,34:[1,81],37:$V4},{15:58,16:$Vm,21:82},{12:74,15:75,16:$Vr,24:84,27:10,31:$V3,34:[1,83]},o($Vt,[2,19]),{11:32,14:85,15:28,16:$Va,18:$Vb,20:$V9,25:30,26:31,37:$V4,42:$Vc,43:$Vd},{16:$Vf,17:[1,86]},o($Vh,$Vi,{31:$Vj}),o($Vg,[2,45]),{16:$Vp,18:$Vq,41:87},{17:[2,33]},{31:$Vj},o($V7,[2,38]),o($Vn,[2,18]),o($V7,[2,39]),o($Vt,[2,20]),{7:88,28:19,29:$V5,32:$V6},{11:32,14:89,15:28,16:$Va,18:$Vb,20:$V9,25:30,26:31,37:$V4,42:$Vc,43:$Vd},o($Vs,[2,47]),o($Vt,[2,21]),{7:90,28:19,29:$V5,32:$V6},o($Vt,[2,22])],
+defaultActions: {15:[2,1],64:[2,34],79:[2,33]},
+parseError: function parseError(str, hash) {
+    if (hash.recoverable) {
+        this.trace(str);
+    } else {
+        function _parseError (msg, hash) {
+            this.message = msg;
+            this.hash = hash;
+        }
+        _parseError.prototype = Error;
+
+        throw new _parseError(str, hash);
+    }
+},
+parse: function parse(input) {
+    var self = this, stack = [0], tstack = [], vstack = [null], lstack = [], table = this.table, yytext = '', yylineno = 0, yyleng = 0, recovering = 0, TERROR = 2, EOF = 1;
+    var args = lstack.slice.call(arguments, 1);
+    log(this.lexer);
+    var lexer = Object.create(this.lexer);
+    var sharedState = { yy: {} };
+    for (var k in this.yy) {
+        if (Object.prototype.hasOwnProperty.call(this.yy, k)) {
+            sharedState.yy[k] = this.yy[k];
+        }
+    }
+    lexer.setInput(input, sharedState.yy);
+    sharedState.yy.lexer = lexer;
+    sharedState.yy.parser = this;
+    if (typeof lexer.yylloc == 'undefined') {
+        lexer.yylloc = {};
+    }
+    var yyloc = lexer.yylloc;
+    lstack.push(yyloc);
+    var ranges = lexer.options && lexer.options.ranges;
+    if (typeof sharedState.yy.parseError === 'function') {
+        this.parseError = sharedState.yy.parseError;
+    } else {
+        this.parseError = Object.getPrototypeOf(this).parseError;
+    }
+    function popStack(n) {
+        stack.length = stack.length - 2 * n;
+        vstack.length = vstack.length - n;
+        lstack.length = lstack.length - n;
+    }
+    _token_stack:
+        var lex = function () {
+            var token;
+            token = lexer.lex() || EOF;
+            if (typeof token !== 'number') {
+                token = self.symbols_[token] || token;
+            }
+            return token;
+        };
+    var symbol, preErrorSymbol, state, action, a, r, yyval = {}, p, len, newState, expected;
+    while (true) {
+        state = stack[stack.length - 1];
+        if (this.defaultActions[state]) {
+            action = this.defaultActions[state];
+        } else {
+            if (symbol === null || typeof symbol == 'undefined') {
+                symbol = lex();
+            }
+            action = table[state] && table[state][symbol];
+        }
+                    if (typeof action === 'undefined' || !action.length || !action[0]) {
+                var errStr = '';
+                expected = [];
+                for (p in table[state]) {
+                    if (this.terminals_[p] && p > TERROR) {
+                        expected.push('\'' + this.terminals_[p] + '\'');
+                    }
+                }
+                if (lexer.showPosition) {
+                    errStr = '[OCO] Parse error on line ' + (yylineno + 1) + ':\n' + lexer.showPosition() + '\nExpecting ' + expected.join(', ') + ', got \'' + (this.terminals_[symbol] || symbol) + '\'';
+                } else {
+                    errStr = '[OCO] Parse error on line ' + (yylineno + 1) + ': Unexpected ' + (symbol == EOF ? 'end of input' : '\'' + (this.terminals_[symbol] || symbol) + '\'');
+                }
+                this.parseError(errStr, {
+                    text: lexer.match,
+                    token: this.terminals_[symbol] || symbol,
+                    line: lexer.yylineno,
+                    loc: yyloc,
+                    expected: expected
+                });
+            }
+        if (action[0] instanceof Array && action.length > 1) {
+            throw new Error('[OCO] Parse Error: multiple actions possible at state: ' + state + ', token: ' + symbol);
+        }
+        switch (action[0]) {
+        case 1:
+            stack.push(symbol);
+            vstack.push(lexer.yytext);
+            lstack.push(lexer.yylloc);
+            stack.push(action[1]);
+            symbol = null;
+            if (!preErrorSymbol) {
+                yyleng = lexer.yyleng;
+                yytext = lexer.yytext;
+                yylineno = lexer.yylineno;
+                yyloc = lexer.yylloc;
+                if (recovering > 0) {
+                    recovering--;
+                }
+            } else {
+                symbol = preErrorSymbol;
+                preErrorSymbol = null;
+            }
+            break;
+        case 2:
+            var __OCO_SKETCK_k = action[1]; len = this.productions_[__OCO_SKETCK_k][1];
+            yyval.$ = vstack[vstack.length - len];
+            yyval._$ = {
+                first_line: lstack[lstack.length - (len || 1)].first_line,
+                last_line: lstack[lstack.length - 1].last_line,
+                first_column: lstack[lstack.length - (len || 1)].first_column,
+                last_column: lstack[lstack.length - 1].last_column
+            };
+            if (ranges) {
+                yyval._$.range = [
+                    lstack[lstack.length - (len || 1)].range[0],
+                    lstack[lstack.length - 1].range[1]
+                ];
+            }
+            r = this.performAction.apply(yyval, [
+                yytext,
+                yyleng,
+                yylineno,
+                sharedState.yy,
+                action[1],
+                vstack,
+                lstack
+            ].concat(args));
+            if (typeof r !== 'undefined') {
+                return r;
+            }
+            if (len) {
+                stack = stack.slice(0, -1 * len * 2);
+                vstack = vstack.slice(0, -1 * len);
+                lstack = lstack.slice(0, -1 * len);
+            }
+            var __OCO_SKETCK_k = action[1]; stack.push(this.productions_[__OCO_SKETCK_k][0]);
+            vstack.push(yyval.$);
+            lstack.push(yyval._$);
+            var __OCO_SKETCK_k1 = stack[stack.length - 2]; var __OCO_SKETCK_k2 = stack[stack.length - 1]; newState = table[__OCO_SKETCK_k1][__OCO_SKETCK_k2];
+            stack.push(newState);
+            break;
+        case 3:
+            return true;
+        }
+    }
+    return true;
+}};
+
+function Parser () {
+  this.yy = {};
+}
+Parser.prototype = parser;
+parser.Parser = Parser;
+return new Parser;
+})();
+
+
+if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
+exports.parser = ocoParser;
+exports.Parser = ocoParser.Parser;
+exports.parse = function () { return ocoParser.parse.apply(ocoParser, arguments); };
+exports.main = function commonjsMain(args) {
+    if (!args[1]) {
+        console.log('Usage: '+args[0]+' FILE');
+        process.exit(1);
+    }
+    // replaces require
+    return exports.parser.parse(source);
+};
+if (typeof module !== 'undefined' && require.main === module) {
+  exports.main(process.argv.slice(1));
+}
+}/* jshint -W097 */
+
+// replaced export
+
+// replaced export
+/* jshint -W097 */
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// replaces require
+// replaces require
+
+function flatten(ary) {
+  var ret = [];
+  for (var i = 0; i < ary.length; i++) {
+    if (Array.isArray(ary[i])) {
+      ret = ret.concat(flatten(ary[i]));
+    } else {
+      ret.push(ary[i]);
+    }
+  }
+  return ret;
+}
+
+// replaced export
+/* jshint -W097 */
+
+
+// replaces require
+// replaces require
+// replaces require
+// replaces require
+// replaces require
+// replaces require
+// replaces require
+jisonparser = ocoParser;
+jisonparser.lexer = lexer;
+
+jisonparser.yy = {
+  ColorValue: ColorValue,
+  Entry: Entry,
+  Metadata: Metadata,
+  Reference: Reference,
+  parseError: function parseError(str) {
+    throw str;
+  },
+  log: function log(object) {
+    console.log(JSON.stringify(object, false, ' '));
+  }
+};
+
+var oco = {
+  parse: function parse(data) {
+    //jisonparser.lexer.resetWithInput(""); //resetting the lexer. Not needed in prod, but helps testing.
+    var tree = jisonparser.parse(data);
+    log(jisonparser.$yy);
+    return tree;
+  },
+  render: function render(tree) {
+    return new Renderer(tree).render();
+  },
+
+  Entry: Entry,
+  ColorValue: ColorValue,
+  Reference: Reference,
+  Metadata: Metadata
+};
+
+// replaced export
+/* jshint -W097 */
+
+/*
+var root = new Entry();
+var color = new Entry('red', [], 'Color');
+color.addChild(ColorValue.fromColorValue('#F00'), true);
+root.addChild(color);
+var ocoOutput = oco.render(root);
+log(ocoOutput);
+
+var tree = oco.parse('red: #F00\n');
+
+var x = tree.get('red').get('rgb').value;
+log(x);
+
+*/

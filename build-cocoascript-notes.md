@@ -1,6 +1,7 @@
 // order:
 
 // - node_modules/lex/lexer.js
+// - lexer
 // - oco-parser
 
 
@@ -11,8 +12,11 @@ var strictStatements = /'use strict';/
 
 // remove entry
 
+// double escape 
 var search = /lexer\.addRule\(\/(.*)\/\,/
-//replace with: lexer.addRule(new RexExp('/$1/')),
+// bullshit:::
+// replace with: lexer.addRule(new RexExp('/$1/')),
+// double escape / => \\/ and no starting, trailing /
 
 // delete comment block in parser
 
