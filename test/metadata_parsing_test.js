@@ -45,8 +45,7 @@ hello/metadata/:
     var test = `
 color:
   #123
-  author/name: Erykah Badu
-`;
+  author/name: Erykah Badu`;
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#123');
     expect(tree.get('color').metadata['author/name']).to.equal('Erykah Badu');

@@ -65,6 +65,7 @@ class Entry {
   }
 
   addChild(child, validate=true) {
+    //console.log("add child", child);
     var type = child.type;
     // we're basically only separating meta data.
     if (type === 'Metadata') {
