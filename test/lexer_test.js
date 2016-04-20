@@ -2,6 +2,8 @@ var expect = require('chai').expect;
 
 var lexer = require('../lib/lexer.js');
 
+//var fs = require('fs');
+
 function lexNTimes(input, step) {
   lexer.resetWithInput(input);
   var retVal, i;
@@ -12,23 +14,31 @@ function lexNTimes(input, step) {
 }
 
 //test bed
-function lexAll(input) {
-  var out = [];
-  var lex;
-  lexer.resetWithInput(input);
-  do {
-    lex = lexer.lex();
-    out.push(lex);
-  } while(lex);
-  return out;
-}
+// function lexAll(input) {
+//   var out = [];
+//   var lex;
+//   lexer.resetWithInput(input);
+//   do {
+//     lex = lexer.lex();
+//     out.push(lex);
+//   } while(lex);
+//   return out;
+// }
 
-var test = `
-color:
-  #123
-  author/name: Erykah Badu`;
+//var test = fs.readFileSync('test/fixtures/test_with_comments.oco');
 
-console.log(lexAll(test));
+// var test = `
+// color: #fff
+// group:
+//   group color: #aea
+//   ref color: =color
+// another: #fff`;
+
+// var test = `
+// metadata/:
+//   author: Erykah Badu`;
+
+//console.log(lexAll(test));
 
 
 

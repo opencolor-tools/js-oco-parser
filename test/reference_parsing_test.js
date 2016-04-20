@@ -21,8 +21,8 @@ color: #fff
 group:
   group color: #aea
   ref color: =color
-another color: #fff
-`;
+  test: #000
+another color: #ffe`;
     var tree = oco.parse(test);
     // Only simple, same level references for now
     var refColor = tree.get('group').get('ref color');

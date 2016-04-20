@@ -3,7 +3,7 @@ group: // heres a comment
     data: Cool Metadata
     other/data: Super Cool Metadata
   subgroup:
-    color in subgroup: #291230 // heres a comment
+    color in subgroup: #291230 // comment after color
   yellow: #c01016
   color as group:
     #aca

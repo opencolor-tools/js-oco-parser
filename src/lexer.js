@@ -18,12 +18,8 @@ lexer.resetWithInput = function(input) {
   indent = [0];
 };
 
-function addLocation(obj, line, col, length)  {
-  if (!obj.yylloc) {obj.yylloc = {};}
-  obj.yylloc.first_line = line;
-  obj.yylloc.last_line = line;
-  obj.yylloc.first_column = col;
-  obj.yylloc.last_column = col + length;
+function addLocation(obj, line)  {
+  obj.yylineno = line;
 }
 
 lexer.addRule(/^( \t)*\n/gm, function () {
@@ -32,7 +28,7 @@ lexer.addRule(/^( \t)*\n/gm, function () {
 });
 
 lexer.addRule(/\n+/, function (lexeme) {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col = 1;
   row += lexeme.length;
   return "NEWLINE";
@@ -41,7 +37,7 @@ lexer.addRule(/\n+/, function (lexeme) {
 
 lexer.addRule(/^ */gm, function (lexeme) {
     var indentation = lexeme.length;
-    addLocation(this, row, col, indentation);
+    addLocation(this, row);
     col += indentation;
 
     if (indentation > indent[0]) {
@@ -53,6 +49,7 @@ lexer.addRule(/^ */gm, function (lexeme) {
 
     while (indentation < indent[0]) {
         tokens.push("OUTDENT");
+        tokens.push("NEWLINE"); // this is to fix a bad conondrum on blocks. a newline gives is a fresh new entry.
         indent.shift();
     }
 
@@ -65,96 +62,102 @@ lexer.addRule(/ +/, function (lexeme) {
 });
 
 lexer.addRule(/true/, function(lexeme) {
-  addLocation(this, row, col, lexeme.length);
+  addLocation(this, row);
   col += lexeme.length;
   return "TRUE";
 });
 
 lexer.addRule(/false/, function(lexeme) {
-  addLocation(this, row, col, lexeme.length);
+  addLocation(this, row);
   col += lexeme.length;
   return "FALSE";
 });
 
 lexer.addRule(/([0-9]+(\.?[0-9]*))/, function(lexeme) {
   this.yytext = lexeme;
-  addLocation(this, row, col, lexeme.length);
+  addLocation(this, row);
   col += lexeme.length;
   return "NUMBER";
 });
 
 lexer.addRule(/[a-f\d]{3,8}/i, function(lexeme) {
-  addLocation(this, row, col, lexeme.length);
+  addLocation(this, row);
   this.yytext = lexeme;
   col += lexeme.length;
   return "HEXNUMBER";
 });
 
 
-lexer.addRule(/[^\/:.,=#()\n ][^\/:.,=#()\n]*/, function(lexeme) {
-  addLocation(this, row, col, lexeme.length);
+lexer.addRule(/[^\/:.,=#()\s][^\/:.,=#()\s]*/, function(lexeme) {
+  addLocation(this, row);
   this.yytext = lexeme;
   col += lexeme.length;
   return "NAME";
 });
 
-lexer.addRule(/"(.*)"/, function(lexeme, string) {
+lexer.addRule(/\/\//, function () {
+  addLocation(this, row);
+  col++;
+  return "COMMENTSTART";
+});
+
+lexer.addRule(/"[^\s]*"/, function(lexeme, string) {
   this.yytext = string;
-  addLocation(this, row, col, string.length);
+  addLocation(this, row);
   col += lexeme.length;
   return "STRING";
 });
 
 lexer.addRule(/\//, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col++;
   return "/";
 });
 
 lexer.addRule(/\./, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col++;
   return ".";
 });
 
 lexer.addRule(/\:/, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col++;
   return ":";
 });
 
 lexer.addRule(/=/, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col++;
   return "=";
 });
 
 lexer.addRule(/\#/, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col++;
   return "#";
 });
 
 lexer.addRule(/\(/, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col ++;
   return "(";
 });
 
 lexer.addRule(/\)/, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col ++;
   return ")";
 });
 
 lexer.addRule(/,/, function () {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
     col++;
     return ",";
 });
 
 lexer.addRule(/=/, function() {
-  addLocation(this, row, col, 1);
+  addLocation(this, row);
   col ++;
   return "=";
 });
@@ -166,6 +169,6 @@ lexer.addRule(/=/, function() {
 // });
 
 lexer.addRule(/$/, function () {
-    addLocation(this, row, col, 0);
+    addLocation(this, row);
     return "EOF";
 });

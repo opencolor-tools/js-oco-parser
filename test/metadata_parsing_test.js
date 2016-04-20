@@ -6,7 +6,7 @@ var parser = require('../lib/index.js');
 
 describe("Parsing Metadata", () => {
   it("should parse metadata", () => {
-    var test = "/author: Erykah Badu\n";
+    var test = "/author: Erykah Badu";
     var tree = parser.parse(test);
     expect(tree.metadata['/author']).to.equal('Erykah Badu');
     test = "meta/author: Erykah Badu\n";
@@ -17,8 +17,7 @@ describe("Parsing Metadata", () => {
   it("should parse metadata Block", () => {
     var test = `
 metadata/:
-  author: Erykah Badu
-`;
+  author: Erykah Badu`;
     var tree = parser.parse(test);
     expect(tree.metadata['metadata/author']).to.equal('Erykah Badu');
   });
@@ -26,8 +25,7 @@ metadata/:
   it("should parse metadata Block with a slash at the end of the name", () => {
     var test = `
 hello/metadata/:
-  author: Erykah Badu
-`;
+  author: Erykah Badu`;
     var tree = parser.parse(test);
     expect(tree.metadata['hello/metadata/author']).to.equal('Erykah Badu');
   });

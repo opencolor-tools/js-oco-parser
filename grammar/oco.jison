@@ -5,29 +5,30 @@
 
 expressions
   : EOF { return new yy.Entry('root', [], 'Root', @1) }
+  | entries {  return new yy.Entry('root', $1, 'Root', @1) } // sometimes EOF is already consumed
   | entries EOF {  return new yy.Entry('root', $1, 'Root', @1) }
   ;
 
 entries
   : entry
-  { $$ = [ $1 ]; }
+  { $$ = [ $1 ];}
   | entries terminators entry
-  { $$ = $1; $1.push($3); }
+  { $$ = $1; $1.push($3);}
   | entries terminators
   { $$ = $1; }
   ;
 
 entry
   : entryname terminators block
-  { $$ = new yy.Entry($1, $3, null, @3); }
+  { $$ = new yy.Entry($1, $3, null, @3);}
   | entryname colorvalues
   { $$ = new yy.Entry($1, $2, 'Color', @2);}
   | entryname reference
-  { $$ = new yy.Reference($1, $2)}
+  { $$ = new yy.Reference($1, $2);  }
   | metaname terminators metablock
   { $$ = new yy.Entry($1, $3, 'Metablock', @3); }
   | metaname metavalue
-  { $$ = new yy.Metadata($1, $2); }
+  { $$ = new yy.Metadata($1, $2);  }
   | colorvalues
   { $$ = $1; }
   ;
@@ -60,16 +61,16 @@ reference
 
 referenceNames
   : nameparts
-  { $$ = "" + $1; }
-  | nameparts '.' referenceNames
-  { $$ = $1 + '.' + $3 }
+  { $$ = "" + $1;}
+  | referenceNames '.' nameparts
+  { $$ = $1 + '.' + $3; }
   ;
 
 metaentries
   : metadata
-  { $$ = [$1] }
+  { $$ = [$1];  }
   | metaentries terminators metadata
-  { $$ = $1; $$.push($2) }
+  { $$ = $1; $$.push($3) }
   | metaentries terminators
   { $$ = $1; }
   ;
@@ -83,7 +84,7 @@ metadata
 
 metavalue
   : metavalueparts
-  { $$ = $1; console.log("Metavalueparts", $1)}
+  { $$ = $1; }
   | NUMBER
   { $$ = parseFloat($1); }
   | boolean
@@ -114,7 +115,9 @@ metaname
 
 comment
   : COMMENTSTART nameparts
+  { $$ = $2 }
   | COMMENTSTART STRING
+  { $$ = $2 }
   ;
 
 metanameparts
@@ -138,7 +141,7 @@ terminators
 
 block
   : INDENT entries outdentOrEof
-  { $$ = $2;}
+  { $$ = $2; }
   ;
 
 metablock
@@ -164,7 +167,7 @@ colorvalue
   | '#' NUMBER
   { $$ = new yy.ColorValue('rgb', "#" + $2); }
   | NAME '(' colorvaluevalues ')'
-  { $$ = new yy.ColorValue($1, $1 + "(" + $3.join(",") + ")"); }
+  { $$ = new yy.ColorValue($1, $1 + "(" + $3.join(",") + ")");}
   ;
 
 colorvaluevalues

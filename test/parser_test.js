@@ -7,7 +7,7 @@ var parser = require('../lib/index.js');
 
 describe("Parser", () => {
   it("should parse a single color", () => {
-    var test = "color: #ff0022\n";
+    var test = "color: #ff0022";
     var tree = parser.parse(test);
     expect(tree.name).to.equal('root');
     expect(tree.get('color').type).to.equal('Color');
@@ -76,6 +76,19 @@ group name:
     var tree = parser.parse(test);
     expect(tree.get('group name').get('yellow').get('rgb').value).to.equal('#ff0000');
   });
+
+
+  it("should parse a simple group with colors after it", () => {
+    var test = `
+group name:
+  yellow: #ff0000
+
+red: #f00
+`;
+    var tree = parser.parse(test);
+    expect(tree.get('group name').get('yellow').get('rgb').value).to.equal('#ff0000');
+  });
+
 
   it("should parse a simple group with more than one color", () => {
     var test = `

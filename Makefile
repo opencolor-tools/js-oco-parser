@@ -14,3 +14,6 @@ lib: $(LIB)
 lib/%.js: src/%.js .babelrc
 	mkdir -p $(@D)
 	./node_modules/.bin/babel $< -o $@
+
+clean:
+	rm lib/*.js	
