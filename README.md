@@ -2,7 +2,7 @@
 
 A node module to parse, render and interpret Open Color Format.
 
-Build-Status: ![Build Status](https://travis-ci.org/opencolor-tools/js-oco-parser.svg)
+Build Status: [![Build Status](https://travis-ci.org/opencolor-tools/opencolor-js.svg?branch=master)](https://travis-ci.org/opencolor-tools/opencolor-js)
 
 ## Install
 
