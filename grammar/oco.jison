@@ -19,18 +19,20 @@ entries
   ;
 
 entry
-  : entryname terminators block
-  { $$ = new yy.Entry($1, $3, null, @3);}
-  | entryname colorvalues
+  : entryname commentOrNot terminators block
+  { $$ = new yy.Entry($1, $4, null, @4);}
+  | entryname colorvalues commentOrNot
   { $$ = new yy.Entry($1, $2, 'Color', @2);}
-  | entryname reference
+  | entryname reference commentOrNot
   { $$ = new yy.Reference($1, $2);  }
-  | metaname terminators metablock
-  { $$ = new yy.Entry($1, $3, 'Metablock', @3); }
-  | metaname metavalue
+  | metaname commentOrNot terminators metablock
+  { $$ = new yy.Entry($1, $4, 'Metablock', @4); }
+  | metaname metavalue commentOrNot
   { $$ = new yy.Metadata($1, $2);  }
-  | colorvalues
+  | colorvalues commentOrNot
   { $$ = $1; }
+  | comment
+  { $$ = {type: 'Comment'}}
   ;
 
 namepart
@@ -113,6 +115,11 @@ metaname
   { $$ = $1; }
   ;
 
+commentOrNot
+  : comment
+  |
+  ;
+
 comment
   : COMMENTSTART nameparts
   { $$ = $2 }
@@ -132,12 +139,6 @@ metanameparts
   | nameparts '/'
   { $$ = $1 + '/' }
   ;
-
-terminators
-  : NEWLINE
-  | comment NEWLINE
-  ;
-
 
 block
   : INDENT entries outdentOrEof
@@ -187,6 +188,10 @@ boolean
   { $$ = true; }
   | FALSE
   { $$ = false; }
+  ;
+
+terminators
+  : NEWLINE
   ;
 
 outdentOrEof

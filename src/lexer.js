@@ -19,7 +19,7 @@ lexer.resetWithInput = function(input) {
 };
 
 function addLocation(obj, line)  {
-  obj.yylineno = line;
+  obj.yylineno = line - 1;
 }
 
 lexer.addRule(/^( \t)*\n/gm, function () {

@@ -13,7 +13,7 @@ function lexNTimes(input, step) {
   return retVal;
 }
 
-//test bed
+// // test bed
 // function lexAll(input) {
 //   var out = [];
 //   var lex;
@@ -24,21 +24,9 @@ function lexNTimes(input, step) {
 //   } while(lex);
 //   return out;
 // }
-
-//var test = fs.readFileSync('test/fixtures/test_with_comments.oco');
-
-// var test = `
-// color: #fff
-// group:
-//   group color: #aea
-//   ref color: =color
-// another: #fff`;
-
-// var test = `
-// metadata/:
-//   author: Erykah Badu`;
-
-//console.log(lexAll(test));
+// var test = "group:\n  color: #ffe\n  // comment";
+//
+// console.log(lexAll(test));
 
 
 

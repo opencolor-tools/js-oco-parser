@@ -1,4 +1,5 @@
 group: // heres a comment
+  // here's a comment too
   meta/:
     data: Cool Metadata
     other/data: Super Cool Metadata

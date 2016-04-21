@@ -155,6 +155,11 @@ group:
     var tree = parser.parse(test);
     expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
   });
+  it("should parse comments that start at beginning of line", () => {
+    var test = "group:\n  color: #ffe\n  // comment";
+    var tree = parser.parse(test);
+    expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
+  });
 });
 
 describe("Parser access methods", () => {
