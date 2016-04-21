@@ -185,6 +185,21 @@ color b: #000
   });
 });
 
+describe("Parsing whitespace", () => {
+  it("should parse whitespace in empty lines without indenting", () => {
+    var test = "800: #1565C0\n  \n50: #E3F2FD";
+    var tree = parser.parse(test);
+    expect(tree.get('800').get('rgb').value).to.equal('#1565C0');
+  });
+
+  it("should not bork on whitespace with wrong indent", () => {
+    var test = "group:\n  subgroup:\n    color: #1565C0\n  \n    other color: #E3F2FD";
+    var tree = parser.parse(test);
+    expect(tree.get('group').get('subgroup').get('color').get('rgb').value).to.equal('#1565C0');
+  });
+
+});
+
 describe("Parsing a more complex document", () => {
   it("should parse a single color", () => {
     var input = fs.readFileSync('test/fixtures/test_with_comments.oco');

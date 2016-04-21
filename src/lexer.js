@@ -22,9 +22,9 @@ function addLocation(obj, line)  {
   obj.yylineno = line - 1;
 }
 
-lexer.addRule(/^( \t)*\n/gm, function () {
+lexer.addRule(/^([ \t]*)(\n+)/gm, function (lexeme, spaces, breaks) {
   col = 1;
-  row += 1;
+  row += breaks.length;
 });
 
 lexer.addRule(/\n+/, function (lexeme) {
@@ -170,5 +170,11 @@ lexer.addRule(/=/, function() {
 
 lexer.addRule(/$/, function () {
     addLocation(this, row);
-    return "EOF";
+    var tokens = [];
+    while (0 < indent[0]) {
+      tokens.push("OUTDENT");
+      indent.shift();
+    }
+    tokens.push("EOF");
+    return tokens;
 });

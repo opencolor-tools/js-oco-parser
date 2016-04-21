@@ -12,27 +12,27 @@ expressions
 entries
   : entry
   { $$ = [ $1 ];}
-  | entries terminators entry
+  | entries newlines entry
   { $$ = $1; $1.push($3);}
-  | entries terminators
+  | entries newlines
   { $$ = $1; }
   ;
 
 entry
-  : entryname commentOrNot terminators block
+  : entryname commentOrNot newlines block
   { $$ = new yy.Entry($1, $4, null, @4);}
   | entryname colorvalues commentOrNot
   { $$ = new yy.Entry($1, $2, 'Color', @2);}
   | entryname reference commentOrNot
   { $$ = new yy.Reference($1, $2);  }
-  | metaname commentOrNot terminators metablock
+  | metaname commentOrNot newlines metablock
   { $$ = new yy.Entry($1, $4, 'Metablock', @4); }
   | metaname metavalue commentOrNot
   { $$ = new yy.Metadata($1, $2);  }
   | colorvalues commentOrNot
   { $$ = $1; }
   | comment
-  { $$ = {type: 'Comment'}}
+  { $$ = null }
   ;
 
 namepart
@@ -71,9 +71,9 @@ referenceNames
 metaentries
   : metadata
   { $$ = [$1];  }
-  | metaentries terminators metadata
+  | metaentries newlines metadata
   { $$ = $1; $$.push($3) }
-  | metaentries terminators
+  | metaentries newlines
   { $$ = $1; }
   ;
 
@@ -183,6 +183,10 @@ colorvaluevalue
   | NAME
   ;
 
+newlines
+  : NEWLINE
+  ;
+
 boolean
   : TRUE
   { $$ = true; }
@@ -190,9 +194,6 @@ boolean
   { $$ = false; }
   ;
 
-terminators
-  : NEWLINE
-  ;
 
 outdentOrEof
   : OUTDENT

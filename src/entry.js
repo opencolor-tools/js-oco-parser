@@ -65,10 +65,10 @@ class Entry {
   }
 
   addChild(child, validate=true) {
+    if (!child) { return; }
     //console.log("add child", child);
     var type = child.type;
     // we're basically only separating meta data.
-    if(type === 'Comment') { return; }
     if (type === 'Metadata') {
       this.metadata[child.name] = child.value;
       this.addParent(this.metadata[child.name]);
