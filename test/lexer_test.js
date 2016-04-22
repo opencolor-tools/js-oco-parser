@@ -59,5 +59,10 @@ describe("oco lexer", () => {
     expect(lex).to.equal('NAME');
     lexer.resetWithInput("");
   });
+  it('should detect color value', () => {
+    var lex = lexNTimes('RGBA(120,100,20)', 1);
+    expect(lex).to.equal('COLORVALUE');
+    lexer.resetWithInput("");
+  });
 
 });

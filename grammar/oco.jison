@@ -160,20 +160,8 @@ colorvalue
   { $$ = new yy.ColorValue('rgb', "#" + $2); }
   | '#' NUMBER
   { $$ = new yy.ColorValue('rgb', "#" + $2); }
-  | NAME '(' colorvaluevalues ')'
-  { $$ = new yy.ColorValue($1, $1 + "(" + $3.join(",") + ")");}
-  ;
-
-colorvaluevalues
-  : colorvaluevalue
-  { $$ = [$1]; }
-  | colorvaluevalues ',' colorvaluevalue
-  { $$ = $1; $$.push($3); }
-  ;
-
-colorvaluevalue
-  : NUMBER
-  | NAME
+  | COLORVALUE
+  { $$ = new yy.ColorValue.fromColorValue($1);}
   ;
 
 newlines

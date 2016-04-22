@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.0.4
+
+- Fixing some comment related parser issues
+- Allowing Palettes named "Root"
+- Allowing (some form) of parentheses in color/palette names
+
 ## 0.0.3
 
 - Parser errors now contain the correct line number
