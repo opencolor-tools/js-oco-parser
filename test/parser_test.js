@@ -101,6 +101,19 @@ group name:
     expect(tree.get('group name').get('green').get('rgb').value).to.equal('#0f0');
   });
 
+  it("should not treat a group named Root as Root type", () => {
+    var test = `
+Group1:
+  50: #E3F2FD
+  800: #1565C0
+Root:
+  50: #E3F2FD
+  800: #1565C0`;
+    var tree = parser.parse(test);
+    expect(tree.get('Root').type).to.equal('Entry');
+  });
+
+
   it("should overwrite with last hit on key clashes", () => {
     var test = `
 color: #fff
