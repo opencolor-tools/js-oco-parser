@@ -160,6 +160,11 @@ group:
     var tree = parser.parse(test);
     expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
   });
+  it("should parse empty comments", () => {
+    var test = "group:\n  color: #ffe\n  // ";
+    var tree = parser.parse(test);
+    expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
+  });
 });
 
 describe("Parser access methods", () => {

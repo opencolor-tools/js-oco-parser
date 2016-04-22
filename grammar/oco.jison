@@ -31,7 +31,7 @@ entry
   { $$ = new yy.Metadata($1, $2);  }
   | colorvalues commentOrNot
   { $$ = $1; }
-  | comment
+  | COMMENT
   { $$ = null }
   ;
 
@@ -116,15 +116,8 @@ metaname
   ;
 
 commentOrNot
-  : comment
+  : COMMENT
   |
-  ;
-
-comment
-  : COMMENTSTART nameparts
-  { $$ = $2 }
-  | COMMENTSTART STRING
-  { $$ = $2 }
   ;
 
 metanameparts

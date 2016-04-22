@@ -95,10 +95,10 @@ lexer.addRule(/[^\/:.,=#()\s][^\/:.,=#()\s]*/, function(lexeme) {
   return "NAME";
 });
 
-lexer.addRule(/\/\//, function () {
+lexer.addRule(/\/\/.*$/m, function (lexeme) {
   addLocation(this, row);
-  col++;
-  return "COMMENTSTART";
+  col += lexeme.length;
+  return "COMMENT";
 });
 
 lexer.addRule(/"[^\s]*"/, function(lexeme, string) {

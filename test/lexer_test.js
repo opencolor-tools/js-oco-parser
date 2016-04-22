@@ -24,7 +24,7 @@ function lexNTimes(input, step) {
 //   } while(lex);
 //   return out;
 // }
-// var test = "group:\n  subgroup:\n    color: #1565C0\n  \n    other color: #E3F2FD";
+// var test = "group:\n  color: #ffe\n  // comment";
 // console.log(lexAll(test));
 
 
