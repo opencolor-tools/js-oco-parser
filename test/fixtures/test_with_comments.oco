@@ -1,7 +1,7 @@
 group: // heres a comment
   // here's a comment too
   meta/:
-    data: Cool Metadata
+    data: Cool Metadata // well?
     other/data: Super Cool Metadata
   subgroup:
     color in subgroup: #291230 // comment after color

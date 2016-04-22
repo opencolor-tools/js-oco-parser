@@ -78,9 +78,9 @@ metaentries
   ;
 
 metadata
-  : metaname metavalue
+  : metaname metavalue commentOrNot
   { $$ = new yy.Metadata($1, $2);  }
-  | nameparts ':' metavalue
+  | nameparts ':' metavalue commentOrNot
   { $$ = new yy.Metadata($1, $3);  }
   ;
 

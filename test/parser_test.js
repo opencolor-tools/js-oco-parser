@@ -29,7 +29,7 @@ describe("Parser", () => {
     expect(tree.get('f00').type).to.equal('Color');
     expect(tree.get('f00').get('rgb').value).to.equal('#f00022');
   });
-  
+
   it("should allow parentheses in color names", () => {
     var test = "vollfarbe (rot) super: #f00022\n";
     var tree = parser.parse(test);
@@ -156,6 +156,7 @@ describe("Parsing comments", () => {
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#fff');
   });
+
   it("should parse single line comments after block", () => {
     var test = `
 group:
@@ -171,20 +172,29 @@ group:
     var tree = parser.parse(test);
     expect(tree.get('color').get('rgb').value).to.equal('#fff');
   });
+
   it("should parse block lead comments", () => {
     var test = "group: // Hello\n  color: #ffe\n";
     var tree = parser.parse(test);
     expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
   });
+
   it("should parse comments that start at beginning of line", () => {
     var test = "group:\n  color: #ffe\n  // comment";
     var tree = parser.parse(test);
     expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
   });
+
   it("should parse empty comments", () => {
     var test = "group:\n  color: #ffe\n  // ";
     var tree = parser.parse(test);
     expect(tree.get('group').get('color').get('rgb').value).to.equal('#ffe');
+  });
+
+  it("should parse comments in meta blocks", () => {
+    var test = "meta/:\n  data: #ffe // what's the vector, viktor?";
+    var tree = parser.parse(test);
+    expect(tree.metadata['meta/data'].value).to.equal('#ffe');
   });
 });
 

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.5
+
+- Fixing comments in metadata blocks
+
 ## 0.0.4
 
 - Fixing some comment related parser issues
