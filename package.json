@@ -17,6 +17,7 @@
   ],
   "scripts": {
     "test": "make test",
+    "testts": "mocha ts_test -w --compilers js:babel-core/register",
     "build": "make build",
     "lint": "jshint src/ test/"
   },

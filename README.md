@@ -19,3 +19,9 @@ var tree = oco.parse(string); // gives you a tree of the parsed OCO data
 
 var out = oco.render(tree); // outputs a valid oco file of the tree
 ```
+
+## Branch ts
+
+```
+npm run testts
+```

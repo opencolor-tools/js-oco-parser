@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "outDir": "./ts_lib"
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!node_modules/**/*.ts"
+    ],
+    "files": [
+        "./ts_src/color_entry.ts",
+        "./ts_src/color_helpers.ts",
+        "./ts_src/color_value.ts",
+        "./ts_src/entry_value.ts",
+        "./ts_src/entry.ts",
+        "./ts_src/index.ts",
+        "./ts_src/metadata.ts",
+        "./ts_src/palette_entry.ts",
+        "./ts_src/palette_value.ts",
+        "./ts_src/reference_entry.ts",
+        "./ts_src/reference_value.ts"
+    ],
+    "atom": {
+        "rewriteTsconfig": true
+    }
+}
