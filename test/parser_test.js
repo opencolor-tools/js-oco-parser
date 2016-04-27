@@ -55,6 +55,13 @@ describe("Parser", () => {
     expect(tree.get('vollfarbe, super').get('rgb').value).to.equal('#f00022');
   });
 
+  it("should allow commas and parentheses in color names", () => {
+    var test = "Minimal (SQUARE, configured): #f00022\n";
+    var tree = parser.parse(test);
+    expect(tree.name).to.equal('root');
+    expect(tree.get('Minimal (SQUARE, configured)').type).to.equal('Color');
+  });
+
   it("should parse a single color as an rgb value", () => {
     var test = "color: rgb(10,20,30)\n";
     var tree = parser.parse(test);
