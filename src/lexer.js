@@ -2,8 +2,8 @@
 'use strict';
 var Lexer = require("lex");
 
-var row = 1;
-var col = 1;
+var row = 0;
+var col = 0;
 var indent = [0];
 
 
@@ -13,13 +13,16 @@ var lexer = module.exports = new Lexer(function (char) {
 
 lexer.resetWithInput = function(input) {
   lexer.setInput(input);
-  row = 1;
-  col = 1;
+  row = 0;
+  col = 0;
   indent = [0];
 };
 
-function addLocation(obj, line)  {
-  obj.yylineno = line - 1;
+function addLocation(obj, line, loc)  {
+  obj.yylineno = line;
+  if (typeof loc['first_line'] === 'undefined') { loc.first_line = line; }
+  if (typeof loc['last_line'] === 'undefined') { loc.last_line = line; }
+  obj.yylloc = loc || {};
 }
 
 lexer.addRule(/^([ \t]*)(\n+)/gm, function (lexeme, spaces, breaks) {
@@ -28,7 +31,7 @@ lexer.addRule(/^([ \t]*)(\n+)/gm, function (lexeme, spaces, breaks) {
 });
 
 lexer.addRule(/\n+/, function (lexeme) {
-  addLocation(this, row);
+  addLocation(this, row, {first_line: row, last_line: row + lexeme.length, first_column: col, last_column: 1});
   col = 1;
   row += lexeme.length;
   return "NEWLINE";
@@ -37,7 +40,7 @@ lexer.addRule(/\n+/, function (lexeme) {
 
 lexer.addRule(/^ */gm, function (lexeme) {
     var indentation = lexeme.length;
-    addLocation(this, row);
+    addLocation(this, row, {first_column: col, last_column: col + indentation });
     col += indentation;
 
     if (indentation > indent[0]) {
@@ -62,108 +65,108 @@ lexer.addRule(/ +/, function (lexeme) {
 });
 
 lexer.addRule(/true/, function(lexeme) {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   col += lexeme.length;
   return "TRUE";
 });
 
 lexer.addRule(/false/, function(lexeme) {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   col += lexeme.length;
   return "FALSE";
 });
 
 lexer.addRule(/([0-9]+(\.?[0-9]*))/, function(lexeme) {
   this.yytext = lexeme;
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   col += lexeme.length;
   return "NUMBER";
 });
 
 lexer.addRule(/[a-f\d]{3,8}/i, function(lexeme) {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   this.yytext = lexeme;
   col += lexeme.length;
   return "HEXNUMBER";
 });
 
 lexer.addRule(/[a-zA-Z0-9]+\(.+?\)/, function(lexeme) {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   this.yytext = lexeme;
   col += lexeme.length;
   return "COLORVALUE";
 });
 
 lexer.addRule(/[^\/:.,=#\s]+/, function(lexeme) {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   this.yytext = lexeme;
   col += lexeme.length;
   return "NAME";
 });
 
 lexer.addRule(/\/\/.*$/m, function (lexeme) {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   col += lexeme.length;
   return "COMMENT";
 });
 
 lexer.addRule(/"[^\s]*"/, function(lexeme, string) {
   this.yytext = string;
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   col += lexeme.length;
   return "STRING";
 });
 
 lexer.addRule(/\//, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col++;
   return "/";
 });
 
 lexer.addRule(/\./, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col++;
   return ".";
 });
 
 lexer.addRule(/\:/, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col++;
   return ":";
 });
 
 lexer.addRule(/=/, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col++;
   return "=";
 });
 
 lexer.addRule(/\#/, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col++;
   return "#";
 });
 
 lexer.addRule(/\(/, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col ++;
   return "(";
 });
 
 lexer.addRule(/\)/, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col ++;
   return ")";
 });
 
 lexer.addRule(/,/, function () {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
     col++;
     return ",";
 });
 
 lexer.addRule(/=/, function() {
-  addLocation(this, row);
+  addLocation(this, row, { first_column: col, last_column: col });
   col ++;
   return "=";
 });
@@ -175,7 +178,7 @@ lexer.addRule(/=/, function() {
 // });
 
 lexer.addRule(/$/, function () {
-    addLocation(this, row);
+    addLocation(this, row, { first_column: col, last_column: col });
     var tokens = [];
     while (0 < indent[0]) {
       tokens.push("OUTDENT");

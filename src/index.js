@@ -8,6 +8,7 @@ var Reference = require('./reference');
 var Metadata = require('./metadata');
 var Renderer = require('./renderer');
 var lexer = require('./lexer');
+var ParserError = require('./parser_error');
 jisonparser.lexer = lexer;
 
 jisonparser.yy = {
@@ -15,7 +16,9 @@ jisonparser.yy = {
   Entry: Entry,
   Metadata: Metadata,
   Reference: Reference,
-  parseError: (str) => { throw(str); },
+  parseError(str, hash) {
+    throw(new ParserError(str, hash));
+  },
   log: (object) => { console.log(JSON.stringify(object, false, ' ')); }
 };
 

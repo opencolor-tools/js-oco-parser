@@ -3,6 +3,7 @@
 
 var Reference = require('./reference');
 var ColorValue = require('./color_value');
+var ParserError = require('./parser_error');
 
 function flatten(ary) {
   var ret = [];
@@ -50,7 +51,7 @@ class Entry {
   addMetadata(metadata) {
     Object.keys(metadata).forEach((key) => {
       if (!key.match(/\//)) {
-        throw("Metadata keys must contain at least one slash. (Failed at ''" + key + "')");
+        throw(new ParserError("Metadata keys must contain at least one slash. (Failed at ''" + key + "')"), {});
       }
       if (typeof(metadata[key]) === 'string') {
         if (metadata[key].match(/^=/)) {
@@ -110,10 +111,12 @@ class Entry {
     });
     types = types.sort();
     if (types.indexOf('ColorValue') !== -1 && types.indexOf('Color') !== -1 ) {
-      throw('Entry "' + this.name + '" cannot contain colors and color values at the same level (line: ' + this.position.first_line + ')');
+      let message = `Entry "${this.name}" cannot contain colors and color values at the same level (line: ${this.position.first_line - 1})`;
+      throw(new ParserError(message, {line: this.position.first_line }));
     }
     if (types.indexOf('Entry') !== -1 && types.indexOf('ColorValue') !== -1) {
-      throw('Entry "' + this.name + '" cannot contain palette and color values at the same level (line: ' + this.position.first_line + ')');
+      let message = `Entry "${this.name}" cannot contain palette and color values at the same level (line: ${this.position.first_line - 1})`;
+      throw(new ParserError(message, {line: this.position.first_line }));
     }
     if (types.indexOf('ColorValue') !== -1 && this.type === 'Entry') {
       this.type = 'Color';
