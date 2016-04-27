@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.0.6
+
+- More Meaningful Error objects on parser errors
+
 ## 0.0.5
 
 - Fixing comments in metadata blocks
