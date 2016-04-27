@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.0.7
+
+- Allowing commas in color names
+- Fixing multiple color values on one line
+
 ## 0.0.6
 
 - More Meaningful Error objects on parser errors
