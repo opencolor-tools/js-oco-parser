@@ -13,19 +13,19 @@ function lexNTimes(input, step) {
   return retVal;
 }
 
-// // test bed
-// function lexAll(input) {
-//   var out = [];
-//   var lex;
-//   lexer.resetWithInput(input);
-//   do {
-//     lex = lexer.lex();
-//     out.push(lex);
-//   } while(lex);
-//   return out;
-// }
-// var test = "group:\n  color: #ffe\n  // comment";
-// console.log(lexAll(test));
+// test bed
+function lexAll(input) {
+  var out = [];
+  var lex;
+  lexer.resetWithInput(input);
+  do {
+    lex = lexer.lex();
+    out.push(lex);
+  } while(lex);
+  return out;
+}
+var test = "color: #ff0022, PAL(10102)";
+console.log(lexAll(test));
 
 
 

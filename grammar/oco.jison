@@ -49,6 +49,8 @@ nameparts
   { $$ = $1;}
   | nameparts namepart
   { $$ = $1 + ' ' + $2 }
+  | nameparts ',' namepart
+  { $$ = $1 + ', ' + $3 }
   ;
 
 entryname
@@ -147,12 +149,12 @@ colorvalues
   : colorvalue
   { $$ = [$1] }
   | colorvalues ',' colorvalue
-  { $$ = $1; $1.push($2); }
+  { $$ = $1; $1.push($3); }
   ;
 
 hexnum
   : HEXNUMBER
-  { $$ = yytext; }
+  { $$ = $1; }
   ;
 
 colorvalue

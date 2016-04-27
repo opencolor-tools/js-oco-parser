@@ -14,6 +14,15 @@ describe("Parser", () => {
     expect(tree.get('color').get('rgb').value).to.equal('#ff0022');
   });
 
+  it("should parse a single color with more than one color value", () => {
+    var test = "color: #ff0022, PAL(10102)";
+    var tree = parser.parse(test);
+    expect(tree.name).to.equal('root');
+    expect(tree.get('color').type).to.equal('Color');
+    expect(tree.get('color').get('rgb').value).to.equal('#ff0022');
+    expect(tree.get('color').get('PAL').value).to.equal('PAL(10102)');
+  });
+
   it("should allow numbers as color names", () => {
     var test = "001: #ff0022\n";
     var tree = parser.parse(test);
@@ -36,6 +45,14 @@ describe("Parser", () => {
     expect(tree.name).to.equal('root');
     expect(tree.get('vollfarbe (rot) super').type).to.equal('Color');
     expect(tree.get('vollfarbe (rot) super').get('rgb').value).to.equal('#f00022');
+  });
+
+  it("should allow commas in color names", () => {
+    var test = "vollfarbe, super: #f00022\n";
+    var tree = parser.parse(test);
+    expect(tree.name).to.equal('root');
+    expect(tree.get('vollfarbe, super').type).to.equal('Color');
+    expect(tree.get('vollfarbe, super').get('rgb').value).to.equal('#f00022');
   });
 
   it("should parse a single color as an rgb value", () => {

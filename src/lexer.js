@@ -97,7 +97,7 @@ lexer.addRule(/[a-zA-Z0-9]+\(.+?\)/, function(lexeme) {
   return "COLORVALUE";
 });
 
-lexer.addRule(/[^\/:.,=#\s]+/, function(lexeme) {
+lexer.addRule(/[^\/:\.,=#\s]+/, function(lexeme) {
   addLocation(this, row, { first_column: col, last_column: col + lexeme.length });
   this.yytext = lexeme;
   col += lexeme.length;
