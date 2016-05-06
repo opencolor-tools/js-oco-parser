@@ -1,24 +1,39 @@
 /* jshint -W097 */
 'use strict';
 
+var tinycolor = require('tinycolor2');
+var ParserError = require('./parser_error');
+
 class ColorValue {
-  constructor(name, value) {
+  constructor(name, value, identified = false) {
     this.name = name;
     this.value = value;
     this.parent = null;
     this.type = 'ColorValue';
+    this.identified = identified;
   }
+  hexcolor(withAlpha = false) {
+    if (this.identified) {
+      if (withAlpha) {
+        return this.value.toString('hex8');
+      }
+      return this.value.toString('hex6');
+    }
+    return null;
+  }
+
   static fromColorValue(value) {
-    var hex = value.match(/^#[0-9a-fA-F]{3,8}$/);
-    if (hex) {
-      return new ColorValue('rgb', value);
+    var parsed = tinycolor(value);
+    if (parsed.isValid()) {
+      return new ColorValue(parsed.getFormat(), parsed, true);
     }
     var space = value.match(/^(\w+)\((.*)\)$/);
     if (space) {
-      return new ColorValue(space[1], space[0]);
+      return new ColorValue(space[1], space[0], false);
     }
-    throw("Illegal Color Value: " + value);
+    throw(new ParserError('Illegal Color Value: ' + value, {}));
   }
 }
+
 
 module.exports = ColorValue;

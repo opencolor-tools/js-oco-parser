@@ -1,16 +1,12 @@
 {
   "name": "opencolor",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A collection of functions to parse Open Color files, construct them via code and write them",
   "main": "lib/index.js",
   "repository": "https://github.com/opencolor-tools/opencolor-js",
   "bugs": "https://github.com/opencolor-tools/opencolor-js/issues",
   "homepage": "http://opencolor.tools",
-  "author": {
-    "name": "Jan Krutisch",
-    "email": "jan@krutisch.de",
-    "url": "https://jan.krutisch.de/"
-  },
+  "author": "Jan Krutisch",
   "contributors": [
     "Florian Munz <surf@theflow.de>",
     "Michael Schieben <michael@precious-forever.com>"
@@ -25,10 +21,10 @@
     "palettes",
     "parsing"
   ],
-  "author": "Jan Krutisch",
   "license": "MIT",
   "dependencies": {
-    "lex": "^1.7.9"
+    "lex": "^1.7.9",
+    "tinycolor2": "^1.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.6.5",

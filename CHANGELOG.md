@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.0.8
+
+- `ColorValues` are now parsed with tinycolor2. Hexcolors are thus named "hex" instead of "rgb". If tinycolor2 successfully parses a color value, the `ColorValue` is marked as "identified" and `.value` is the tinycolor object, which means that
+`.value.toString(format)` gives you various options to convert the color to different formats.
+- Added `hexcolor()` function to both Color Value and Color, if an identified color is found, it's converted to a hexcolor.
+- added `traverseTree()` method to traverse the tree and filter by type as well.
+- added `set()` to `Entry`, including the possibility of setting with a dotPath.
+- enhanced `get()` on `Entry` to allow getting via dotPath.
+- `dotPath()` on `Entry` returns the fully qualified dotpath for the node.
+
 ## 0.0.7
 
 - Allowing commas in color names

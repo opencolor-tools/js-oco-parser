@@ -36,10 +36,53 @@ class Entry {
   }
   get(nameOrIndex) {
     if ('string' === typeof nameOrIndex) {
+      if (nameOrIndex.match(/\./)) { // dotpath, so we need to do a deep lookup
+        var pathspec = nameOrIndex.split(".");
+        return this.get(pathspec.shift()).get(pathspec.join("."));
+      }
       return this.children[this.childKeys[nameOrIndex]];
     } else {
       return this.children[nameOrIndex];
     }
+  }
+
+  set(nameOrIndex, value) {
+    if ('string' === typeof nameOrIndex) {
+      if (nameOrIndex.match(/\./)) { // dotpath, so we need to do a deep lookup
+        var pathspec = nameOrIndex.split(".");
+        var firstPart = pathspec.shift();
+        var existingEntry =  this.get(firstPart);
+        if (existingEntry && existingEntry.type === 'Entry') {
+          existingEntry.set(pathspec.join("."), value);
+        } else {
+          var newGroup = new Entry(firstPart);
+          this.set(firstPart, newGroup);
+          newGroup.set(pathspec.join("."), value);
+        }
+      } else {
+        if (this.get(nameOrIndex)) {
+          this.get(nameOrIndex).parent = null; // nullifying ref
+          this.children[this.childKeys[nameOrIndex]] = value;
+          value.name = nameOrIndex;
+        } else {
+          this.children.push(value);
+          value.name = nameOrIndex;
+          this.childKeys[nameOrIndex] = this.children.length - 1;
+        }
+        value.parent = this;
+      }
+    } else {
+      if (this.children[nameOrIndex]) {
+        this.children[nameOrIndex].parent = null; // nullifying reference
+      }
+      this.children[nameOrIndex] = value;
+      value.parent = this;
+    }
+  }
+
+  dotPath() {
+    if (!this.parent) { return ''; } // we don't actually want to have the root in there.
+    return [this.parent.dotPath(), this.name].filter((e) => e !== '').join('.');
   }
 
   addParent(element) {
@@ -70,7 +113,6 @@ class Entry {
 
   addChild(child, validate=true) {
     if (!child) { return; }
-    //console.log("add child", child);
     var type = child.type;
     // we're basically only separating meta data.
     if (type === 'Metadata') {
@@ -122,6 +164,28 @@ class Entry {
       this.type = 'Color';
     }
   }
+
+  traverseTree(filters, callback) {
+    var filter = false;
+    if (typeof filters === 'string') { filters = [filters]; }
+    if (filters && filters.length > 0) { filter = true; }
+    this.children.forEach((child) => {
+      if (!filter || filters.indexOf(child.type) !== -1) {
+        callback(child);
+      }
+      if (child.children && child.children.length > 0) {
+        child.traverseTree(filters, callback);
+      }
+    });
+  }
+
+  hexcolor(withAlpha = false) {
+    if (this.type !== 'Color') { return null; }
+    var identifiedColor = this.children.filter((child) => child.identified === true)[0];
+    if (identifiedColor) { return identifiedColor.hexcolor(withAlpha); }
+    return null;
+  }
+
 }
 
 module.exports = Entry;

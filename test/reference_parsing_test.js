@@ -12,7 +12,7 @@ ref color: =color
     var tree = oco.parse(test);
     // Only simple, same level references for now
     expect(tree.children[1].refName).to.equal('color');
-    expect(tree.children[1].resolved().get('rgb').value).to.equal('#fff');
+    expect(tree.children[1].resolved().hexcolor()).to.equal('#ffffff');
   });
 
   it("should parse a deep reference", () => {
@@ -27,7 +27,7 @@ another color: #ffe`;
     // Only simple, same level references for now
     var refColor = tree.get('group').get('ref color');
     expect(refColor.refName).to.equal('color');
-    expect(refColor.resolved().get('rgb').value).to.equal('#fff');
+    expect(refColor.resolved().hexcolor()).to.equal('#ffffff');
   });
 
   it("should parse a tree reference", () => {
@@ -42,7 +42,7 @@ group:
     // Only simple, same level references for now
     var refColor = tree.get('group').get('ref color');
     expect(refColor.refName).to.equal('group.another color');
-    expect(refColor.resolved().get('rgb').value).to.equal('#afa');
+    expect(refColor.resolved().hexcolor()).to.equal('#aaffaa');
   });
 
   it("should parse a non obvious tree reference", () => {
@@ -57,7 +57,7 @@ a:
     // Only simple, same level references for now
     var refColor = tree.get('a').get('a').get('subgroup ref color');
     expect(refColor.refName).to.equal('a.b');
-    expect(refColor.resolved().get('rgb').value).to.equal('#fff');
+    expect(refColor.resolved().hexcolor()).to.equal('#ffffff');
   });
 
   it("should resolve references of references", () => {
@@ -69,7 +69,7 @@ c: #afa
 
     var tree = oco.parse(test);
     // Only simple, same level references for now
-    expect(tree.get('a').resolved().get('rgb').value).to.equal('#afa');
+    expect(tree.get('a').resolved().hexcolor()).to.equal('#aaffaa');
 
   });
 
@@ -101,7 +101,7 @@ a: =800
 `;
     var tree = oco.parse(test);
     // Only simple, same level references for now
-    expect(tree.get('a').resolved().get('rgb').value).to.equal('#cc0000');
+    expect(tree.get('a').resolved().hexcolor()).to.equal('#cc0000');
   });
 
 });

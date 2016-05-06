@@ -159,9 +159,9 @@ hexnum
 
 colorvalue
   : '#' hexnum
-  { $$ = new yy.ColorValue('rgb', "#" + $2); }
+  { $$ = new yy.ColorValue.fromColorValue("#" + $2); }
   | '#' NUMBER
-  { $$ = new yy.ColorValue('rgb', "#" + $2); }
+  { $$ = new yy.ColorValue.fromColorValue("#" + $2); }
   | COLORVALUE
   { $$ = new yy.ColorValue.fromColorValue($1);}
   ;

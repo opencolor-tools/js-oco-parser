@@ -42,16 +42,16 @@ describe('Entry', () => {
     var color = new Entry('super', [ColorValue.fromColorValue('#ffe')], 'Color');
     root.addChild(color);
     root.addMetadata({'foo/test': '=super'});
-    expect(root.metadata['foo/test'].resolved().get('rgb').value).to.equal('#ffe');
+    expect(root.metadata['foo/test'].resolved().get('hex').hexcolor()).to.equal('#ffffee');
   });
   it("adding metadata via object literals with hex color", () => {
     var root = new Entry();
     root.addMetadata({'foo/test': '#ffe'});
-    expect(root.metadata['foo/test'].value).to.equal('#ffe');
+    expect(root.metadata['foo/test'].hexcolor()).to.equal('#ffffee');
   });
   it("adding metadata via object literals with rgb color", () => {
     var root = new Entry();
     root.addMetadata({'foo/test': 'rgb(123,132,142)'});
-    expect(root.metadata['foo/test'].value).to.equal('rgb(123,132,142)');
+    expect(root.metadata['foo/test'].value.toString('rgb')).to.equal('rgb(123, 132, 142)');
   });
 });

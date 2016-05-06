@@ -13,7 +13,7 @@ describe('Renderer', () => {
     tree.addChild(color);
     var result = oco.render(tree);
     var expected = `bright yellow:
-  #ffe
+  #ffffee
   key/key: Value
 `;
     expect(result).to.equal(expected);
@@ -27,7 +27,7 @@ describe('Renderer', () => {
     tree.addChild(color);
     tree.addChild(ref);
     var result = oco.render(tree);
-    var expected = `bright yellow: #ffe
+    var expected = `bright yellow: #ffffee
 almost yellow: =bright yellow
 `;
     expect(result).to.equal(expected);
@@ -42,10 +42,9 @@ almost yellow: =bright yellow
     tree.addChild(palette);
     var result = oco.render(tree);
     var expected = `yellows:
-  bright yellow: #ffe
+  bright yellow: #ffffee
 `;
     expect(result).to.equal(expected);
-
   });
 
   it("should render complex example", () => {
@@ -54,8 +53,5 @@ almost yellow: =bright yellow
     // basically just one assertion to verify the parsing worked.
     var result = oco.render(tree);
     expect(result).to.equal(input.toString());
-
-
   });
-
 });
