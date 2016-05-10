@@ -16,7 +16,7 @@ describe('Entry', () => {
     var root = new Entry();
     root.addChild(new Entry('name', [], 'Entry'));
     var fun = function() {
-      root.addChild(ColorValue.fromColorValue('#ffe'), true);
+      root.addChild(ColorValue.fromColorValue('#FFE'), true);
     };
     //console.log(root);
     expect(fun).to.throw();
@@ -26,7 +26,7 @@ describe('Entry', () => {
     var root = new Entry();
     root.addChild(new Entry('name', [], 'Entry'));
     var fun = function() {
-      root.addChild(ColorValue.fromColorValue('#ffe'), true);
+      root.addChild(ColorValue.fromColorValue('#FFE'), true);
     };
     //console.log(root);
     expect(fun).to.throw();
@@ -39,15 +39,15 @@ describe('Entry', () => {
   });
   it("adding metadata via object literals with reference", () => {
     var root = new Entry();
-    var color = new Entry('super', [ColorValue.fromColorValue('#ffe')], 'Color');
+    var color = new Entry('super', [ColorValue.fromColorValue('#FFE')], 'Color');
     root.addChild(color);
     root.addMetadata({'foo/test': '=super'});
-    expect(root.metadata['foo/test'].resolved().get('hex').hexcolor()).to.equal('#ffffee');
+    expect(root.metadata['foo/test'].resolved().get('hex').hexcolor()).to.equal('#FFFFEE');
   });
   it("adding metadata via object literals with hex color", () => {
     var root = new Entry();
     root.addMetadata({'foo/test': '#ffe'});
-    expect(root.metadata['foo/test'].hexcolor()).to.equal('#ffffee');
+    expect(root.metadata['foo/test'].hexcolor()).to.equal('#FFFFEE');
   });
   it("adding metadata via object literals with rgb color", () => {
     var root = new Entry();

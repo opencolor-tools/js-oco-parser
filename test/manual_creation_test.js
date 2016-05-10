@@ -14,9 +14,9 @@ describe('Manually creating OCO objects', () => {
 describe('Deep creating syntax', () => {
   it("should create an entry structure", () => {
     var root = new oco.Entry();
-    var color = new oco.Entry('color', [oco.ColorValue.fromColorValue('#ff0')]);
+    var color = new oco.Entry('color', [oco.ColorValue.fromColorValue('#FF0')]);
     expect(color.type).to.equal('Color');
     root.set('foo.bar.baz.color', color);
-    expect(root.get('foo').get('bar').get('baz').get('color').get('hex').hexcolor()).to.equal('#ffff00');
+    expect(root.get('foo').get('bar').get('baz').get('color').get('hex').hexcolor()).to.equal('#FFFF00');
   });
 });

@@ -47,7 +47,7 @@ describe("oco lexer", () => {
     expect(lex).to.equal('NUMBER');
   });
   it('should detect hexnumber', () => {
-    var lex = lexNTimes("1af234", 1);
+    var lex = lexNTimes("1AF234", 1);
     expect(lex).to.equal('HEXNUMBER');
   });
   it('should detect name', () => {

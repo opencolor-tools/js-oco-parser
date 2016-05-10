@@ -37,6 +37,6 @@ group 1:
     color: #ff0
 `;
     var tree = oco.parse(test);
-    expect(tree.get('group 1.group 2.color').hexcolor()).to.equal('#ffff00');
+    expect(tree.get('group 1.group 2.color').hexcolor()).to.equal('#FFFF00');
   });
 });

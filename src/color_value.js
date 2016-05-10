@@ -15,9 +15,9 @@ class ColorValue {
   hexcolor(withAlpha = false) {
     if (this.identified) {
       if (withAlpha) {
-        return this.value.toString('hex8');
+        return this.value.toString('hex8').toUpperCase();
       }
-      return this.value.toString('hex6');
+      return this.value.toString('hex6').toUpperCase();
     }
     return null;
   }

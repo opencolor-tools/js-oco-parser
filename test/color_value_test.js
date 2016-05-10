@@ -5,7 +5,7 @@ var oco = require('../lib/index.js');
 
 describe('ColorValue', () => {
   it("should create hex value", () => {
-    var colorValue = oco.ColorValue.fromColorValue('#ffa');
+    var colorValue = oco.ColorValue.fromColorValue('#FFA');
     expect(colorValue.value.toString('hex3')).to.equal('#ffa');
     expect(colorValue.name).to.equal('hex');
   });

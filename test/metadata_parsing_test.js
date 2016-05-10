@@ -87,7 +87,7 @@ color:
   it("should parse color metadata", () => {
     var test = "meta/data: #ff0022\n";
     var tree = parser.parse(test);
-    expect(tree.metadata['meta/data'].hexcolor()).to.equal('#ff0022');
+    expect(tree.metadata['meta/data'].hexcolor()).to.equal('#FF0022');
   });
   it("should parse reference metadata", () => {
     var test = `
@@ -95,7 +95,7 @@ color: #ff0022
 meta/data: =color
 `;
     var tree = parser.parse(test);
-    expect(tree.metadata['meta/data'].resolved().hexcolor()).to.equal('#ff0022');
+    expect(tree.metadata['meta/data'].resolved().hexcolor()).to.equal('#FF0022');
   });
   it("should parse reference metadata in block", () => {
     var test = `
@@ -104,7 +104,7 @@ meta/:
   data: =color
 `;
     var tree = parser.parse(test);
-    expect(tree.metadata['meta/data'].resolved().hexcolor()).to.equal('#ff0022');
+    expect(tree.metadata['meta/data'].resolved().hexcolor()).to.equal('#FF0022');
   });
 
 });

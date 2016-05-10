@@ -170,7 +170,7 @@ class Entry {
     if (typeof filters === 'string') { filters = [filters]; }
     if (filters && filters.length > 0) { filter = true; }
     this.children.forEach((child) => {
-      if (!filter || filters.indexOf(child.type) !== -1) {
+      if (child.type != 'ColorValue' && (!filter || filters.indexOf(child.type) !== -1)) {
         callback(child);
       }
       if (child.children && child.children.length > 0) {
