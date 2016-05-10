@@ -23,7 +23,6 @@ class Entry {
     this.position = position;
     this.metadata = {};
     this.children = [];
-    this.childKeys = {};
     this.parent = null;
     if (arguments.length === 0) {
       this.type = 'Root';
@@ -40,7 +39,7 @@ class Entry {
         var pathspec = nameOrIndex.split(".");
         return this.get(pathspec.shift()).get(pathspec.join("."));
       }
-      return this.children[this.childKeys[nameOrIndex]];
+      return this.children.filter((child) => child.name === nameOrIndex).pop();
     } else {
       return this.children[nameOrIndex];
     }
@@ -62,12 +61,13 @@ class Entry {
       } else {
         if (this.get(nameOrIndex)) {
           this.get(nameOrIndex).parent = null; // nullifying ref
-          this.children[this.childKeys[nameOrIndex]] = value;
+          this.children.filter((child) => child.name === nameOrIndex).forEach((child) => {
+            child.value = value;
+          });
           value.name = nameOrIndex;
         } else {
           this.children.push(value);
           value.name = nameOrIndex;
-          this.childKeys[nameOrIndex] = this.children.length - 1;
         }
         value.parent = this;
       }
@@ -126,13 +126,7 @@ class Entry {
         this.addParent(this.metadata[combinedKey]);
       });
     } else {
-      if ('undefined' !== typeof this.childKeys[child.name]) { // name collision. just overwrite as yaml would probably do.
-        this.children[this.childKeys[child.name]] = child;
-      } else {
-        var newIndex = this.children.length;
-        this.children.push(child);
-        this.childKeys[child.name] = newIndex;
-      }
+      this.children.push(child);
       child.parent = this;
     }
 
