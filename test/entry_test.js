@@ -12,6 +12,18 @@ describe('Entry', () => {
     expect(root.name).to.equal('Root');
   });
 
+  it("should be able to rename", () => {
+    var root = new oco.Entry();
+    root.name = 'XXX';
+    expect(root.name).to.equal('XXX');
+  });
+
+  it("should clean name", () => {
+    var root = new oco.Entry();
+    root.name = 'XX.X';
+    expect(root.name).to.equal('XXX');
+  });
+
   it("should throw error when entry and color value are added as children", () => {
     var root = new Entry();
     root.addChild(new Entry('name', [], 'Entry'));

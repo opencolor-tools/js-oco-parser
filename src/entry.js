@@ -19,7 +19,7 @@ function flatten(ary) {
 
 class Entry {
   constructor(name, children, type, position) {
-    this.name = name || 'Root';
+    this._name = name || 'Root';
     this.position = position;
     this.metadata = {};
     this.children = [];
@@ -32,6 +32,12 @@ class Entry {
     this.addChildren(flatten(children || []), false);
     this.validateType();
     this.forEach = Array.prototype.forEach.bind(this.children); // the magic of JavaScript.
+  }
+  set name(newName) {
+    this._name = newName.replace(/\./g, '');
+  }
+  get name() {
+    return this._name;
   }
   get(nameOrIndex) {
     if ('string' === typeof nameOrIndex) {
