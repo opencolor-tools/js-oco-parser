@@ -14,6 +14,7 @@
   "scripts": {
     "test": "make test",
     "build": "make build",
+    "test:watch": "watch 'npm test' src",
     "lint": "jshint src/ test/"
   },
   "keywords": [
@@ -33,6 +34,7 @@
     "chai": "^3.5.0",
     "jison": "^0.4.17",
     "jshint": "^2.9.1",
-    "mocha": "^2.4.5"
+    "mocha": "^2.4.5",
+    "watch": "^0.18.0"
   }
 }

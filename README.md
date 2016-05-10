@@ -12,7 +12,7 @@ npm install opencolor
 
 ### Parsing and rendering OCO formats.
 
-```JavaScript
+```javascript
 var oco = require('opencolor');
 
 var tree = oco.parse(string); // gives you a tree of the parsed OCO data
@@ -22,7 +22,7 @@ var out = oco.render(tree); // outputs a valid oco file of the tree
 
 ### Creating OCO programmatically
 
-```JavaScript
+```javascript
 var oco = require('opencolor');
 
  // creates a root object
@@ -39,3 +39,11 @@ var out = oco.render(tree); // outputs a valid oco file of the tree
 ```
 
 We're going to add more thorough Documentation soon!
+
+## Development
+
+```
+git clone https://github.com/opencolor-tools/opencolor-js.git
+npm install
+npm run test:watch
+```
