@@ -180,6 +180,13 @@ class Entry {
     return null;
   }
 
+  clone() {
+    var children = this.children.map((child) => child.clone());
+    var clone = new Entry(this.name, children, this.type, this.position);
+    clone.metadata = this.metadata;
+    return clone;
+  }
+
 }
 
 module.exports = Entry;

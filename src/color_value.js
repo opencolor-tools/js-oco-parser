@@ -22,6 +22,10 @@ class ColorValue {
     return null;
   }
 
+  clone() {
+    return new ColorValue(this.name, this.value, this.identified);
+  }
+
   static fromColorValue(value) {
     var parsed = tinycolor(value);
     if (parsed.isValid()) {
