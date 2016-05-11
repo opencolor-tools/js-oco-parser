@@ -20,14 +20,14 @@ group 2:
     expect(entries.join(",")).to.equal(['color 1', 'color 2', 'color 3'].join(","));
   });
 
-  it('should get a deep dotpath', () => {
+  it('should get a deep path', () => {
     var test = `
 group 1:
   group 2:
     color: #ff0
 `;
     var tree = oco.parse(test);
-    expect(tree.get('group 1').get('group 2').get('color').dotPath()).to.equal('group 1.group 2.color');
+    expect(tree.get('group 1').get('group 2').get('color').path()).to.equal('group 1.group 2.color');
 
   });
   it('should allow access via deep dotpath', () => {

@@ -86,9 +86,9 @@ class Entry {
     }
   }
 
-  dotPath() {
+  path() {
     if (!this.parent) { return ''; } // we don't actually want to have the root in there.
-    return [this.parent.dotPath(), this.name].filter((e) => e !== '').join('.');
+    return [this.parent.path(), this.name].filter((e) => e !== '').join('.');
   }
 
   addParent(element) {
