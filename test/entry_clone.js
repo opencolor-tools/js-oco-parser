@@ -3,7 +3,6 @@
 var expect = require('chai').expect;
 var oco = require('../lib/index.js');
 var Entry = oco.Entry;
-var ColorValue = oco.ColorValue;
 
 describe('Cloning Entries', () => {
 

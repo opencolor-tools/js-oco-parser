@@ -8,7 +8,7 @@ var ColorValue = oco.ColorValue;
 describe('Entry', () => {
   it("should create a root palette when called without arguments", () => {
     var root = new oco.Entry();
-    expect(root.parent).to.be.null;
+    expect(root.parent).to.equal(null);
     expect(root.name).to.equal('Root');
   });
 
