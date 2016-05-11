@@ -24,11 +24,8 @@ class Entry {
     this.metadata = {};
     this.children = [];
     this.parent = null;
-    if (arguments.length === 0) {
-      this.type = 'Root';
-    } else {
-      this.type = type || 'Entry';
-    }
+    this.type = type || 'Palette';
+
     this.addChildren(flatten(children || []), false);
     this.validateType();
     this.forEach = Array.prototype.forEach.bind(this.children); // the magic of JavaScript.
@@ -67,7 +64,7 @@ class Entry {
         var pathspec = nameOrIndex.split(".");
         var firstPart = pathspec.shift();
         var existingEntry =  this.get(firstPart);
-        if (existingEntry && existingEntry.type === 'Entry') {
+        if (existingEntry && existingEntry.type === 'Palette') {
           existingEntry.set(pathspec.join("."), value);
         } else {
           var newGroup = new Entry(firstPart);
@@ -163,19 +160,19 @@ class Entry {
   validateType() {
     var types = [];
     this.children.forEach((child) => {
-      let type = child.constructor.name;
+      let type = child.type;
       if (types.indexOf(type) === -1) { types.push(type); }
     });
     types = types.sort();
     if (types.indexOf('ColorValue') !== -1 && types.indexOf('Color') !== -1 ) {
-      let message = `Entry "${this.name}" cannot contain colors and color values at the same level (line: ${this.position.first_line - 1})`;
+      let message = `Palette "${this.name}" cannot contain colors and color values at the same level (line: ${this.position.first_line - 1})`;
       throw(new ParserError(message, {line: this.position.first_line }));
     }
-    if (types.indexOf('Entry') !== -1 && types.indexOf('ColorValue') !== -1) {
-      let message = `Entry "${this.name}" cannot contain palette and color values at the same level (line: ${this.position.first_line - 1})`;
+    if (types.indexOf('Palette') !== -1 && types.indexOf('ColorValue') !== -1) {
+      let message = `Palette "${this.name}" cannot contain palette and color values at the same level (line: ${this.position.first_line - 1})`;
       throw(new ParserError(message, {line: this.position.first_line }));
     }
-    if (types.indexOf('ColorValue') !== -1 && this.type === 'Entry') {
+    if (types.indexOf('ColorValue') !== -1 && this.type === 'Palette') {
       this.type = 'Color';
     }
   }

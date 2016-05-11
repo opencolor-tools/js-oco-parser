@@ -6,7 +6,7 @@ var oco = require('../lib/index.js');
 describe('Manually creating OCO objects', () => {
   it("should create a root palette", () => {
     var root = new oco.Entry();
-    expect(root.type).to.equal('Root');
+    expect(root.parent).to.be.null;
     expect(root.name).to.equal('Root');
   });
   it("is possible to create more than one entry with sharing one dotpath", () => {

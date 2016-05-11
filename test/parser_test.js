@@ -94,7 +94,7 @@ color:
   #ff0022
 `;
     var tree = parser.parse(test);
-    expect(tree.type).to.equal('Root');
+    expect(tree.parent).to.be.null;
     expect(tree.name).to.equal('root');
     expect(tree.get('color').type).to.equal('Color');
     expect(tree.get('color').hexcolor()).to.equal('#FF0022');
@@ -142,7 +142,8 @@ Root:
   50: #E3F2FD
   800: #1565C0`;
     var tree = parser.parse(test);
-    expect(tree.get('Root').type).to.equal('Entry');
+    expect(tree.get('Root').type).to.equal('Palette');
+    expect(tree.get('Root').parent).to.not.be.null;
   });
 
 

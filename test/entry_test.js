@@ -8,7 +8,7 @@ var ColorValue = oco.ColorValue;
 describe('Entry', () => {
   it("should create a root palette when called without arguments", () => {
     var root = new oco.Entry();
-    expect(root.type).to.equal('Root');
+    expect(root.parent).to.be.null;
     expect(root.name).to.equal('Root');
   });
 
@@ -26,7 +26,7 @@ describe('Entry', () => {
 
   it("should throw error when entry and color value are added as children", () => {
     var root = new Entry();
-    root.addChild(new Entry('name', [], 'Entry'));
+    root.addChild(new Entry('name', [], 'Palette'));
     var fun = function() {
       root.addChild(ColorValue.fromColorValue('#FFE'), true);
     };
@@ -36,7 +36,7 @@ describe('Entry', () => {
 
   it("should throw error when entry and color value are added as children", () => {
     var root = new Entry();
-    root.addChild(new Entry('name', [], 'Entry'));
+    root.addChild(new Entry('name', [], 'Palette'));
     var fun = function() {
       root.addChild(ColorValue.fromColorValue('#FFE'), true);
     };
