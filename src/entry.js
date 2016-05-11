@@ -51,6 +51,16 @@ class Entry {
     }
   }
 
+  remove(path) {
+    var entry = this.get(path);
+    if(!entry) {
+      return;
+    }
+    entry.parent.removeChild(entry);
+    // if there are multiple children with the same dotpath
+    this.remove(path);
+  }
+
   set(nameOrIndex, value) {
     if ('string' === typeof nameOrIndex) {
       if (nameOrIndex.match(/\./)) { // dotpath, so we need to do a deep lookup
@@ -115,6 +125,11 @@ class Entry {
       this.metadata[key] = metadata[key];
       this.addParent(this.metadata[key]);
     });
+  }
+
+  removeChild(child) {
+    var index = this.children.indexOf(child);
+    this.children = this.children.slice(0, index).concat(this.children.slice(index + 1));
   }
 
   addChild(child, validate=true) {
