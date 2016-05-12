@@ -72,4 +72,24 @@ describe('Deep creating syntax', () => {
     root.set('newentryname', color);
     expect(root.get('newentryname').name).to.equal('newentryname');
   });
+  it("should overwrite existing entry", () => {
+    var root = new oco.Entry();
+    var colorA = new oco.Entry('colornameA', [oco.ColorValue.fromColorValue('#FFFFFF')]);
+    var colorB = new oco.Entry('colornameB', [oco.ColorValue.fromColorValue('#000000')]);
+
+    root.set('colornameA', colorA);
+    expect(root.get('colornameA').hexcolor()).to.equal('#FFFFFF');
+    root.set('colornameA', colorB);
+    expect(root.get('colornameA').hexcolor()).to.equal('#000000');
+  });
+  it("should overwrite existing entry with different type", () => {
+    var root = new oco.Entry();
+    var colorA = new oco.Entry('entrynameA', [oco.ColorValue.fromColorValue('#FFFFFF')]);
+    var referenceA = new oco.Reference('entrynameB', '=xxx');
+
+    root.set('entrynameA', colorA);
+    expect(root.get('entrynameA').hexcolor()).to.equal('#FFFFFF');
+    root.set('entrynameA', referenceA);
+    expect(root.get('entrynameA').type).to.equal('Reference');
+  });
 });

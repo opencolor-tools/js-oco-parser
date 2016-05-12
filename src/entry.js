@@ -58,39 +58,39 @@ class Entry {
     this.remove(path);
   }
 
-  set(nameOrIndex, value) {
-    if ('string' === typeof nameOrIndex) {
-      if (nameOrIndex.match(/\./)) { // dotpath, so we need to do a deep lookup
-        var pathspec = nameOrIndex.split(".");
+  set(path, entry) {
+    // if ('string' === typeof nameOrIndex) {
+      if (path.match(/\./)) { // dotpath, so we need to do a deep lookup
+        var pathspec = path.split(".");
         var firstPart = pathspec.shift();
         var existingEntry =  this.get(firstPart);
         if (existingEntry && existingEntry.type === 'Palette') {
-          existingEntry.set(pathspec.join("."), value);
+          existingEntry.set(pathspec.join("."), entry);
         } else {
           var newGroup = new Entry(firstPart);
           this.set(firstPart, newGroup);
-          newGroup.set(pathspec.join("."), value);
+          newGroup.set(pathspec.join("."), entry);
         }
       } else {
-        if (this.get(nameOrIndex)) {
-          this.get(nameOrIndex).parent = null; // nullifying ref
-          this.children.filter((child) => child.name === nameOrIndex).forEach((child) => {
-            child.value = value;
+        entry.name = path;
+        entry.parent = this;
+        if (this.get(path)) {
+          // replace existing entries
+          this.children.filter((child) => child.name === path).forEach((child) => {
+            this.replaceChild(child, entry);
           });
-          value.name = nameOrIndex;
         } else {
-          this.children.push(value);
-          value.name = nameOrIndex;
+          // add entry
+          this.children.push(entry);
         }
-        value.parent = this;
       }
-    } else {
-      if (this.children[nameOrIndex]) {
-        this.children[nameOrIndex].parent = null; // nullifying reference
-      }
-      this.children[nameOrIndex] = value;
-      value.parent = this;
-    }
+    // } else {
+    //   if (this.children[nameOrIndex]) {
+    //     this.children[nameOrIndex].parent = null; // nullifying reference
+    //   }
+    //   this.children[nameOrIndex] = entry;
+    //   entry.parent = this;
+    // }
   }
 
   path() {
@@ -129,7 +129,12 @@ class Entry {
     this.children = this.children.slice(0, index).concat(this.children.slice(index + 1));
   }
 
-  addChild(child, validate=true) {
+  replaceChild(child, newEntry) {
+    var currentPosition = this.children.indexOf(child);
+    this.children.splice(currentPosition, 1, newEntry);
+  }
+
+  addChild(child, validate = true, position = -1) {
     if (!child) { return; }
     var type = child.type;
     // we're basically only separating meta data.
@@ -144,8 +149,12 @@ class Entry {
         this.addParent(this.metadata[combinedKey]);
       });
     } else {
-      this.children.push(child);
       child.parent = this;
+      if(position === -1) {
+        this.children.push(child);
+      } else {
+        this.children.splice(position, 0, child)
+      }
     }
 
     if (validate) {
