@@ -64,6 +64,6 @@ describe('Entry', () => {
   it("adding metadata via object literals with rgb color", () => {
     var root = new Entry();
     root.addMetadata({'foo/test': 'rgb(123,132,142)'});
-    expect(root.metadata['foo/test'].value.toString('rgb')).to.equal('rgb(123, 132, 142)');
+    expect(root.metadata['foo/test'].value).to.equal('rgb(123,132,142)');
   });
 });

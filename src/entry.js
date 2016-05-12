@@ -193,7 +193,7 @@ class Entry {
 
   hexcolor(withAlpha = false) {
     if (this.type !== 'Color') { return null; }
-    var identifiedColor = this.children.filter((child) => child.identified === true)[0];
+    var identifiedColor = this.children.filter((child) => child.isHexExpressable())[0];
     if (identifiedColor) { return identifiedColor.hexcolor(withAlpha); }
     return null;
   }
