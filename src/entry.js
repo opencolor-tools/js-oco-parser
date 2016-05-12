@@ -153,7 +153,7 @@ class Entry {
       if(position === -1) {
         this.children.push(child);
       } else {
-        this.children.splice(position, 0, child)
+        this.children.splice(position, 0, child);
       }
     }
 
