@@ -13,7 +13,7 @@ describe('Renderer', () => {
     tree.addChild(color);
     var result = oco.render(tree);
     var expected = `bright yellow:
-  #ffffee
+  #ffe
   key/key: Value
 `;
     expect(result).to.equal(expected);
@@ -27,7 +27,7 @@ describe('Renderer', () => {
     tree.addChild(color);
     tree.addChild(ref);
     var result = oco.render(tree);
-    var expected = `bright yellow: #ffffee
+    var expected = `bright yellow: #ffe
 almost yellow: =bright yellow
 `;
     expect(result).to.equal(expected);
@@ -42,7 +42,7 @@ almost yellow: =bright yellow
     tree.addChild(palette);
     var result = oco.render(tree);
     var expected = `yellows:
-  bright yellow: #ffffee
+  bright yellow: #ffe
 `;
     expect(result).to.equal(expected);
   });

@@ -14,7 +14,7 @@
   "scripts": {
     "test": "make test",
     "build": "make build",
-    "test:watch": "watch 'npm test' src",
+    "test:watch": "watch 'npm test' src test",
     "lint": "jshint src/ test/"
   },
   "keywords": [

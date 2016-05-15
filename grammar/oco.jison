@@ -4,9 +4,9 @@
 %%
 
 expressions
-  : EOF { return new yy.Entry('root', [], 'Root', @1) }
-  | entries {  return new yy.Entry('root', $1, 'Root', @1) } // sometimes EOF is already consumed
-  | entries EOF {  return new yy.Entry('root', $1, 'Root', @1) }
+  : EOF { return new yy.Entry('root', [], 'Palette', @1) }
+  | entries {  return new yy.Entry('root', $1, 'Palette', @1) } // sometimes EOF is already consumed
+  | entries EOF {  return new yy.Entry('root', $1, 'Palette', @1) }
   ;
 
 entries

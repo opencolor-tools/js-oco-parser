@@ -6,7 +6,7 @@ class Renderer {
     this.root = root;
   }
 
-  renderEntry(entry, indent) {
+  renderPalette(entry, indent) {
     var string = this.renderIndent(indent) + entry.name + ":\n";
     string += this.renderMetadataEntries(entry, indent + 1);
     string += this.renderChildren(entry, indent + 1);
