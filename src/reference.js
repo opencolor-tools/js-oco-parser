@@ -12,6 +12,9 @@ class Reference {
     if (!this.parent) { return ''; }
     return [this.parent.path(), this.name].filter((e) => e !== '').join('.');
   }
+  isRoot() {
+    return false;
+  }
   resolved(stack = []) {
     if (stack.indexOf(this) !== -1) {
       throw("References can not be circular!");
