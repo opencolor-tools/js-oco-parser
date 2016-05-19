@@ -214,7 +214,10 @@ class Entry {
   clone() {
     var children = this.children.map((child) => child.clone());
     var clone = new Entry(this.name, children, this.type, this.position);
-    clone.metadata = Object.assign({}, this.metadata);
+    clone.metadata = {};
+    Object.keys(this.metadata).forEach((key) => {
+      clone.metadata[key] = this.metadata[key].clone ? this.metadata[key].clone() : this.metadata[key];
+    });
     return clone;
   }
 

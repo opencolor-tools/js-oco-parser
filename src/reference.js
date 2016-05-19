@@ -40,6 +40,11 @@ class Reference {
       return null;
     }
   }
+
+  clone() {
+    var clone =  new Reference(this.name, this.refName);
+    return clone;
+  }
 }
 
 module.exports = Reference;

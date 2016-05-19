@@ -51,7 +51,9 @@ describe('Cloning Entries', () => {
     var root = new Entry();
     var palette = new oco.Entry('first', [], 'Palette');
     palette.addMetadata({
-      'oct/defaultView': 'squares'
+      'oct/defaultView': 'squares',
+      'oct/color': '#000000',
+      'oct/ref': '=first',
     });
     root.addChild(palette);
 
@@ -62,7 +64,27 @@ describe('Cloning Entries', () => {
     expect(root.get('first').type).to.equal('Palette');
     expect(clone.name).to.equal('Copy');
     expect(clone.get('first').type).to.equal('Palette');
-    expect(clone.get('first').metadata).to.have.key('oct/defaultView');
+    expect(clone.get('first').metadata).to.have.keys(['oct/defaultView', 'oct/color', 'oct/ref']);
+    expect(clone.get('first').metadata['oct/color'].type).to.equal('ColorValue');
+    expect(clone.get('first').metadata['oct/ref'].type).to.equal('Reference');
+  });
+
+  it("should clone references", () => {
+    var root = new Entry();
+    var value = new oco.ColorValue.fromColorValue('#111111');
+    var color = new oco.Entry('one', [value], 'Color');
+
+    var reference = new oco.Reference('oneRef', 'one');
+    root.addChild(color);
+    root.addChild(reference);
+
+    var clone = root.clone();
+    clone.name = 'Copy';
+
+    expect(root.name).to.equal('Root');
+    expect(clone.get('oneRef').type).to.equal('Reference');
+    expect(clone.get('oneRef').resolved().hexcolor()).to.equal('#111111');
+
   });
 
 });
