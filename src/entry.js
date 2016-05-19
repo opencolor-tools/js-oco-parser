@@ -98,7 +98,7 @@ class Entry {
   }
 
   path() {
-    if (!this.parent) { return ''; } // we don't actually want to have the root in there.
+    if (!this.parent) { return ''; }
     return [this.parent.path(), this.name].filter((e) => e !== '').join('.');
   }
 

@@ -8,6 +8,10 @@ class Reference {
     this.parent = null;
     this.type = 'Reference';
   }
+  path() {
+    if (!this.parent) { return ''; }
+    return [this.parent.path(), this.name].filter((e) => e !== '').join('.');
+  }
   resolved(stack = []) {
     if (stack.indexOf(this) !== -1) {
       throw("References can not be circular!");
