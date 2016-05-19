@@ -83,10 +83,21 @@ class Renderer {
 
   renderMetaGroups(groups, indent) {
     var out = "";
+    if(!groups) {
+      return out;
+    }
     Object.keys(groups).forEach((key) => {
       var value = groups[key];
-      if (typeof(value) === 'string') {
+      if (typeof(value) === 'string' || typeof(value) === 'number') {
         out += this.renderIndent(indent) + key + ": " + value + "\n";
+      } else if (typeof(value) === 'boolean') {
+        out += this.renderIndent(indent) + key + ": " + (value ? 'true' : 'false') + "\n";
+      } else if (typeof(value) === 'object' && 'type' in value) {
+        if (value.type === 'ColorValue') {
+          out += this.renderIndent(indent) + key + ": " + value.value + "\n";
+        } else if (value.type === 'Reference') {
+          out += this.renderIndent(indent) + key + ": =" + value.refName + "\n";
+        }
       } else {
         out += this.renderIndent(indent) + key + "/:\n" + this.renderMetaGroups(value, indent + 1);
       }
