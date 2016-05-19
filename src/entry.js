@@ -48,6 +48,10 @@ class Entry {
     }
   }
 
+  isRoot() {
+    return !this.parent;
+  }
+
   remove(path) {
     var entry = this.get(path);
     if(!entry) {
@@ -210,7 +214,7 @@ class Entry {
   clone() {
     var children = this.children.map((child) => child.clone());
     var clone = new Entry(this.name, children, this.type, this.position);
-    clone.metadata = this.metadata;
+    clone.metadata = Object.assign({}, this.metadata);
     return clone;
   }
 

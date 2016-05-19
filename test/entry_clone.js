@@ -47,4 +47,22 @@ describe('Cloning Entries', () => {
     expect(clone.children).to.have.length(2);
   });
 
+  it("should clone metadata", () => {
+    var root = new Entry();
+    var palette = new oco.Entry('first', [], 'Palette');
+    palette.addMetadata({
+      'oct/defaultView': 'squares'
+    });
+    root.addChild(palette);
+
+    var clone = root.clone();
+    clone.name = 'Copy';
+
+    expect(root.name).to.equal('Root');
+    expect(root.get('first').type).to.equal('Palette');
+    expect(clone.name).to.equal('Copy');
+    expect(clone.get('first').type).to.equal('Palette');
+    expect(clone.get('first').metadata).to.have.key('oct/defaultView');
+  });
+
 });

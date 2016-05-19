@@ -7,9 +7,14 @@ class Renderer {
   }
 
   renderPalette(entry, indent) {
-    var string = this.renderIndent(indent) + entry.name + ":\n";
-    string += this.renderMetadataEntries(entry, indent + 1);
-    string += this.renderChildren(entry, indent + 1);
+    var string = '';
+    var childrenIndent = indent;
+    if(!entry.isRoot()) {
+      string = this.renderIndent(indent) + entry.name + ":\n";
+      childrenIndent += 1;
+    }
+    string += this.renderMetadataEntries(entry, childrenIndent);
+    string += this.renderChildren(entry, childrenIndent);
     return string;
   }
 
@@ -111,7 +116,7 @@ class Renderer {
   }
 
   render() {
-    return this.renderChildren(this.root, 0);
+    return this.renderPalette(this.root, 0);
   }
 
 }

@@ -1,3 +1,4 @@
+ns/metakey: metavalue
 group:
   meta/:
     data: Cool Metadata
