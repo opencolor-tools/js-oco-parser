@@ -103,3 +103,24 @@ a: =800
     expect(tree.get('a').resolved().hexcolor()).to.equal('#CC0000')
   })
 })
+
+describe('Parsing of Metadata on References', () => {
+  it('should parse a local ref metadata', () => {
+    var test = `
+a: #fff
+b: =a
+  oct/meta: foo
+`
+    var tree = oco.parse(test)
+    expect(tree.get('b').getMetadata('oct/meta')).to.equal('foo')
+  })
+  it('should find metadata on ref target', () => {
+    var test = `
+a: #fff
+  oct/meta: foo
+b: =a
+`
+    var tree = oco.parse(test)
+    expect(tree.get('b').getMetadata('oct/meta')).to.equal('foo')
+  })
+})

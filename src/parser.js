@@ -3,7 +3,6 @@
 var Entry = require('./entry')
 var ColorValue = require('./color_value')
 var Reference = require('./reference')
-// var Metadata = require('./metadata') Will be needed later on
 var ParserError = require('./parser_error')
 
 function parse (input) {
@@ -141,7 +140,6 @@ function normalizeMetadata (tree) {
       if (child['metadata']) {
         let keys = Object.keys(child.metadata)
         keys.forEach(function (key) {
-          // let value = child.metadata[key]
           let combinedName = [child.name, key].join('/').replace(/\/\//g, '/')
           addMetadata(tree, child, combinedName)
         })
@@ -190,8 +188,13 @@ function objectify (tree) {
     return cv
   } else if (tree.type === 'reference') {
     let ref = new Reference(tree.name, tree.value)
-    // let metadata = tree.metadata || []
-    // ref.addMetadata(metadata.map((md) => new Metadata(md.name, md.value)))
+    let metadata = {}
+    if (tree.metadata) {
+      tree.metadata.forEach((md) => {
+        metadata[md.name] = md.value
+      })
+    }
+    ref.addMetadata(metadata)
     return ref
   }
 }

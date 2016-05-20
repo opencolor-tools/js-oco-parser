@@ -217,7 +217,7 @@ group:
   it('should parse comments in meta blocks', () => {
     var test = "meta/:\n  data: #ffe // what's the vector, viktor?"
     var tree = parser.parse(test)
-    expect(tree.metadata['meta/data'].hexcolor()).to.equal('#FFFFEE')
+    expect(tree.getMetadata('meta/data').hexcolor()).to.equal('#FFFFEE')
   })
 })
 
@@ -264,6 +264,6 @@ describe('Parsing a more complex document', () => {
     var tree = parser.parse(input)
     // basically just one assertion to verify the parsing worked.
     expect(tree.children[0].get('yellow').hexcolor()).to.equal('#C01016')
-    expect(tree.get('group').metadata['meta/other/data']).to.equal('Super Cool Metadata')
+    expect(tree.get('group').getMetadata('meta/other/data')).to.equal('Super Cool Metadata')
   })
 })

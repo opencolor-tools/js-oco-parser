@@ -63,9 +63,9 @@ describe('Cloning Entries', () => {
     expect(root.get('first').type).to.equal('Palette')
     expect(clone.name).to.equal('Copy')
     expect(clone.get('first').type).to.equal('Palette')
-    expect(clone.get('first').metadata).to.have.keys(['oct/defaultView', 'oct/color', 'oct/ref'])
-    expect(clone.get('first').metadata['oct/color'].type).to.equal('ColorValue')
-    expect(clone.get('first').metadata['oct/ref'].type).to.equal('Reference')
+    expect(clone.get('first').metadata.keys()).to.deep.equal(['oct/defaultView', 'oct/color', 'oct/ref'])
+    expect(clone.get('first').metadata.get('oct/color').type).to.equal('ColorValue')
+    expect(clone.get('first').metadata.get('oct/ref').type).to.equal('Reference')
   })
 
   it('should clone references', () => {

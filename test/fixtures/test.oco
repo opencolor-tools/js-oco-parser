@@ -1,6 +1,6 @@
 ns/metakey: metavalue
 group:
-  meta/:
+  meta/
     data: Cool Metadata
     other/data: Super Cool Metadata
   subgroup:

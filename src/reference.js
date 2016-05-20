@@ -1,6 +1,7 @@
 'use strict'
 
 var ParserError = require('./parser_error')
+var MetaProxy = require('./meta_proxy')
 
 class Reference {
   constructor (name, refName) {
@@ -11,6 +12,7 @@ class Reference {
     }
     this.parent = null
     this.type = 'Reference'
+    this.metadata = new MetaProxy(this)
   }
   path () {
     if (!this.parent) { return '' }
@@ -50,6 +52,20 @@ class Reference {
     } else {
       return null
     }
+  }
+
+  addParent (element) {
+    if (element['refName']) {
+      element.parent = this
+    }
+  }
+
+  addMetadata (metadata) {
+    this.metadata.add(metadata)
+  }
+
+  getMetadata (key) {
+    return this.metadata.get(key)
   }
 
   clone () {

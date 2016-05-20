@@ -19,7 +19,7 @@ class Renderer {
   }
 
   renderColor (entry, indent) {
-    var metalength = Object.keys(entry.metadata).length
+    var metalength = entry.metadata.keys(true).length
     var childLength = entry.children.length
     var realIndent = 0
     var separator = ' '
@@ -40,6 +40,7 @@ class Renderer {
 
   renderReference (entry, indent) {
     var string = this.renderIndent(indent) + entry.name + ': =' + entry.refName + '\n'
+    string += this.renderMetadataEntries(entry, indent + 1)
     return string
   }
 
@@ -65,8 +66,8 @@ class Renderer {
     return groups
   }
 
-  groupMetadata (metadata) {
-    var keys = Object.keys(metadata)
+  groupMetadata (entry) {
+    var keys = entry.metadata.keys()
     var grouped = {}
     var groups = this.findMetaGroups(keys)
     keys.forEach((key) => {
@@ -74,9 +75,9 @@ class Renderer {
       var first = segments.shift()
       if (groups.indexOf(first) !== -1) {
         grouped[first] = grouped[first] || {}
-        grouped[first][segments.join('/')] = metadata[key]
+        grouped[first][segments.join('/')] = entry.metadata.get(key)
       } else {
-        grouped[key] = metadata[key]
+        grouped[key] = entry.metadata.get(key)
       }
     })
     return grouped
@@ -100,15 +101,15 @@ class Renderer {
           out += this.renderIndent(indent) + key + ': =' + value.refName + '\n'
         }
       } else {
-        out += this.renderIndent(indent) + key + '/:\n' + this.renderMetaGroups(value, indent + 1)
+        out += this.renderIndent(indent) + key + '/\n' + this.renderMetaGroups(value, indent + 1)
       }
     })
     return out
   }
 
   renderMetadataEntries (entry, indent) {
-    if (Object.keys(entry.metadata).length === 0) { return '' }
-    var grouped = this.groupMetadata(entry.metadata)
+    if (entry.metadata.keys().length === 0) { return '' }
+    var grouped = this.groupMetadata(entry)
     return this.renderMetaGroups(grouped, indent)
   }
   renderChildren (entry, indent) {

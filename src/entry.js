@@ -1,9 +1,7 @@
-/* jshint -W097 */
 'use strict'
 
-var Reference = require('./reference')
-var ColorValue = require('./color_value')
 var ParserError = require('./parser_error')
+var MetaProxy = require('./meta_proxy')
 
 function flatten (ary) {
   var ret = []
@@ -23,7 +21,7 @@ class Entry {
     this.position = position
     this.children = []
     this.parent = null
-    this.metadata = {}
+    this.metadata = new MetaProxy(this)
     this.type = type || 'Palette'
 
     this.addChildren(flatten(children || []), false)
@@ -109,32 +107,7 @@ class Entry {
   }
 
   addMetadata (metadata) {
-    Object.keys(metadata).forEach((key) => {
-      if (!key.match(/\//)) {
-        throw (new ParserError("Metadata keys must contain at least one slash. (Failed at ''" + key + "')", {}))
-      }
-      if (typeof (metadata[key]) === 'string') {
-        if (metadata[key].match(/^=/)) {
-          // shortcut for creating references
-          var name = metadata[key].slice(1).trim()
-          metadata[key] = new Reference('metachild', name)
-        } else if (metadata[key].match(/^#([a-fA-F0-9]){3,8}/) || metadata[key].match(/^rgba?\(.*\)$/)) {
-          // shortcut for creating colors
-          metadata[key] = ColorValue.fromColorValue(metadata[key])
-        } else if (metadata[key].toLowerCase() === 'true' || metadata[key].toLowerCase() === 'yes') {
-          metadata[key] = true
-        } else if (metadata[key].toLowerCase() === 'false' || metadata[key].toLowerCase() === 'no') {
-          metadata[key] = false
-        } else if (metadata[key].match(/^[0-9\.,]+$/)) {
-          let num = parseFloat(metadata[key])
-          if (!isNaN(num)) {
-            metadata[key] = num
-          }
-        }
-      }
-      this.metadata[key] = metadata[key]
-      this.addParent(this.metadata[key])
-    })
+    this.metadata.add(metadata) // transitioning
   }
 
   removeChild (child) {
@@ -152,15 +125,9 @@ class Entry {
     var type = child.type
     // we're basically only separating meta data.
     if (type === 'Metadata') {
-      this.metadata[child.name] = child.value
-      this.addParent(this.metadata[child.name])
+      throw (new Error('API error, please use .addMetadata or .metadata.add instead'))
     } else if (type === 'Metablock') {
-      var prefix = child.name + '/'
-      Object.keys(child.metadata).forEach((key) => {
-        var combinedKey = (prefix + key).replace(/\/\//g, '/') // normalize keys
-        this.metadata[combinedKey] = child.metadata[key]
-        this.addParent(this.metadata[combinedKey])
-      })
+      throw (new Error('API error, please use .addMetadata or .metadata.add instead'))
     } else {
       child.parent = this
       if (position === -1) {
@@ -201,6 +168,10 @@ class Entry {
     }
   }
 
+  getMetadata (key) {
+    return this.metadata.get(key)
+  }
+
   traverseTree (filters, callback) {
     var filter = false
     if (typeof filters === 'string') { filters = [filters] }
@@ -225,8 +196,9 @@ class Entry {
   clone () {
     var children = this.children.map((child) => child.clone())
     var clone = new Entry(this.name, children, this.type, this.position)
-    Object.keys(this.metadata).forEach((key) => {
-      clone.metadata[key] = this.metadata[key].clone ? this.metadata[key].clone() : this.metadata[key]
+    this.metadata.keys().forEach((key) => {
+      let meta = this.metadata.get(key)
+      clone.metadata.set(key, meta.clone ? meta.clone() : meta)
     })
     return clone
   }
