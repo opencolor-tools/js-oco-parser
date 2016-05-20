@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 'use strict'
 var expect = require('chai').expect
-var oco = require('../lib/index.js')
+var oco = require('../src/index.js')
 
 describe('Manually creating OCO objects', () => {
   it('should create a root palette', () => {

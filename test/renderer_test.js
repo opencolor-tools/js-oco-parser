@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 'use strict'
 var expect = require('chai').expect
-var oco = require('../lib/index.js')
+var oco = require('../src/index.js')
 var fs = require('fs')
 
 describe('Renderer', () => {

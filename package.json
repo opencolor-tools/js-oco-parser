@@ -12,8 +12,8 @@
     "Michael Schieben <michael@precious-forever.com>"
   ],
   "scripts": {
-    "test": "make test",
-    "build": "make build",
+    "test": "mocha",
+    "build": "make lib",
     "test:watch": "watch 'npm test' src test",
     "lint": "standard 'src/**/*.js' 'test/**/*.js'"
   },

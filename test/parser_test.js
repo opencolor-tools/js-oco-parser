@@ -3,7 +3,7 @@
 var expect = require('chai').expect
 var fs = require('fs')
 
-var parser = require('../lib/index.js')
+var parser = require('../src/index.js')
 
 describe('Parser', () => {
   it('should parse a single color', () => {

@@ -19,7 +19,7 @@ block:
   it('should raise exception on parse error', () => {
     var test = `
 block:
-  color: #fff
+  color: #fff;
 `
     var fn = function () { parser.parse(test) }
     expect(fn).to.throw(ParserError)

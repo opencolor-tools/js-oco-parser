@@ -2,7 +2,7 @@
 'use strict'
 var expect = require('chai').expect
 
-var parser = require('../lib/index.js')
+var parser = require('../src/index.js')
 
 describe('Parsing Metadata', () => {
   it('should parse metadata', () => {
