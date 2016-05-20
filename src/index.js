@@ -1,42 +1,26 @@
 /* jshint -W097 */
-'use strict';
+'use strict'
 
-var jisonparser = require("./oco-parser").parser;
-var Entry = require('./entry');
-var ColorValue = require('./color_value');
-var Reference = require('./reference');
-var Metadata = require('./metadata');
-var Renderer = require('./renderer');
-var lexer = require('./lexer');
-var ParserError = require('./parser_error');
-jisonparser.lexer = lexer;
-
-jisonparser.yy = {
-  ColorValue: ColorValue,
-  Entry: Entry,
-  Metadata: Metadata,
-  Reference: Reference,
-  parseError(str, hash) {
-    throw(new ParserError(str, hash));
-  },
-  log: (object) => { console.log(JSON.stringify(object, false, ' ')); }
-};
-
+var parse = require('./parser')
+var Entry = require('./entry')
+var ColorValue = require('./color_value')
+var Reference = require('./reference')
+var Metadata = require('./metadata')
+var Renderer = require('./renderer')
 
 var parser = {
-  parse(data) {
-    jisonparser.lexer.resetWithInput(""); //resetting the lexer. Not needed in prod, but helps testing.
-    var tree = jisonparser.parse(data);
-    return tree;
+  parse (data) {
+    // currently, the new parser needs a string.
+    // TODO: Make the parser work with Buffers and Streams if possible.
+    return parse(data.toString())
   },
-  render(tree) {
-    return new Renderer(tree).render();
+  render (tree) {
+    return new Renderer(tree).render()
   },
   Entry,
   ColorValue,
   Reference,
   Metadata
-};
+}
 
-
-module.exports = parser;
+module.exports = parser
