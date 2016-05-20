@@ -1,21 +1,41 @@
-/* jshint -W097 */
 'use strict'
-var ParserError = require('./parser_error')
-var metaValue = require('./meta_value')
+import ParserError from './parser_error'
+import metaValue from './meta_value'
 
-class MetaProxy {
+function makeArrayUnique (inp) { // http://stackoverflow.com/questions/1960473/unique-values-in-an-array
+  let a = []
+  for (var i = 0, l = inp.length; i < l; i++) {
+    if (a.indexOf(inp[i]) === -1) {
+      a.push(inp[i])
+    }
+  }
+  return a
+}
+
+/**
+ * MetaProxy is a way to store and retrieve metadata in various ways
+ * Specifically, it handles the fallback to look up metadata on references if the proxy itself
+ * doesn't have that data.
+ */
+export default class MetaProxy {
+  /*
+   * @param parent reference to the parent object
+   */
   constructor (parent) {
     this.parent = parent
-    this.hash = {}
-    this.data = []
+    this._hash = {}
+    this._data = []
   }
-
+  /*
+   * @param {string} key key to lookup
+   * @return metadate or undefined.
+   */
   get (key) {
     let result = null
     if (typeof key === 'string') {
-      result = this.hash[key]
+      result = this._hash[key]
     } else {
-      result = this.data[key]
+      result = this._data[key]
     }
     if (!result) {
       if (this.parent.type === 'Reference') {
@@ -28,8 +48,8 @@ class MetaProxy {
   set (key, value) {
     value = metaValue(value)
     this.addParent(value)
-    this.data.push(value)
-    this.hash[key] = value
+    this._data.push(value)
+    this._hash[key] = value
   }
 
   addParent (element) {
@@ -48,20 +68,11 @@ class MetaProxy {
   }
 
   keys (onlyLocal = false) {
-    let localKeys = Object.keys(this.hash)
+    let localKeys = Object.keys(this._hash)
     let remoteKeys = []
     if (!onlyLocal && this.parent.type === 'Reference') {
       remoteKeys = this.parent.resolved().metadata.keys()
     }
-    return localKeys.concat(remoteKeys)
-  }
-
-  clone () {
-    let cloneData = this.data.map((d) => d.clone ? d.clone() : d)
-    let clone = new MetaProxy(cloneData)
-    // what about fallbacks?
-    return clone
+    return makeArrayUnique(localKeys.concat(remoteKeys))
   }
 }
-
-module.exports = MetaProxy

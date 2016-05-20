@@ -1,7 +1,7 @@
 'use strict'
 
-var ParserError = require('./parser_error')
-var MetaProxy = require('./meta_proxy')
+import ParserError from './parser_error'
+import MetaProxy from './meta_proxy'
 
 function flatten (ary) {
   var ret = []
@@ -15,7 +15,7 @@ function flatten (ary) {
   return ret
 }
 
-class Entry {
+export default class Entry {
   constructor (name, children, type, position) {
     this._name = name || 'Root'
     this.position = position
@@ -204,5 +204,3 @@ class Entry {
   }
 
 }
-
-module.exports = Entry

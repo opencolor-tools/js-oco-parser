@@ -1,7 +1,6 @@
-/* jshint -W097 */
 'use strict'
 
-class Renderer {
+export default class Renderer {
   constructor (root) {
     this.root = root
   }
@@ -132,5 +131,3 @@ class Renderer {
   }
 
 }
-
-module.exports = Renderer

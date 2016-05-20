@@ -1,9 +1,9 @@
 'use strict'
 
-var ParserError = require('./parser_error')
-var MetaProxy = require('./meta_proxy')
+import ParserError from './parser_error'
+import MetaProxy from './meta_proxy'
 
-class Reference {
+export default class Reference {
   constructor (name, refName) {
     this.name = name
     this.refName = refName
@@ -73,5 +73,3 @@ class Reference {
     return clone
   }
 }
-
-module.exports = Reference

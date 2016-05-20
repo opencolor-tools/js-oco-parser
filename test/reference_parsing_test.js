@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 'use strict'
-var expect = require('chai').expect
-var oco = require('../src/index.js')
+import {expect} from 'chai'
+import * as oco from '../src/index'
 
 describe('Parsing of References', () => {
   it('should parse a reference', () => {

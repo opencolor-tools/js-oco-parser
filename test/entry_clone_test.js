@@ -1,8 +1,8 @@
 /* eslint-env mocha */
 'use strict'
-var expect = require('chai').expect
-var oco = require('../src/index.js')
-var Entry = oco.Entry
+
+import {expect} from 'chai'
+import {Entry, ColorValue, Reference} from '../src/index'
 
 describe('Cloning Entries', () => {
   it('should be a different object', () => {
@@ -17,8 +17,8 @@ describe('Cloning Entries', () => {
 
   it('should contain different child objects', () => {
     var source = new Entry()
-    var value = oco.ColorValue.fromColorValue('#ffe')
-    var color = new oco.Entry('first', [value], 'Color')
+    var value = ColorValue.fromColorValue('#ffe')
+    var color = new Entry('first', [value], 'Color')
     source.addChild(color)
 
     var clone = source.clone()
@@ -31,13 +31,13 @@ describe('Cloning Entries', () => {
 
   it('should maintain its own properties', () => {
     var root = new Entry()
-    var value = oco.ColorValue.fromColorValue('#ffe')
-    var color = new oco.Entry('first', [value], 'Color')
+    var value = ColorValue.fromColorValue('#ffe')
+    var color = new Entry('first', [value], 'Color')
     root.addChild(color)
 
     var clone = root.clone()
     clone.name = 'Copy'
-    var color2 = new oco.Entry('second', [value], 'Color')
+    var color2 = new Entry('second', [value], 'Color')
     clone.addChild(color2)
 
     expect(root.name).to.equal('Root')
@@ -48,7 +48,7 @@ describe('Cloning Entries', () => {
 
   it('should clone metadata', () => {
     var root = new Entry()
-    var palette = new oco.Entry('first', [], 'Palette')
+    var palette = new Entry('first', [], 'Palette')
     palette.addMetadata({
       'oct/defaultView': 'squares',
       'oct/color': '#000000',
@@ -70,10 +70,10 @@ describe('Cloning Entries', () => {
 
   it('should clone references', () => {
     var root = new Entry()
-    var value = oco.ColorValue.fromColorValue('#111111')
-    var color = new oco.Entry('one', [value], 'Color')
+    var value = ColorValue.fromColorValue('#111111')
+    var color = new Entry('one', [value], 'Color')
 
-    var reference = new oco.Reference('oneRef', 'one')
+    var reference = new Reference('oneRef', 'one')
     root.addChild(color)
     root.addChild(reference)
 

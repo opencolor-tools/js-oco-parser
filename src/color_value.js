@@ -1,9 +1,9 @@
 'use strict'
 
-var tinycolor = require('tinycolor2')
-var ParserError = require('./parser_error')
+import tinycolor from 'tinycolor2'
+import ParserError from './parser_error'
 
-class ColorValue {
+export default class ColorValue {
   constructor (name, value, identifiedValue = null) {
     this.name = name
     this.value = value
@@ -39,5 +39,3 @@ class ColorValue {
     throw (new ParserError('Illegal Color Value: ' + value, {line: line}))
   }
 }
-
-module.exports = ColorValue

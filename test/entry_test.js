@@ -1,7 +1,9 @@
 /* eslint-env mocha */
 'use strict'
-var expect = require('chai').expect
-var oco = require('../src/index.js')
+
+import {expect} from 'chai'
+import * as oco from '../src/index.js'
+
 var Entry = oco.Entry
 var ColorValue = oco.ColorValue
 

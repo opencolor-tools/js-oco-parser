@@ -1,9 +1,8 @@
 /* eslint-env mocha */
 'use strict'
-var expect = require('chai').expect
-var fs = require('fs')
-
-var parser = require('../src/index.js')
+import {expect} from 'chai'
+import * as parser from '../src/index'
+import fs from 'fs'
 
 describe('Parser', () => {
   it('should parse a single color', () => {
@@ -13,16 +12,6 @@ describe('Parser', () => {
     expect(tree.get('color').type).to.equal('Color')
     expect(tree.get('color').hexcolor()).to.equal('#FF0022')
   })
-
-  // hopefully removing this from the spec!
-  // it("should parse a single color with more than one color value", () => {
-  //   var test = "color: #ff0022, PAL(10102)"
-  //   var tree = parser.parse(test)
-  //   expect(tree.name).to.equal('root')
-  //   expect(tree.get('color').type).to.equal('Color')
-  //   expect(tree.get('color').hexcolor()).to.equal('#FF0022')
-  //   expect(tree.get('color').get('PAL').value).to.equal('PAL(10102)')
-  // })
 
   it('should allow numbers as color names', () => {
     var test = '001: #ff0022\n'

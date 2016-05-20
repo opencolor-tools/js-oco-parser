@@ -1,26 +1,22 @@
-/* jshint -W097 */
 'use strict'
 
-var parse = require('./parser')
-var Entry = require('./entry')
-var ColorValue = require('./color_value')
-var Reference = require('./reference')
-var Metadata = require('./metadata')
-var Renderer = require('./renderer')
+import parser from './parser'
+import Entry from './entry'
+import ColorValue from './color_value'
+import Reference from './reference'
+import Renderer from './renderer'
 
-var parser = {
-  parse (data) {
-    // currently, the new parser needs a string.
-    // TODO: Make the parser work with Buffers and Streams if possible.
-    return parse(data.toString())
-  },
-  render (tree) {
-    return new Renderer(tree).render()
-  },
-  Entry,
-  ColorValue,
-  Reference,
-  Metadata
+function parse (data) {
+  return parser(data.toString())
+}
+function render (tree) {
+  return new Renderer(tree).render()
 }
 
-module.exports = parser
+export {
+  render,
+  parse,
+  Entry,
+  ColorValue,
+  Reference
+}

@@ -1,10 +1,11 @@
 'use strict'
 
+import Reference from './reference'
+import ColorValue from './color_value'
 
-function metaValue (value) {
+export default function metaValue (value) {
   /* This is a trick to get rid of circular dependencies between Reference and MetaProxy */
-  var Reference = require('./reference')
-  var ColorValue = require('./color_value')
+
   var newValue = value
   if (typeof (value) === 'string') {
     if (value.match(/^=/)) {
@@ -27,5 +28,3 @@ function metaValue (value) {
   }
   return newValue
 }
-
-module.exports = metaValue

@@ -1,11 +1,11 @@
 'use strict'
 
-var Entry = require('./entry')
-var ColorValue = require('./color_value')
-var Reference = require('./reference')
-var ParserError = require('./parser_error')
+import Entry from './entry'
+import ColorValue from './color_value'
+import Reference from './reference'
+import ParserError from './parser_error'
 
-function parse (input) {
+export default function parse (input) {
   let tokenized = tokenize(input.toString())
   let transformed = transform(tokenized)
   let adjusted = adjustTypes(transformed)
@@ -198,5 +198,3 @@ function objectify (tree) {
     return ref
   }
 }
-
-module.exports = parse

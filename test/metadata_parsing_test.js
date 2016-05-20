@@ -1,8 +1,8 @@
 /* eslint-env mocha */
 'use strict'
-var expect = require('chai').expect
 
-var parser = require('../src/index.js')
+import {expect} from 'chai'
+import * as parser from '../src/index'
 
 describe('Parsing Metadata', () => {
   it('should parse metadata', () => {

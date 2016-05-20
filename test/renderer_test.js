@@ -1,8 +1,8 @@
 /* eslint-env mocha */
 'use strict'
-var expect = require('chai').expect
-var oco = require('../src/index.js')
-var fs = require('fs')
+import {expect} from 'chai'
+import * as oco from '../src/index'
+import fs from 'fs'
 
 describe('Renderer', () => {
   it('should render a simple example', () => {
