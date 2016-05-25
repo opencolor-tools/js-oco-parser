@@ -7,6 +7,9 @@ class Renderer {
   }
 
   renderPalette(entry, indent) {
+    if(!entry.children.length) {
+      return '';
+    }
     var string = '';
     var childrenIndent = indent;
     if(!entry.isRoot()) {

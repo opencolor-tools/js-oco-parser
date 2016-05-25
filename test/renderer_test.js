@@ -33,6 +33,19 @@ almost yellow: =bright yellow
     expect(result).to.equal(expected);
   });
 
+  it("should not render empty palettes", () => {
+    var tree = new oco.Entry();
+    var emptyPalette = new oco.Entry('Empty', [], 'Palette');
+    var value = new oco.ColorValue.fromColorValue('#ffe');
+    var color = new oco.Entry('bright yellow', [value], 'Color');
+    tree.addChild(emptyPalette);
+    tree.addChild(color);
+    var result = oco.render(tree);
+    var expected = `bright yellow: #ffe
+`;
+    expect(result).to.equal(expected);
+  });
+
   it("should render nested blocks", () => {
     var tree = new oco.Entry();
     var value = new oco.ColorValue.fromColorValue('#ffe');
