@@ -8,6 +8,26 @@ class Reference {
     this.parent = null;
     this.type = 'Reference';
   }
+  get absoluteRefName() {
+    var refPath = this.refName.split(".");
+    var refName = this.resolveRefName(this.parent, refPath);
+    return refName;
+  }
+  resolveRefName(current, refPath, notUp) {
+    var resolvedEntry = current.get(refPath[0]);
+    if (resolvedEntry) {
+      if (refPath.length > 1) {
+        return this.resolveRefName(resolvedEntry, refPath.slice(1), true);
+      } else {
+        return resolvedEntry.path();
+      }
+    }
+    if (current.parent && !notUp) {
+      return this.resolveRefName(current.parent, refPath);
+    } else {
+      return null;
+    }
+  }
   path() {
     if (!this.parent) { return ''; }
     return [this.parent.path(), this.name].filter((e) => e !== '').join('.');
@@ -31,18 +51,18 @@ class Reference {
     return null;
   }
 
-  resolve(current, path, notUp) {
-    var resolved = current.get(path[0]);
+  resolve(current, refPath, notUp) {
+    var resolved = current.get(refPath[0]);
     if (resolved) {
-      if (path.length > 1) {
-        resolved = this.resolve(resolved, path.slice(1), true);
+      if (refPath.length > 1) {
+        resolved = this.resolve(resolved, refPath.slice(1), true);
       }
       if (resolved) {
         return resolved;
       }
     }
     if (current.parent && !notUp) {
-      return this.resolve(current.parent, path);
+      return this.resolve(current.parent, refPath);
     } else {
       return null;
     }

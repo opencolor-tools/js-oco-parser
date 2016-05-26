@@ -30,6 +30,29 @@ another color: #ffe`;
     expect(refColor.resolved().hexcolor()).to.equal('#FFFFFF');
   });
 
+  it("should return a absolute ref name", () => {
+    var test = `
+one: #111111
+three: #333333
+group:
+  one: #111111
+  two: #222222
+  refOne: =one
+  refTwo: =group.two
+  refThree: =three
+  refThreeRef: =refThree
+`;
+    var tree = oco.parse(test);
+    var refOne = tree.get('group').get('refOne');
+    var refTwo = tree.get('group').get('refTwo');
+    var refThree = tree.get('group').get('refThree');
+    var refThreeRef = tree.get('group').get('refThreeRef');
+    expect(refOne.absoluteRefName).to.equal('group.one');
+    expect(refTwo.absoluteRefName).to.equal('group.two');
+    expect(refThree.absoluteRefName).to.equal('three');
+    expect(refThreeRef.absoluteRefName).to.equal('group.refThree');
+  });
+
   it("should parse a tree reference", () => {
     var test = `
 color: #fff
