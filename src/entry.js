@@ -223,12 +223,12 @@ class Entry {
 
   toString() {
     return JSON.stringify(this, function(key, value) {
-        if (key == 'parent' && value) {
+        if (key === 'parent' && value) {
           return value.path();
         } else {
           return value;
         }
-      }, '  ')
+      }, '  ');
   }
 
 }
