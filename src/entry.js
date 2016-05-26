@@ -221,6 +221,16 @@ class Entry {
     return clone;
   }
 
+  toString() {
+    return JSON.stringify(this, function(key, value) {
+        if (key == 'parent' && value) {
+          return value.path();
+        } else {
+          return value;
+        }
+      }, '  ')
+  }
+
 }
 
 module.exports = Entry;

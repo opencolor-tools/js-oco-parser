@@ -24,6 +24,27 @@ describe('Entry', () => {
     expect(root.name).to.equal('XXX');
   });
 
+  it("#toString", () => {
+    var root = new oco.Entry();
+    root.addChild(new Entry('name', [], 'Color'));
+    expect(root.toString()).to.equal(
+`{
+  "_name": "Root",
+  "metadata": {},
+  "children": [
+    {
+      "_name": "name",
+      "metadata": {},
+      "children": [],
+      "parent": "",
+      "type": "Color"
+    }
+  ],
+  "parent": null,
+  "type": "Palette"
+}`);
+  });
+
   it("should throw error when entry and color value are added as children", () => {
     var root = new Entry();
     root.addChild(new Entry('name', [], 'Palette'));
