@@ -35,6 +35,21 @@ class Reference {
   isRoot() {
     return false;
   }
+  root() {
+    if(this.isRoot()) {
+      return this;
+    } else {
+      return this.parent.root();
+    }
+  }
+  moveTo(newPath, maintainReferences = true) {
+    let oldPath = this.path();
+    if(maintainReferences) {
+      this.root().updateReferences(oldPath, newPath);
+    }
+    this.parent.removeChild(this);
+    this.root().set(newPath, this);
+  }
   resolved(stack = []) {
     if (stack.indexOf(this) !== -1) {
       throw("References can not be circular!");

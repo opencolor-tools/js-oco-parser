@@ -40,7 +40,11 @@ class Entry {
     if ('string' === typeof nameOrIndex) {
       if (nameOrIndex.match(/\./)) { // dotpath, so we need to do a deep lookup
         var pathspec = nameOrIndex.split(".");
-        return this.get(pathspec.shift()).get(pathspec.join("."));
+        var first = this.get(pathspec.shift());
+        if(!first) {
+          return undefined;
+        }
+        return first.get(pathspec.join("."));
       }
       return this.children.filter((child) => child.name === nameOrIndex).pop();
     } else {
@@ -50,6 +54,14 @@ class Entry {
 
   isRoot() {
     return !this.parent;
+  }
+
+  root() {
+    if(this.isRoot()) {
+      return this;
+    } else {
+      return this.parent.root();
+    }
   }
 
   remove(path) {
@@ -63,38 +75,48 @@ class Entry {
   }
 
   set(path, entry) {
-    // if ('string' === typeof nameOrIndex) {
-      if (path.match(/\./)) { // dotpath, so we need to do a deep lookup
-        var pathspec = path.split(".");
-        var firstPart = pathspec.shift();
-        var existingEntry =  this.get(firstPart);
-        if (existingEntry && existingEntry.type === 'Palette') {
-          existingEntry.set(pathspec.join("."), entry);
-        } else {
-          var newGroup = new Entry(firstPart);
-          this.set(firstPart, newGroup);
-          newGroup.set(pathspec.join("."), entry);
-        }
+    if (path.match(/\./)) { // dotpath, so we need to do a deep lookup
+      var pathspec = path.split(".");
+      var firstPart = pathspec.shift();
+      var existingEntry =  this.get(firstPart);
+      if (existingEntry && existingEntry.type === 'Palette') {
+        existingEntry.set(pathspec.join("."), entry);
       } else {
-        entry.name = path;
-        entry.parent = this;
-        if (this.get(path)) {
-          // replace existing entries
-          this.children.filter((child) => child.name === path).forEach((child) => {
-            this.replaceChild(child, entry);
-          });
-        } else {
-          // add entry
-          this.children.push(entry);
-        }
+        var newGroup = new Entry(firstPart);
+        this.set(firstPart, newGroup);
+        newGroup.set(pathspec.join("."), entry);
       }
-    // } else {
-    //   if (this.children[nameOrIndex]) {
-    //     this.children[nameOrIndex].parent = null; // nullifying reference
-    //   }
-    //   this.children[nameOrIndex] = entry;
-    //   entry.parent = this;
-    // }
+    } else {
+      entry.name = path;
+      entry.parent = this;
+      if (this.get(path)) {
+        // replace existing entries
+        this.children.filter((child) => child.name === path).forEach((child) => {
+          this.replaceChild(child, entry);
+        });
+      } else {
+        // add entry
+        this.children.push(entry);
+      }
+    }
+  }
+
+  updateReferences(oldPath, newPath) {
+    this.traverseTree(['Reference'], (entry) => {
+      if (oldPath === entry.absoluteRefName) {
+        entry.refName = newPath;
+        this.set(entry.path(), entry);
+      }
+    });
+  }
+
+  moveTo(newPath, maintainReferences = true) {
+    let oldPath = this.path();
+    if(maintainReferences) {
+      this.root().updateReferences(oldPath, newPath);
+    }
+    this.parent.removeChild(this);
+    this.root().set(newPath, this);
   }
 
   path() {
