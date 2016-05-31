@@ -31,10 +31,20 @@ class Entry {
     this.forEach = Array.prototype.forEach.bind(this.children); // the magic of JavaScript.
   }
   set name(newName) {
-    this._name = newName.replace(/\./g, '');
+    newName = newName.replace(/[\.\/]/g, '');
+    this._name = newName;
   }
   get name() {
     return this._name;
+  }
+  rename(newName) {
+    newName = newName.replace(/[\.\/]/g, '');
+    if(this.isRoot()) {
+      this._name = newName;
+    } else {
+      let newPath = [this.parent.path(), newName].filter((e) => e !== '').join('.');
+      this.moveTo(newPath);
+    }
   }
   get(nameOrIndex) {
     if ('string' === typeof nameOrIndex) {
@@ -87,7 +97,9 @@ class Entry {
         newGroup.set(pathspec.join("."), entry);
       }
     } else {
-      entry.name = path;
+      if (path !== entry.name) {
+        entry.name = path;
+      }
       entry.parent = this;
       if (this.get(path)) {
         // replace existing entries

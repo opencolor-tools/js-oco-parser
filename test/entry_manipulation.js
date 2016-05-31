@@ -6,6 +6,22 @@ var oco = require('../lib/index.js');
 
 describe('Manipulating Entries', () => {
 
+  it("should not be possible to give an invalid name", () => {
+    var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')]);
+    color.name = 'xx.x';
+    expect(color.name).to.equal('xxx');
+    color.name = 'xx/x';
+    expect(color.name).to.equal('xxx');
+  });
+
+  it("should be possible to rename", () => {
+    var tree = new oco.Entry();
+    var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')]);
+    tree.addChild(color);
+    tree.get('one').rename('two');
+    expect(tree.get('two')).to.equal(color);
+  });
+
   it("should be possible to move Color Entry", () => {
     var tree = new oco.Entry();
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')]);

@@ -3,10 +3,26 @@
 
 class Reference {
   constructor(name, refName) {
-    this.name = name;
+    this._name = name;
     this.refName = refName;
     this.parent = null;
     this.type = 'Reference';
+  }
+  set name(newName) {
+    newName = newName.replace(/[\.\/]/g, '');
+    this._name = newName;
+  }
+  get name() {
+    return this._name;
+  }
+  rename(newName) {
+    newName = newName.replace(/[\.\/]/g, '');
+    if(this.isRoot()) {
+      this._name = newName;
+    } else {
+      let newPath = [this.parent.path(), newName].filter((e) => e !== '').join('.');
+      this.moveTo(newPath);
+    }
   }
   get absoluteRefName() {
     var refPath = this.refName.split(".");
