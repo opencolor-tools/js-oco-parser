@@ -1,6 +1,6 @@
 {
   "name": "opencolor",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "A collection of functions to parse Open Color files, construct them via code and write them",
   "main": "lib/index.js",
   "repository": "https://github.com/opencolor-tools/opencolor-js",
