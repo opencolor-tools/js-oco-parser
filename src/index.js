@@ -24,9 +24,10 @@ jisonparser.yy = {
 
 
 var parser = {
-  parse(data) {
+  parse(data, referenceResolver) {
     jisonparser.lexer.resetWithInput(""); //resetting the lexer. Not needed in prod, but helps testing.
     var tree = jisonparser.parse(data);
+    tree.referenceResolver = referenceResolver;
     return tree;
   },
   render(tree) {

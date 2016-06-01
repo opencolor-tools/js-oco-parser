@@ -1,6 +1,7 @@
 /* jshint -W097 */
 'use strict';
 
+const URL_REFERENCE_FILE_PROTOCOL = '__URL_file_'
 class Reference {
   constructor(name, refName) {
     this._name = name;
@@ -69,6 +70,9 @@ class Reference {
   resolved(stack = []) {
     if (stack.indexOf(this) !== -1) {
       throw("References can not be circular!");
+    }
+    if(this.refName.indexOf(URL_REFERENCE_FILE_PROTOCOL) !== -1) {
+      return this.root().referenceResolver(this.refName.replace(URL_REFERENCE_FILE_PROTOCOL, ''));
     }
     var refPath = this.refName.split(".");
     var reference = this.resolve(this.parent, refPath);

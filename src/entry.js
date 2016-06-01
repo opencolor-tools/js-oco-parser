@@ -24,6 +24,7 @@ class Entry {
     this.metadata = {};
     this.children = [];
     this.parent = null;
+    this.referenceResolver = () => {};
     this.type = type || 'Palette';
 
     this.addChildren(flatten(children || []), false);

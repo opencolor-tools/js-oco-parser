@@ -15,6 +15,18 @@ ref color: =color
     expect(tree.children[1].resolved().hexcolor()).to.equal('#FFFFFF');
   });
 
+  it.only("should parse a url-reference", () => {
+    var test = `
+ref color: =__URL_file_n4.oco__color
+`;
+    function urlResolver(path) {
+      return oco.parse(`color: #111111`).get('color');
+    }
+    var tree = oco.parse(test, urlResolver);
+    // Only simple, same level references for now
+    expect(tree.children[0].resolved().hexcolor()).to.equal('#111111');
+  });
+
   it("should parse a deep reference", () => {
     var test = `
 color: #fff
