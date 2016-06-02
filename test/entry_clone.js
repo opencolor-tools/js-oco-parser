@@ -1,4 +1,5 @@
 /* jshint -W097 */
+/* jshint expr: true */
 'use strict';
 var expect = require('chai').expect;
 var oco = require('../lib/index.js');
