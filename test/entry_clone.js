@@ -67,6 +67,7 @@ describe('Cloning Entries', () => {
     expect(clone.get('first').metadata).to.have.keys(['oct/defaultView', 'oct/color', 'oct/ref']);
     expect(clone.get('first').metadata['oct/color'].type).to.equal('ColorValue');
     expect(clone.get('first').metadata['oct/ref'].type).to.equal('Reference');
+    expect(clone.get('first').metadata['oct/ref'].parent).to.exist;
   });
 
   it("should clone references", () => {

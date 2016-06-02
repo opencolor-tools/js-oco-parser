@@ -251,6 +251,7 @@ class Entry {
     clone.metadata = {};
     Object.keys(this.metadata).forEach((key) => {
       clone.metadata[key] = this.metadata[key].clone ? this.metadata[key].clone() : this.metadata[key];
+      this.addParent(clone.metadata[key]);
     });
     return clone;
   }
