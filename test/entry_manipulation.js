@@ -72,4 +72,15 @@ describe('Manipulating Entries', () => {
     expect(tree.get('groupA.oneRef').refName).to.equal('groupB.one');
   });
 
+  it("should maintain references when sub-palette name changes", () => {
+    var tree = new oco.Entry();
+    var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')]);
+    var reference = new oco.Reference('oneRef', 'groupA.one');
+
+    tree.set('groupA.one', color);
+    tree.set('groupB.oneRef', reference);
+    tree.get('groupA').moveTo('groupa - renamed', true);
+    expect(tree.get('groupB.oneRef').refName).to.equal('groupa - renamed.one');
+  });
+
 });

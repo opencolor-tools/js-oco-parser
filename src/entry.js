@@ -115,8 +115,8 @@ class Entry {
 
   updateReferences(oldPath, newPath) {
     this.traverseTree(['Reference'], (entry) => {
-      if (oldPath === entry.absoluteRefName) {
-        entry.refName = newPath;
+      if (entry.absoluteRefName && entry.absoluteRefName.indexOf(oldPath) === 0) {
+        entry.refName = entry.absoluteRefName.replace(oldPath, newPath);
         this.set(entry.path(), entry);
       }
     });
