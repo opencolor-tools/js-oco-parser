@@ -2,7 +2,7 @@
 'use strict'
 
 import {expect} from 'chai'
-import * as oco from '../src/index.js'
+import oco from '../src/index.js'
 
 var Entry = oco.Entry
 var ColorValue = oco.ColorValue

@@ -2,7 +2,7 @@
 'use strict'
 
 import {expect} from 'chai'
-import * as oco from '../src/index.js'
+import oco from '../src/index.js'
 
 describe('ColorValue', () => {
   it('should create hex value', () => {

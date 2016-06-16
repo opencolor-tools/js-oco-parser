@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 'use strict'
 import {expect} from 'chai'
-import * as oco from '../src/index'
+import oco from '../src/index'
 
 describe('Traversal', () => {
   it('should traverse by type', () => {
@@ -28,16 +28,16 @@ group 2:
 color 1: #ff0
 color 2: #fe0
 color 3: #fd0
-`;
-    var tree = oco.parse(test);
-    var calls = 0;
+`
+    var tree = oco.parse(test)
+    var calls = 0
     tree.traverseTree(['Color'], (entry) => {
-      calls++;
-      tree.set('clone - ' + entry.name, entry.clone());
-    });
-    expect(calls).to.equal(3);
-    expect(tree.children.length).to.equal(6);
-  });
+      calls++
+      tree.set('clone - ' + entry.name, entry.clone())
+    })
+    expect(calls).to.equal(3)
+    expect(tree.children.length).to.equal(6)
+  })
 
   it('should get a deep path', () => {
     var test = `

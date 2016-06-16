@@ -1,13 +1,13 @@
 /* eslint-env mocha */
 'use strict'
 import {expect} from 'chai'
-import * as parser from '../src/index'
+import oco from '../src/index'
 import fs from 'fs'
 
 describe('Parser', () => {
   it('should parse a single color', () => {
     var test = 'color: #ff0022'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('color').type).to.equal('Color')
     expect(tree.get('color').hexcolor()).to.equal('#FF0022')
@@ -15,7 +15,7 @@ describe('Parser', () => {
 
   it('should allow numbers as color names', () => {
     var test = '001: #ff0022\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('001').type).to.equal('Color')
     expect(tree.get('001').hexcolor()).to.equal('#FF0022')
@@ -23,7 +23,7 @@ describe('Parser', () => {
 
   it('should allow hexnumbers as color names', () => {
     var test = 'f00: #f00022\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('f00').type).to.equal('Color')
     expect(tree.get('f00').hexcolor()).to.equal('#F00022')
@@ -31,7 +31,7 @@ describe('Parser', () => {
 
   it('should allow parentheses in color names', () => {
     var test = 'vollfarbe (rot) super: #f00022\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('vollfarbe (rot) super').type).to.equal('Color')
     expect(tree.get('vollfarbe (rot) super').hexcolor()).to.equal('#F00022')
@@ -39,7 +39,7 @@ describe('Parser', () => {
 
   it('should allow commas in color names', () => {
     var test = 'vollfarbe, super: #f00022\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('vollfarbe, super').type).to.equal('Color')
     expect(tree.get('vollfarbe, super').hexcolor()).to.equal('#F00022')
@@ -47,34 +47,34 @@ describe('Parser', () => {
 
   it('should allow commas and parentheses in color names', () => {
     var test = 'Minimal (SQUARE, configured): #f00022\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('Minimal (SQUARE, configured)').type).to.equal('Color')
   })
 
   it('should parse a single color as an rgb value', () => {
     var test = 'color: rgb(10,20,30)\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('color').get('rgb').value).to.equal('rgb(10,20,30)')
   })
 
   it('should parse a single color as an special value', () => {
     var test = 'color: RAL(1003)\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.name).to.equal('root')
     expect(tree.get('color').get('RAL').value).to.equal('RAL(1003)')
   })
 
   it('should parse a single color with umlaut', () => {
     var test = 'Hintergrund Primär: #FFFFFF\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('Hintergrund Primär').hexcolor()).to.equal('#FFFFFF')
   })
 
   it('should parse a single color with special chars', () => {
     var test = 'Google+: #C52E10\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('Google+').hexcolor()).to.equal('#C52E10')
   })
 
@@ -83,7 +83,7 @@ describe('Parser', () => {
 color:
   #ff0022
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.parent).to.equal(null)
     expect(tree.name).to.equal('root')
     expect(tree.get('color').type).to.equal('Color')
@@ -95,7 +95,7 @@ color:
 group name:
   yellow: #ff0000
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group name').get('yellow').hexcolor()).to.equal('#FF0000')
   })
 
@@ -106,7 +106,7 @@ group name:
 
 red: #f00
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group name').get('yellow').hexcolor()).to.equal('#FF0000')
   })
 
@@ -116,7 +116,7 @@ group name:
   yellow: #ff0000
   green: #0f0
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group name').get('yellow').hexcolor()).to.equal('#FF0000')
     expect(tree.get('group name').get('green').hexcolor()).to.equal('#00FF00')
   })
@@ -129,7 +129,7 @@ Group1:
 Root:
   50: #E3F2FD
   800: #1565C0`
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('Root').type).to.equal('Palette')
     expect(tree.get('Root').parent).to.not.equal(null)
   })
@@ -139,25 +139,25 @@ Root:
 color: #fff
 color: #000
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#000000')
   })
 
   it('a child should know its parents', () => {
     var test = 'color: #fff\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').parent).to.equal(tree)
   })
 
   it('should parse with newlines in front', () => {
     var test = '\n\ncolor: #fff\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#FFFFFF')
   })
 
   it('should parse with newline in front', () => {
     var test = '\ncolor: #fff\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#FFFFFF')
   })
 })
@@ -165,7 +165,7 @@ color: #000
 describe('Parsing comments', () => {
   it('should parse single line comments', () => {
     var test = 'color: #fff\n// Hello!\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#FFFFFF')
   })
 
@@ -175,37 +175,37 @@ group:
   color: #fff
 // Hello!
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group').get('color').hexcolor()).to.equal('#FFFFFF')
   })
 
   it('should parse same line comments', () => {
     var test = 'color: #fff// Hello!\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#FFFFFF')
   })
 
   it('should parse block lead comments', () => {
     var test = 'group: // Hello\n  color: #ffe\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group').get('color').hexcolor()).to.equal('#FFFFEE')
   })
 
   it('should parse comments that start at beginning of line', () => {
     var test = 'group:\n  color: #ffe\n  // comment'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group').get('color').hexcolor()).to.equal('#FFFFEE')
   })
 
   it('should parse empty comments', () => {
     var test = 'group:\n  color: #ffe\n  // '
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group').get('color').hexcolor()).to.equal('#FFFFEE')
   })
 
   it('should parse comments in meta blocks', () => {
     var test = "meta/:\n  data: #ffe // what's the vector, viktor?"
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('meta/data').hexcolor()).to.equal('#FFFFEE')
   })
 })
@@ -213,7 +213,7 @@ group:
 describe('Parser access methods', () => {
   it('should allow for dual access via index and key', () => {
     var test = 'color: #fff\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get(0).hexcolor()).to.equal('#FFFFFF')
     expect(tree.get('color').hexcolor()).to.equal('#FFFFFF')
   })
@@ -223,7 +223,7 @@ describe('Parser access methods', () => {
 color a: #fff
 color b: #000
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     var i = 0
     tree.forEach((color) => {
       expect(color.type).to.equal('Color')
@@ -236,13 +236,13 @@ color b: #000
 describe('Parsing whitespace', () => {
   it('should parse whitespace in empty lines without indenting', () => {
     var test = '800: #1565C0\n  \n50: #E3F2FD'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('800').hexcolor()).to.equal('#1565C0')
   })
 
   it('should not bork on whitespace with wrong indent', () => {
     var test = 'group:\n  subgroup:\n    color: #1565C0\n  \n    other color: #E3F2FD'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('group').get('subgroup').get('color').hexcolor()).to.equal('#1565C0')
   })
 })
@@ -250,7 +250,7 @@ describe('Parsing whitespace', () => {
 describe('Parsing a more complex document', () => {
   it('should parse a single color', () => {
     var input = fs.readFileSync('test/fixtures/test_with_comments.oco')
-    var tree = parser.parse(input)
+    var tree = oco.parse(input)
     // basically just one assertion to verify the parsing worked.
     expect(tree.children[0].get('yellow').hexcolor()).to.equal('#C01016')
     expect(tree.get('group').getMetadata('meta/other/data')).to.equal('Super Cool Metadata')

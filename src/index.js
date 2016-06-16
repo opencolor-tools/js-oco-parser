@@ -13,10 +13,12 @@ function render (tree) {
   return new Renderer(tree).render()
 }
 
-export {
+let oco = {
   render,
   parse,
   Entry,
   ColorValue,
   Reference
 }
+
+export default oco

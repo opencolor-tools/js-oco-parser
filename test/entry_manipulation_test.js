@@ -2,7 +2,7 @@
 'use strict'
 
 import {expect} from 'chai'
-import * as oco from '../src/index'
+import oco from '../src/index'
 
 describe('Manipulating Entries', () => {
   it('should not be possible to give an invalid name', () => {

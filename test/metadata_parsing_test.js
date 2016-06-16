@@ -2,15 +2,15 @@
 'use strict'
 
 import {expect} from 'chai'
-import * as parser from '../src/index'
+import oco from '../src/index'
 
 describe('Parsing Metadata', () => {
   it('should parse metadata', () => {
     var test = '/author: Erykah Badu'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('/author')).to.equal('Erykah Badu')
     test = 'meta/author: Erykah Badu\n'
-    tree = parser.parse(test)
+    tree = oco.parse(test)
     expect(tree.getMetadata('meta/author')).to.equal('Erykah Badu')
   })
 
@@ -18,7 +18,7 @@ describe('Parsing Metadata', () => {
     var test = `
 metadata/
   author: Erykah Badu`
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('metadata/author')).to.equal('Erykah Badu')
   })
 
@@ -26,16 +26,16 @@ metadata/
     var test = `
 hello/metadata/
   author: Erykah Badu`
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('hello/metadata/author')).to.equal('Erykah Badu')
   })
 
   it('should parse metadata with more than one slash', () => {
     var test = 'foo/bar/author: Erykah Badu\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('foo/bar/author')).to.equal('Erykah Badu')
     test = '/foo/bar/author: Erykah Badu\n'
-    tree = parser.parse(test)
+    tree = oco.parse(test)
     expect(tree.getMetadata('/foo/bar/author')).to.equal('Erykah Badu')
   })
 
@@ -44,7 +44,7 @@ hello/metadata/
 color:
   #123
   author/name: Erykah Badu`
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#112233')
     expect(tree.get('color').getMetadata('author/name')).to.equal('Erykah Badu')
   })
@@ -55,7 +55,7 @@ color:
   author/name: Erykah Badu
   #123
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#112233')
     expect(tree.get('color').getMetadata('author/name')).to.equal('Erykah Badu')
   })
@@ -67,26 +67,26 @@ color:
   author/email: Erykah Badu
   #123
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#112233')
     expect(tree.get('color').getMetadata('author/name')).to.equal('Erykah Badu')
   })
 
   it('should parse boolean metadata', () => {
     var test = 'meta/data: true\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('meta/data')).to.equal(true)
   })
 
   it('should parse number metadata', () => {
     var test = 'meta/data: 1.2\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('meta/data')).to.equal(1.2)
   })
 
   it('should parse color metadata', () => {
     var test = 'meta/data: #ff0022\n'
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('meta/data').hexcolor()).to.equal('#FF0022')
   })
   it('should parse reference metadata', () => {
@@ -94,7 +94,7 @@ color:
 color: #ff0022
 meta/data: =color
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('meta/data').resolved().hexcolor()).to.equal('#FF0022')
   })
   it('should parse reference metadata in block', () => {
@@ -103,7 +103,7 @@ color: #ff0022
 meta/:
   data: =color
 `
-    var tree = parser.parse(test)
+    var tree = oco.parse(test)
     expect(tree.getMetadata('meta/data').resolved().hexcolor()).to.equal('#FF0022')
   })
 })

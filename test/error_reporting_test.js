@@ -2,7 +2,7 @@
 'use strict'
 
 import {expect} from 'chai'
-import * as oco from '../src/index'
+import oco from '../src/index'
 import ParserError from '../lib/parser_error'
 
 describe('Basic error handling in Parser', () => {
