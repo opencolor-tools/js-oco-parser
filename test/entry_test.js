@@ -26,13 +26,41 @@ describe('Entry', () => {
     expect(root.name).to.equal('XXX')
   })
 
+  it('#toString', () => {
+    var root = new oco.Entry()
+    root.addChild(new Entry('name', [], 'Color'))
+    expect(root.toString()).to.equal(
+`{
+  "_name": "Root",
+  "children": [
+    {
+      "_name": "name",
+      "children": [],
+      "parent": "",
+      "metadata": {
+        "parent": "name",
+        "_hash": {},
+        "_data": []
+      },
+      "type": "Color"
+    }
+  ],
+  "parent": null,
+  "metadata": {
+    "parent": "",
+    "_hash": {},
+    "_data": []
+  },
+  "type": "Palette"
+}`)
+  })
+
   it('should throw error when entry and color value are added as children', () => {
     var root = new Entry()
     root.addChild(new Entry('name', [], 'Palette'))
     var fun = function () {
       root.addChild(ColorValue.fromColorValue('#FFE'), true)
     }
-    // console.log(root)
     expect(fun).to.throw()
   })
 
@@ -51,6 +79,7 @@ describe('Entry', () => {
     root.addMetadata({'foo/test': 'Hello!'})
     expect(root.getMetadata('foo/test')).to.equal('Hello!')
   })
+
   it('adding metadata via object literals with reference', () => {
     var root = new Entry()
     var color = new Entry('super', [ColorValue.fromColorValue('#FFE')], 'Color')
@@ -58,11 +87,13 @@ describe('Entry', () => {
     root.addMetadata({'foo/test': '=super'})
     expect(root.getMetadata('foo/test').resolved().get('hex').hexcolor()).to.equal('#FFFFEE')
   })
+
   it('adding metadata via object literals with hex color', () => {
     var root = new Entry()
     root.addMetadata({'foo/test': '#ffe'})
     expect(root.getMetadata('foo/test').hexcolor()).to.equal('#FFFFEE')
   })
+
   it('adding metadata via object literals with rgb color', () => {
     var root = new Entry()
     root.addMetadata({'foo/test': 'rgb(123,132,142)'})

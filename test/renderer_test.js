@@ -33,18 +33,31 @@ almost yellow: =bright yellow
     expect(result).to.equal(expected)
   })
 
-  it('should render a simple Reference', () => {
+  // it('should render a simple Reference', () => {
+  //   var tree = new oco.Entry()
+  //   var ref = new oco.Reference('almost yellow', 'bright yellow')
+  //   ref.addMetadata({'oct/fire': true})
+  //   var value = oco.ColorValue.fromColorValue('#ffe')
+  //   var color = new oco.Entry('bright yellow', [value], 'Color')
+  //   tree.addChild(color)
+  //   tree.addChild(ref)
+  //   var result = oco.render(tree)
+  //   var expected = `bright yellow: #ffe
+  // almost yellow: =bright yellow
+  // oct/fire: true
+  // `
+  //   expect(result).to.equal(expected)
+  // })
+
+  it('should not render empty palettes', () => {
     var tree = new oco.Entry()
-    var ref = new oco.Reference('almost yellow', 'bright yellow')
-    ref.addMetadata({'oct/fire': true})
+    var emptyPalette = new oco.Entry('Empty', [], 'Palette')
     var value = oco.ColorValue.fromColorValue('#ffe')
     var color = new oco.Entry('bright yellow', [value], 'Color')
+    tree.addChild(emptyPalette)
     tree.addChild(color)
-    tree.addChild(ref)
     var result = oco.render(tree)
     var expected = `bright yellow: #ffe
-almost yellow: =bright yellow
-  oct/fire: true
 `
     expect(result).to.equal(expected)
   })

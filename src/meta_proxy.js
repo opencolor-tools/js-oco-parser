@@ -75,4 +75,7 @@ export default class MetaProxy {
     }
     return makeArrayUnique(localKeys.concat(remoteKeys))
   }
+  toString () {
+    return JSON.stringify(this._hash, '  ')
+  }
 }

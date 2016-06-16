@@ -28,17 +28,35 @@ export default class Entry {
     this.validateType()
     this.forEach = Array.prototype.forEach.bind(this.children) // the magic of JavaScript.
   }
+
   set name (newName) {
-    this._name = newName.replace(/\./g, '')
+    newName = newName.replace(/[\.\/]/g, '')
+    this._name = newName
   }
+
   get name () {
     return this._name
   }
+
+  rename (newName) {
+    newName = newName.replace(/[\.\/]/g, '')
+    if (this.isRoot()) {
+      this._name = newName
+    } else {
+      let newPath = [this.parent.path(), newName].filter((e) => e !== '').join('.')
+      this.moveTo(newPath)
+    }
+  }
+
   get (nameOrIndex) {
     if (typeof nameOrIndex === 'string') {
       if (nameOrIndex.match(/\./)) { // dotpath, so we need to do a deep lookup
         var pathspec = nameOrIndex.split('.')
-        return this.get(pathspec.shift()).get(pathspec.join('.'))
+        var first = this.get(pathspec.shift())
+        if (!first) {
+          return undefined
+        }
+        return first.get(pathspec.join('.'))
       }
       return this.children.filter((child) => child.name === nameOrIndex).pop()
     } else {
@@ -48,6 +66,14 @@ export default class Entry {
 
   isRoot () {
     return !this.parent
+  }
+
+  root () {
+    if (this.isRoot()) {
+      return this
+    } else {
+      return this.parent.root()
+    }
   }
 
   remove (path) {
@@ -61,7 +87,6 @@ export default class Entry {
   }
 
   set (path, entry) {
-    // if ('string' === typeof nameOrIndex) {
     if (path.match(/\./)) { // dotpath, so we need to do a deep lookup
       var pathspec = path.split('.')
       var firstPart = pathspec.shift()
@@ -74,7 +99,9 @@ export default class Entry {
         newGroup.set(pathspec.join('.'), entry)
       }
     } else {
-      entry.name = path
+      if (path !== entry.name) {
+        entry.name = path
+      }
       entry.parent = this
       if (this.get(path)) {
         // replace existing entries
@@ -86,13 +113,24 @@ export default class Entry {
         this.children.push(entry)
       }
     }
-  // } else {
-  //   if (this.children[nameOrIndex]) {
-  //     this.children[nameOrIndex].parent = null // nullifying reference
-  //   }
-  //   this.children[nameOrIndex] = entry
-  //   entry.parent = this
-  // }
+  }
+
+  updateReferences (oldPath, newPath) {
+    this.traverseTree(['Reference'], (entry) => {
+      if (entry.absoluteRefName && entry.absoluteRefName.indexOf(oldPath) === 0) {
+        entry.refName = entry.absoluteRefName.replace(oldPath, newPath)
+        this.set(entry.path(), entry)
+      }
+    })
+  }
+
+  moveTo (newPath, maintainReferences = true) {
+    let oldPath = this.path()
+    if (maintainReferences) {
+      this.root().updateReferences(oldPath, newPath)
+    }
+    this.parent.removeChild(this)
+    this.root().set(newPath, this)
   }
 
   path () {
@@ -203,4 +241,13 @@ export default class Entry {
     return clone
   }
 
+  toString () {
+    return JSON.stringify(this, function (key, value) {
+      if (key === 'parent' && value) {
+        return value.path()
+      } else {
+        return value
+      }
+    }, '  ')
+  }
 }
