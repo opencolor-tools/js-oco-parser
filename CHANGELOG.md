@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 0.1.0
+
+- New, naive parser, much faster, hopefully easier to fix and to give meaningful error messages.
+- New way of handling metadata.
+- module exports now use ES6 syntax
+- Tests run on src, to allow for easier test runs, singeling out tests etc.
+- switched to standardjs for linting and changed syntax throughout the project accordingly
+
+This is more or less a release candidate for a 1.0 release.
+
 ## 0.0.8
 
 - `ColorValues` are now parsed with tinycolor2. Hexcolors are thus named "hex" instead of "rgb". If tinycolor2 successfully parses a color value, the `ColorValue` is marked as "identified" and `.value` is the tinycolor object, which means that
