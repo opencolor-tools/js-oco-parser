@@ -6,7 +6,6 @@ import * as oco from '../src/index'
 
 /** @test {parse} */
 describe('Parsing Metadata', () => {
-
   it('should parse metadata', () => {
     var test = '/author: Erykah Badu'
     var tree = oco.parse(test)
