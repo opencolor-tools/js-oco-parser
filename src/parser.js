@@ -5,6 +5,7 @@ import ColorValue from './color_value'
 import Reference from './reference'
 import ParserError from './parser_error'
 
+/** @ignore */
 export default function parse (input) {
   let tokenized = tokenize(input.toString())
   let transformed = transform(tokenized)

@@ -6,19 +6,22 @@ import ColorValue from './color_value'
 import Reference from './reference'
 import Renderer from './renderer'
 
-function parse (data) {
-  return parser(data.toString())
-}
+/**
+ * Render an OCO tree into a string
+ * @param {Entry} tree OCO Tree
+ * @return {string} Rendered OCO
+ */
 function render (tree) {
   return new Renderer(tree).render()
 }
-
-let oco = {
-  render,
-  parse,
-  Entry,
-  ColorValue,
-  Reference
+/**
+ * Parses a string into an OCO tree
+ * @param {string} data String or anything that can be converted to a String with toString()
+ * @return {Entry} OCO tree
+ * @throws {ParserError} if input is not valid OCO
+ */
+function parse (data) {
+  return parser(data.toString())
 }
 
-export default oco
+export { render, parse, Entry, ColorValue, Reference }

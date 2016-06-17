@@ -1,9 +1,10 @@
 /* eslint-env mocha */
 'use strict'
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 import fs from 'fs'
 
+/** @test {render} */
 describe('Renderer', () => {
   it('should render a simple example', () => {
     var tree = new oco.Entry()

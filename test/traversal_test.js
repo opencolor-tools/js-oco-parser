@@ -1,8 +1,9 @@
 /* eslint-env mocha */
 'use strict'
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 
+/** @test {Entry#traverseTree} */
 describe('Traversal', () => {
   it('should traverse by type', () => {
     var test = `

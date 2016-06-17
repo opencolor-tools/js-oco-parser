@@ -1,8 +1,9 @@
 /* eslint-env mocha */
 'use strict'
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 
+/** @test {parse} */
 describe('Parsing of References', () => {
   it('should parse a reference', () => {
     var test = `
@@ -127,6 +128,7 @@ a: =800
   })
 })
 
+/** @test {parse} */
 describe('Parsing of Metadata on References', () => {
   it('should parse a local ref metadata', () => {
     var test = `

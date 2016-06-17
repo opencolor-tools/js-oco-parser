@@ -2,9 +2,11 @@
 'use strict'
 
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 
+/** @test {Entry#clone} */
 describe('Cloning Entries', () => {
+  /** @test {Entry#clone} */
   it('should be a different object', () => {
     var source = new oco.Entry()
     var clone = source.clone()
@@ -15,6 +17,7 @@ describe('Cloning Entries', () => {
     expect(source).to.equal(copy)
   })
 
+  /** @test {Entry#clone} */
   it('should contain different child objects', () => {
     var source = new oco.Entry()
     var value = oco.ColorValue.fromColorValue('#ffe')
@@ -29,6 +32,7 @@ describe('Cloning Entries', () => {
     expect(source.get('first')).to.equal(copy.get('first'))
   })
 
+  /** @test {Entry#clone} */
   it('should maintain its own properties', () => {
     var root = new oco.Entry()
     var value = oco.ColorValue.fromColorValue('#ffe')
@@ -46,6 +50,7 @@ describe('Cloning Entries', () => {
     expect(clone.children).to.have.length(2)
   })
 
+  /** @test {Entry#clone} */
   it('should clone metadata', () => {
     var root = new oco.Entry()
     var palette = new oco.Entry('first', [], 'Palette')
@@ -68,6 +73,7 @@ describe('Cloning Entries', () => {
     expect(clone.get('first').metadata.get('oct/ref').type).to.equal('Reference')
   })
 
+  /** @test {Reference#clone} */
   it('should clone references', () => {
     var root = new oco.Entry()
     var value = oco.ColorValue.fromColorValue('#111111')

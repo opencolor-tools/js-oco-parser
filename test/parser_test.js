@@ -1,9 +1,10 @@
 /* eslint-env mocha */
 'use strict'
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 import fs from 'fs'
 
+/** @test {parse} */
 describe('Parser', () => {
   it('should parse a single color', () => {
     var test = 'color: #ff0022'
@@ -162,6 +163,7 @@ color: #000
   })
 })
 
+/** @test {parse} */
 describe('Parsing comments', () => {
   it('should parse single line comments', () => {
     var test = 'color: #fff\n// Hello!\n'
@@ -210,6 +212,7 @@ group:
   })
 })
 
+/** @test {Entry#get} */
 describe('Parser access methods', () => {
   it('should allow for dual access via index and key', () => {
     var test = 'color: #fff\n'
@@ -232,7 +235,7 @@ color b: #000
     expect(i).to.equal(2) // make sure that the inner asserts are even called :)
   })
 })
-
+/** @test {parse} */
 describe('Parsing whitespace', () => {
   it('should parse whitespace in empty lines without indenting', () => {
     var test = '800: #1565C0\n  \n50: #E3F2FD'
@@ -247,6 +250,7 @@ describe('Parsing whitespace', () => {
   })
 })
 
+/** @test {parse} */
 describe('Parsing a more complex document', () => {
   it('should parse a single color', () => {
     var input = fs.readFileSync('test/fixtures/test_with_comments.oco')

@@ -2,9 +2,10 @@
 'use strict'
 
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 import ParserError from '../lib/parser_error'
 
+/** @test {parse} */
 describe('Basic error handling in Parser', () => {
   it('should raise exception on illegal nesting of colors and colorvalues', () => {
     var test = `

@@ -3,9 +3,9 @@
 import Reference from './reference'
 import ColorValue from './color_value'
 
+/* This is a trick to get rid of circular dependencies between Reference and MetaProxy */
+/** @ignore */
 export default function metaValue (value) {
-  /* This is a trick to get rid of circular dependencies between Reference and MetaProxy */
-
   var newValue = value
   if (typeof (value) === 'string') {
     if (value.match(/^=/)) {

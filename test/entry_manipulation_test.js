@@ -2,8 +2,9 @@
 'use strict'
 
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 
+/** @test {Entry} */
 describe('Manipulating Entries', () => {
   it('should not be possible to give an invalid name', () => {
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')])
@@ -13,6 +14,7 @@ describe('Manipulating Entries', () => {
     expect(color.name).to.equal('xxx')
   })
 
+  /** @test {Entry#rename} */
   it('should be possible to rename', () => {
     var tree = new oco.Entry()
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')])
@@ -21,6 +23,7 @@ describe('Manipulating Entries', () => {
     expect(tree.get('two')).to.equal(color)
   })
 
+  /** @test {Entry#moveTo} */
   it('should be possible to move Color Entry', () => {
     var tree = new oco.Entry()
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')])
@@ -30,6 +33,7 @@ describe('Manipulating Entries', () => {
     expect(tree.get('one')).to.be.undefined
   })
 
+  /** @test {Reference#moveTo} */
   it('should be possible to move Reference Entry', () => {
     var tree = new oco.Entry()
     var reference = new oco.Reference('one', '=notResolvable')
@@ -39,6 +43,7 @@ describe('Manipulating Entries', () => {
     expect(tree.get('one')).to.be.undefined
   })
 
+  /** @test {Entry#moveTo} */
   it('should be possible to move entries in sub-palettes', () => {
     var tree = new oco.Entry()
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')])
@@ -48,6 +53,7 @@ describe('Manipulating Entries', () => {
     expect(tree.get('groupA.one')).to.be.undefined
   })
 
+  /** @test {Entry#moveTo} */
   it('should maintain references', () => {
     var tree = new oco.Entry()
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')])
@@ -59,6 +65,7 @@ describe('Manipulating Entries', () => {
     expect(tree.get('oneRef').refName).to.equal('two')
   })
 
+  /** @test {Entry#moveTo} */
   it('should maintain references in groups', () => {
     var tree = new oco.Entry()
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')])
@@ -70,6 +77,7 @@ describe('Manipulating Entries', () => {
     expect(tree.get('groupA.oneRef').refName).to.equal('groupB.one')
   })
 
+  /** @test {Entry#moveTo} */
   it('should maintain references when sub-palette name changes', () => {
     var tree = new oco.Entry()
     var color = new oco.Entry('one', [oco.ColorValue.fromColorValue('#111111')])

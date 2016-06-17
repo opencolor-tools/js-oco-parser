@@ -2,6 +2,9 @@
 import ParserError from './parser_error'
 import metaValue from './meta_value'
 
+/**
+ * @ignore
+ */
 function makeArrayUnique (inp) { // http://stackoverflow.com/questions/1960473/unique-values-in-an-array
   let a = []
   for (var i = 0, l = inp.length; i < l; i++) {
@@ -16,6 +19,7 @@ function makeArrayUnique (inp) { // http://stackoverflow.com/questions/1960473/u
  * MetaProxy is a way to store and retrieve metadata in various ways
  * Specifically, it handles the fallback to look up metadata on references if the proxy itself
  * doesn't have that data.
+ *
  */
 export default class MetaProxy {
   /*
@@ -26,9 +30,14 @@ export default class MetaProxy {
     this._hash = {}
     this._data = []
   }
-  /*
-   * @param {string} key key to lookup
-   * @return metadate or undefined.
+  /**
+   * Get a metadatum by key or by index
+   * @param {string|number} key key to lookup
+   * @return metadatum or undefined.
+   * @example
+   * metaproxy.get('oct/backgroundColor');
+   * @example
+   * metaproxy.get(0);
    */
   get (key) {
     let result = null
@@ -44,7 +53,12 @@ export default class MetaProxy {
     }
     return result
   }
-
+  /**
+   * Set a metadatum by key
+   * @param {string} key
+   * @param {string|number|boolean|colorvalue|reference} value
+   *
+   */
   set (key, value) {
     value = metaValue(value)
     this.addParent(value)
@@ -52,12 +66,20 @@ export default class MetaProxy {
     this._hash[key] = value
   }
 
+  /**
+   * Add self as parent if element is a reference. You probably don't need this.
+   * @param {Reference|*} element
+   */
   addParent (element) {
     if (element['refName']) {
       element.parent = this.parent
     }
   }
 
+  /**
+   * Add metadata by bulk via a hash.
+   * @param {object} metadata
+   */
   add (metadata) {
     Object.keys(metadata).forEach((key) => {
       if (!key.match(/\//)) {
@@ -67,6 +89,11 @@ export default class MetaProxy {
     }, this)
   }
 
+  /**
+   * Get all metadata keys, including keys on references
+   * @param {boolean} onlyLocal if true, only local keys will be returned.
+   * @return {Array} list of keys
+   */
   keys (onlyLocal = false) {
     let localKeys = Object.keys(this._hash)
     let remoteKeys = []
@@ -75,6 +102,10 @@ export default class MetaProxy {
     }
     return makeArrayUnique(localKeys.concat(remoteKeys))
   }
+  /**
+   * Return a string representation. this only uses local metadata.
+   * @return {string} stringified metadata
+   */
   toString () {
     return JSON.stringify(this._hash, '  ')
   }

@@ -1,5 +1,6 @@
 'use strict'
 
+/** @ignore */
 export default class Renderer {
   constructor (root) {
     this.root = root

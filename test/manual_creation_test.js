@@ -2,14 +2,18 @@
 'use strict'
 
 import {expect} from 'chai'
-import oco from '../src/index'
+import * as oco from '../src/index'
 
+/** @test {Entry} */
 describe('Manually creating OCO objects', () => {
+  /** @test {Entry.constructor} */
   it('should create a root palette', () => {
     var root = new oco.Entry()
     expect(root.parent).to.equal(null)
     expect(root.name).to.equal('Root')
   })
+
+  /** @test {Entry#addChild} */
   it('is possible to create more than one entry with sharing one dotpath', () => {
     var root = new oco.Entry()
     var colorA = new oco.Entry('color', [oco.ColorValue.fromColorValue('#FF0')])
@@ -20,7 +24,9 @@ describe('Manually creating OCO objects', () => {
   })
 })
 
+/** @test {Entry} */
 describe('Manually manipulating OCO objects', () => {
+  /** @test {Entry#removeChild} */
   it('should be able to remove entries', () => {
     var root = new oco.Entry()
     var color = new oco.Entry('colorname', [oco.ColorValue.fromColorValue('#FF0')])
@@ -29,6 +35,8 @@ describe('Manually manipulating OCO objects', () => {
     root.removeChild(color)
     expect(root.children).to.have.length(0)
   })
+
+  /** @test {Entry#remove} */
   it('should be able to remove colors with dotpath', () => {
     var root = new oco.Entry()
     var color = new oco.Entry('colorname', [oco.ColorValue.fromColorValue('#FF0')])
@@ -37,6 +45,8 @@ describe('Manually manipulating OCO objects', () => {
     root.remove('colorname')
     expect(root.children).to.have.length(0)
   })
+
+  /** @test {Entry#remove} */
   it('should be able to remove all colors with same dotpath', () => {
     var root = new oco.Entry()
     var colorA = new oco.Entry('color', [oco.ColorValue.fromColorValue('#FF0')])
@@ -47,6 +57,8 @@ describe('Manually manipulating OCO objects', () => {
     root.remove('color')
     expect(root.children).to.have.length(0)
   })
+
+  /** @test {Entry#remove} */
   it('should be able to remove palettes with dotpath', () => {
     var root = new oco.Entry()
     var color = new oco.Entry('colorname', [oco.ColorValue.fromColorValue('#FF0')])
@@ -58,7 +70,9 @@ describe('Manually manipulating OCO objects', () => {
   })
 })
 
+/** @test {Entry} */
 describe('Deep creating syntax', () => {
+  /** @test {Entry#set} */
   it('should create an entry structure', () => {
     var root = new oco.Entry()
     var color = new oco.Entry('color', [oco.ColorValue.fromColorValue('#FF0')])
@@ -66,6 +80,8 @@ describe('Deep creating syntax', () => {
     root.set('foo.bar.baz.color', color)
     expect(root.get('foo').get('bar').get('baz').get('color').get('hex').hexcolor()).to.equal('#FFFF00')
   })
+
+  /** @test {Entry#set} */
   it('should overwrite entry name', () => {
     var root = new oco.Entry()
     var color = new oco.Entry('entryname', [oco.ColorValue.fromColorValue('#FF0')])
@@ -73,6 +89,8 @@ describe('Deep creating syntax', () => {
     root.set('newentryname', color)
     expect(root.get('newentryname').name).to.equal('newentryname')
   })
+
+  /** @test {Entry#set} */
   it('should overwrite existing entry', () => {
     var root = new oco.Entry()
     var colorA = new oco.Entry('colornameA', [oco.ColorValue.fromColorValue('#FFFFFF')])
@@ -83,6 +101,8 @@ describe('Deep creating syntax', () => {
     root.set('colornameA', colorB)
     expect(root.get('colornameA').hexcolor()).to.equal('#000000')
   })
+
+  /** @test {Entry#set} */
   it('should overwrite existing entry with different type', () => {
     var root = new oco.Entry()
     var colorA = new oco.Entry('entrynameA', [oco.ColorValue.fromColorValue('#FFFFFF')])
