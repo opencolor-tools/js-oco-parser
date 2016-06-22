@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.2.0
+
+- Changed the way the module exports itself. No default export anymore.
+- Added document tags for esdoc. Docs will be published soon.
+
 ## 0.1.0
 
 - New, naive parser, much faster, hopefully easier to fix and to give meaningful error messages.
