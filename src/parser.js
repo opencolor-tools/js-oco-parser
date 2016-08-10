@@ -6,12 +6,21 @@ import Reference from './reference'
 import ParserError from './parser_error'
 
 /** @ignore */
-export default function parse (input) {
+
+function resolveURL (resolver, url, line) {
+  if (typeof resolver === 'function') {
+    return resolver(url, line)
+  } else {
+    throw (new ParserError('No configured URL resolver, URL cannot be resolved', {line: line}))
+  }
+}
+
+export default function parse (input, urlResolver = null) {
   let tokenized = tokenize(input.toString())
   let transformed = transform(tokenized)
   let adjusted = adjustTypes(transformed)
   let metaadjusted = normalizeMetadata(adjusted)
-  let objectified = objectify(metaadjusted)
+  let objectified = objectify(metaadjusted, urlResolver)
   return objectified
 }
 
@@ -19,9 +28,12 @@ function tokenize (input) {
   let output = []
   let lines = input.split('\n')
   lines.forEach(function (line) {
-    line = line.replace(/\/\/.*$/, '') // remove comments
-    let tokens = line.split(':').map((t) => t.trim())
-    output.push({indent: indent(line), tokens: tokens})
+    line = line.replace(/(^|\s+)\/\/.*$/, '') // remove comments
+    let tokens = line.split(':')
+    if (tokens.length > 2) { // we might have a url or something
+      tokens = [tokens[0], tokens.splice(1).join(':')]
+    }
+    output.push({indent: indent(line), tokens: tokens.map((t) => t.trim())})
   })
   return output
 }
@@ -159,9 +171,9 @@ function addMetadata (obj, metadata, name = null) {
   obj.metadata.push(metadata)
 }
 
-function objectify (tree) {
+function objectify (tree, urlResolver = null) {
   let children = tree.children || []
-  children = children.map((c) => objectify(c))
+  children = children.map((c) => objectify(c, urlResolver))
 
   if (tree.type === 'root' || tree.type === 'palette') {
     let palette = new Entry(tree.name, children, 'Palette', {line: tree.line})
@@ -188,7 +200,24 @@ function objectify (tree) {
     let cv = ColorValue.fromColorValue(tree.value, tree.line)
     return cv
   } else if (tree.type === 'reference') {
-    let ref = new Reference(tree.name, tree.value)
+    let ref = null
+    if (tree.value.match(/^=url\(/)) {
+      let urlMatch = tree.value.match(/^=url\((.*)?\)/)
+      if (urlMatch) {
+        let contents = resolveURL(urlResolver, urlMatch[1], tree.line)
+        if (typeof contents !== 'undefined') {
+          ref = parse(contents, urlResolver)
+          ref.name = tree.name
+        } else {
+          throw (new ParserError('URL Resolver did not return valid contents', tree.line))
+        }
+      } else {
+        throw (new ParserError('Not a valid URL reference', tree.line))
+      }
+    } else {
+      ref = new Reference(tree.name, tree.value)
+    }
+
     let metadata = {}
     if (tree.metadata) {
       tree.metadata.forEach((md) => {

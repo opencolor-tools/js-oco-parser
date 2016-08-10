@@ -149,3 +149,30 @@ b: =a
     expect(tree.get('b').getMetadata('oct/meta')).to.equal('foo')
   })
 })
+/** @test {parse} */
+describe('Parsing of URL References', () => {
+  it('should bork if URL ref cannot be resolved', () => {
+    var test = `
+    a: =url(file://test.url.oco)
+`
+    function testParse () {
+      oco.parse(test)
+    }
+    expect(testParse).to.throw()
+  })
+
+  it('should call back with url', () => {
+    var test = `
+a: =url(file://test.url.oco)
+`
+    var resolveURLCalls = 0
+    function resolveURL (url) {
+      console.log(url)
+      resolveURLCalls++
+      return 'b: #fff'
+    }
+    var tree = oco.parse(test, resolveURL)
+    expect(resolveURLCalls).to.equal(1)
+    expect(tree.get('a').get('b').hexcolor()).to.equal('#FFFFFF')
+  })
+})

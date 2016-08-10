@@ -18,8 +18,8 @@ export function render (tree) {
  * @return {Entry} OCO tree
  * @throws {ParserError} if input is not valid OCO
  */
-export function parse (data) {
-  return parser(data.toString())
+export function parse (data, urlResolver = null) {
+  return parser(data.toString(), urlResolver)
 }
 
 export {default as Entry} from './entry'

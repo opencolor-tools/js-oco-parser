@@ -182,7 +182,7 @@ group:
   })
 
   it('should parse same line comments', () => {
-    var test = 'color: #fff// Hello!\n'
+    var test = 'color: #fff // Hello!\n'
     var tree = oco.parse(test)
     expect(tree.get('color').hexcolor()).to.equal('#FFFFFF')
   })
